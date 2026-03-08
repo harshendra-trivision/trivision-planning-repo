@@ -2,6 +2,123 @@
 {% load i18n %}
 
 {% block extrahead %}{{block.super}}{% if not 'navbar' in request.session or request.session.navbar %}
+<style>
+/* Trivision Modern Purple Theme - Navigation */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap');
+
+.trivision-navbar {
+    background: linear-gradient(135deg, #2D004D 0%, #1A0033 40%, #7B2D8E 100%) !important;
+    border-bottom: none;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-family: 'Inter', sans-serif;
+}
+.trivision-brand {
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    color: #FFFFFF !important;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+.trivision-nav-link {
+    color: #D8A4E8 !important;
+    font-weight: 500;
+    font-size: 0.9rem;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    transition: all 0.2s ease;
+}
+.trivision-nav-link:hover {
+    color: #FFFFFF !important;
+}
+.trivision-search-input {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    color: #FFFFFF !important;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s ease;
+    padding-left: 2rem !important;
+}
+.trivision-search-input::placeholder {
+    color: #D8A4E8 !important;
+}
+.trivision-search-input:focus {
+    background: rgba(0, 0, 0, 0.3) !important;
+    border-color: #A855F7 !important;
+    box-shadow: 0 0 0 3px rgba(168,85,247,0.3) !important;
+    color: #FFFFFF !important;
+}
+.trivision-search-container {
+    position: relative;
+    width: 220px;
+}
+.trivision-search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #D8A4E8;
+    pointer-events: none;
+}
+.trivision-avatar {
+    width: 32px;
+    height: 32px;
+    background: #A855F7;
+    color: #FFFFFF;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 14px;
+    margin-right: 8px;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 2px 4px rgba(168,85,247,0.3);
+}
+.trivision-subheader {
+    background: #F8F4FC !important;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid rgba(156,39,176,0.15);
+}
+#breadcrumbs .breadcrumb-item a {
+    color: #7B2D8E !important;
+    font-weight: 500;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+#breadcrumbs .breadcrumb-item a:hover {
+    color: #A855F7 !important;
+}
+#breadcrumbs .breadcrumb-item.active {
+    color: #5C4670 !important;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+}
+#breadcrumbs .breadcrumb-item + .breadcrumb-item::before {
+    color: #CE93D8 !important;
+}
+
+.trivision-scenario-select {
+    background-color: #FAFAFE !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(156,39,176,0.15) !important;
+    color: #1A0033 !important;
+    font-weight: 600 !important;
+    font-size: 0.85rem !important;
+    padding: 0.3rem 2rem 0.3rem 1rem !important;
+    box-shadow: 0 2px 4px rgba(123, 45, 142, 0.05);
+    transition: all 0.2s ease;
+}
+.trivision-scenario-select:hover {
+    border-color: rgba(156,39,176,0.3) !important;
+    box-shadow: 0 4px 8px rgba(123, 45, 142, 0.08);
+}
+</style>
 <script>
 $(function() {
   breadcrumbs_reflow();
@@ -13,12 +130,12 @@ $(function() {
 
 {% block nav-global %}{% if not 'navbar' in request.session or request.session.navbar %}
 {% getMenu as menu %}
-<nav id="nav-menu-header" class="navbar navbar-expand-lg navbar-light bg-light">
+<nav id="nav-menu-header" class="navbar navbar-expand-lg trivision-navbar navbar-dark">
 	<div class="container-fluid">
 
           {% if not request.session.navbar or request.session.branding %}
-	      <a href="{{request.prefix}}/" class="navbar-brand">
-          {% block branding %}{{ block.super }}{% endblock %}
+	      <a href="{{request.prefix}}/" class="navbar-brand trivision-brand">
+            <img src="{{STATIC_URL}}img/Trivision_logo.png" alt="Trivision" style="max-height: 2.5rem; height: auto;">
           </a>
           {% endif %}
 
@@ -30,25 +147,24 @@ $(function() {
 			<div class="float-end ms-3 d-lg-none">
 			    <div class="d-flex justify-content-around align-items-center mt-3">
 					<div>
-						<a class="position-relative" href="{{request.prefix}}/inbox/">
-							<i id="messages" style="font-size: 1.5em" class="fa fa-envelope-open-o" aria-hidden="true"></i>
-							<span class="position-absolute top-20 start-50 translate-middle badge rounded-pill bg-danger" aria-hidden="true"></span>
+						<a class="position-relative trivision-nav-link" href="{{request.prefix}}/inbox/">
+							<i id="messages" style="font-size: 1.25em" class="fa fa-bell-o" aria-hidden="true"></i>
+							<span class="position-absolute top-20 start-50 translate-middle badge rounded-pill bg-danger" aria-hidden="true" style="font-size: 0.6em;"></span>
 						</a>
 					</div>
 					<div>
-				        <a href="{{request.prefix}}/preferences/">
-							{% if user.avatar %}<img src="{{ user.avatar.url }}" class="avatar-sm">
-							{% else %}<i style="font-size: 1.5em" class="fa fa-user-circle-o"></i>
-							{% endif %}
+				        <a class="trivision-nav-link" href="{{request.prefix}}/preferences/">
+							<div class="trivision-avatar" style="width: 24px; height: 24px; font-size: 10px;">{% firstof user.first_name|make_list|first user.username|make_list|first "A" %}</div>
 						</a>
 					</div>
 					<div>
-  				        <a href="/data/logout/"><i style="font-size: 1.5em" class="fa fa-sign-out"></i></a>
+  				        <a class="trivision-nav-link" href="/data/logout/"><i style="font-size: 1.25em" class="fa fa-sign-out"></i></a>
 					</div>
 				</div>
 			<form class="navbar-form me-start mt-3 mb-3" role="search">
-				<div class="form-group" style="width: 12em">
-				  <input class="form-control typeahead search-input" type="text" placeholder="&#xf002; {% trans 'Search' %}">
+				<div class="trivision-search-container" style="width: 100%;">
+                  <i class="fa fa-search trivision-search-icon"></i>
+				  <input class="form-control typeahead trivision-search-input w-100" type="text" placeholder="{% trans 'Search...' %}">
 				</div>
 			</form>
 			<ul class="nav navbar-nav ms-auto" class="selectdb">
@@ -77,7 +193,7 @@ $(function() {
 			<ul class="navbar-nav">
 			  {% for group in menu %}{% if group.2 %}
 			  <li class="nav-item dropdown">
-			    <a class="nav-link text-nowrap" id="nav-{{ group.0 }}" data-bs-toggle="dropdown" role="button" aria-expanded="false">{{ group.0 }}</a>
+			    <a class="nav-link trivision-nav-link text-nowrap" id="nav-{{ group.0 }}" data-bs-toggle="dropdown" role="button" aria-expanded="false">{{ group.0 }}</a>
 			    <ul class="dropdown-menu" aria-labelledby="nav-{{ group.0 }}">
 			      {% for item in group.1 %}
 			        {% if item.4 %}
@@ -90,9 +206,10 @@ $(function() {
 			  </li>{% endif %}
 			  {% endfor %}
 			</ul>
-			<form class="navbar-form me-start mt-3 mb-3 d-none d-lg-block" role="search">
-				<div class="form-group" style="width: 12em">
-				  <input class="form-control typeahead search-input" type="text" placeholder="&#xf002; {% trans 'Search' %}">
+			<form class="navbar-form me-start mt-1 mb-1 ms-3 d-none d-lg-block" role="search">
+				<div class="trivision-search-container">
+                  <i class="fa fa-search trivision-search-icon"></i>
+				  <input class="form-control typeahead trivision-search-input" type="text" placeholder="{% trans 'Search...' %}">
 				</div>
 			</form>
 
@@ -103,18 +220,16 @@ $(function() {
         {% block extra_user_context %}{% endblock %}
         <li class="navbar-item" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom"
           style="position:relative" data-bs-title="{% trans "No unread messages" %}" data-bs-offset="0,7">
-          <a class="nav-link" href="{{request.prefix}}/inbox/">
-            <i id="messages" style="font-size: 1.5em" class="fa fa-envelope-open-o" aria-hidden="true"></i>
-            <span class="position-absolute top-20 start-50 translate-middle badge rounded-pill bg-danger" aria-hidden="true"></span>
-            &nbsp;&nbsp;
+          <a class="nav-link trivision-nav-link" href="{{request.prefix}}/inbox/">
+            <i id="messages" style="font-size: 1.25em" class="fa fa-bell-o" aria-hidden="true"></i>
+            <span class="position-absolute top-20 start-50 translate-middle badge rounded-pill bg-danger" aria-hidden="true" style="font-size: 0.6em;"></span>
+            &nbsp;
           </a>
         </li>
 		<li class="navbar-item dropdown">
-		    <a href="#" class="nav-link dropdown-toggle pe-3" data-bs-toggle="dropdown"
-          role="button" aria-haspopup="true" aria-expanded="false">
-          {% if user.avatar %}<img src="{{ user.avatar.url }}" class="avatar-sm">
-          {% else %}<i style="font-size: 1.5em" class="fa fa-user-circle-o"></i>
-          {% endif %}
+		    <a href="#" class="nav-link trivision-nav-link dropdown-toggle pe-3" data-bs-toggle="dropdown"
+          role="button" aria-haspopup="true" aria-expanded="false" style="color: #FFFFFF !important;">
+          <div class="trivision-avatar">{% firstof user.first_name|make_list|first user.username|make_list|first "A" %}</div>
           {% firstof user.first_name user.username %}
         </a>
 				<ul class="dropdown-menu dropdown-menu-end" style="right: 0 !important; left: auto !important">
@@ -135,12 +250,12 @@ $(function() {
   </div>
 </nav>
 
-<nav id="nav-breadcrumb-header" class="navbar navbar-expand-lg d-none d-lg-block navbar-light bg-light pt-0">
+<nav id="nav-breadcrumb-header" class="navbar navbar-expand-lg d-none d-lg-block trivision-subheader pt-0 pb-0">
 	<div class="container-fluid">
-	  <div class="breadcrumbrow row align-items-center" aria-label="breadcrumb">
+	  <div class="breadcrumbrow row align-items-center" aria-label="breadcrumb" style="min-height: 40px;">
 		  <div class="col flex-grow-1">
 		     <ol class="breadcrumb mb-0" id="breadcrumbs">
-		       <li id="cockpitcrumb" class="breadcrumb-item"><a href="{{request.prefix}}/">{% trans 'home'|capfirst %}</a></li>
+		       <li id="cockpitcrumb" class="breadcrumb-item"><a href="{{request.prefix}}/"><i class="fa fa-home"></i>&nbsp; {% trans 'home'|capfirst %}</a></li>
 		       {% crumbs %}
 		     </ol>
 		  </div>
@@ -149,7 +264,7 @@ $(function() {
 			<ul class="nav navbar-nav ms-auto" class="selectdb">
 				{% if user.scenarios|length > 1 %}
 				   <li class="navbar-item dropdown">
-					<a href="#" class="dropdown-toggle form-control pe-3" data-bs-toggle="dropdown"
+					<a href="#" class="dropdown-toggle form-control pe-3 trivision-scenario-select" data-bs-toggle="dropdown"
           			   role="button" aria-haspopup="true" aria-expanded="false" id="database" name="{{ request.scenario.name }}">
 					<span data-bs-toggle="tooltip" data-bs-delay='{"show":2000, "hide":4000}' data-bs-placement="left"
 					  data-bs-title="{% trans "Select a what-if scenario.<br>Click <a class='text-decoration-underline' href='/execute/#scenario_copy'>here</a> to manage scenarios." %}"

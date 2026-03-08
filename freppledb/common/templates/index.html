@@ -26,6 +26,101 @@
     });
   });
 </script>
+<style>
+/* Trivision Modern Purple Theme - Dashboard */
+.trivision-widget-card {
+    border: none !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(123, 45, 142, 0.08) !important;
+    transition: all 0.3s ease;
+    background: #FFFFFF !important;
+}
+.trivision-widget-card:hover {
+    box-shadow: 0 8px 24px rgba(123, 45, 142, 0.12) !important;
+    transform: translateY(-2px);
+}
+.trivision-card-header {
+    background: linear-gradient(135deg, #5C197B 0%, #A855F7 100%) !important;
+    color: #FFFFFF !important;
+    border-radius: 12px 12px 0 0 !important;
+    padding: 0.75rem 1.25rem !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 0.85rem !important;
+    letter-spacing: 1px !important;
+    border-bottom: none !important;
+}
+.trivision-card-header a.card-header-color, .trivision-card-header span {
+    color: #FFFFFF !important;
+    text-decoration: none !important;
+}
+.trivision-card-header .panel-close, .trivision-card-header .widget-handle, .trivision-card-header .fa-arrow-down {
+    color: rgba(255, 255, 255, 0.8) !important;
+    transition: all 0.2s ease !important;
+    font-size: 1rem !important;
+    cursor: pointer !important;
+}
+.trivision-card-header .panel-close:hover, .trivision-card-header .widget-handle:hover, .trivision-card-header .fa-arrow-down:hover {
+    color: #FFFFFF !important;
+    transform: scale(1.1) !important;
+}
+
+/* Header Action Buttons */
+.trivision-btn-info {
+    background: #2196F3 !important;
+    color: white !important;
+    border-radius: 50% !important;
+    width: 35px !important;
+    height: 35px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 8px rgba(33, 150, 243, 0.3) !important;
+    border: none !important;
+    transition: all 0.2s ease !important;
+}
+.trivision-btn-info:hover { transform: translateY(-2px) !important; box-shadow: 0 6px 12px rgba(33, 150, 243, 0.4) !important; color: white !important;}
+
+.trivision-btn-edit {
+    background: #A855F7 !important;
+    color: white !important;
+    border-radius: 50% !important;
+    width: 35px !important;
+    height: 35px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 8px rgba(168, 85, 247, 0.3) !important;
+    border: none !important;
+    transition: all 0.2s ease !important;
+}
+.trivision-btn-edit:hover { transform: translateY(-2px) !important; box-shadow: 0 6px 12px rgba(168, 85, 247, 0.4) !important; color: white !important;}
+
+.trivision-btn-clock {
+    background: #FFB300 !important;
+    color: white !important;
+    border-radius: 50% !important;
+    width: 35px !important;
+    height: 35px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 8px rgba(255, 179, 0, 0.3) !important;
+    border: none !important;
+    transition: all 0.2s ease !important;
+}
+.trivision-btn-clock:hover { transform: translateY(-2px) !important; box-shadow: 0 6px 12px rgba(255, 179, 0, 0.4) !important; color: white !important; }
+
+.trivision-page-title {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 800 !important;
+    color: #1A0033 !important;
+    font-size: 1.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+</style>
 {% endblock %}
 
 {% block content_title %}{% endblock %}
@@ -37,29 +132,27 @@
 <div data-cockpit-row="{{ row.rowname }}">
     <div class="row mt-3">
       <div class="col-auto">
-         <h1 class="widget-title" style="float: left; text-transform: capitalize">{{ row.rowname }}</h1>
+         <h1 class="widget-title trivision-page-title" style="float: left; text-transform: capitalize">✨ {{ row.rowname }}</h1>
       </div>
 
-      <div class="col-auto ms-auto">
-        <h1>
+      <div class="col-auto ms-auto d-flex align-items-center gap-2">
+        {% if forloop.first %}
+          <a class="btn trivision-btn-info" href="{% setting "DOCUMENTATION_URL" %}/docs/{% version_short %}/user-interface/cockpit.html" target="_blank"
+            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'help'|capfirst|force_escape %}">
+            <span class="fa fa-info"></span>
+		  </a>
+        {% endif %}
+          <button class="btn trivision-btn-edit" onclick="dashboard.customize('{{ row.rowname }}')"
+            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'customize'|capfirst|force_escape %}">
+            <span class="fa fa-pencil"></span>
+          </button>
         {% if forloop.first %}
           {% block actions %}{% endblock %}
-          <button class="btn btn-sm btn-primary" onclick="grid.showBucket()" data-bs-toggle="tooltip"
+          <button class="btn trivision-btn-clock" onclick="grid.showBucket()" data-bs-toggle="tooltip"
                data-bs-placement="top" data-bs-title="{% trans 'set time horizon'|capfirst|force_escape %}">
              <span class="fa fa-clock-o"></span>
           </button>
         {% endif %}
-          <button class="btn btn-sm btn-primary" onclick="dashboard.customize('{{ row.rowname }}')"
-            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'customize'|capfirst|force_escape %}">
-            <span class="fa fa-wrench"></span>
-          </button>
-        {% if forloop.first %}
-          <a href="{% setting "DOCUMENTATION_URL" %}/docs/{% version_short %}/user-interface/cockpit.html" target="_blank"
-            data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'help'|capfirst|force_escape %}">
-            <span class="fa fa-question"></span>
-        </a>
-        {% endif %}
-        </h1>
       </div>
     </div>
 
@@ -68,18 +161,18 @@
             {% for widget in cols.widgets %}
             {% if widget.linebreak %}</div><div class="row cockpitcolumn widget-list g-3">{% endif %}
             <div class="cockpitwidget-{{widget.size}} mb-3">
-            <div class="card widget h-100" data-cockpit-widget="{{widget.name}}">
-                <div class="card-header d-flex align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="{{widget.tooltip|escape}}">
-                    {% if widget.url %}<a class="text-decoration-underline card-header-color" href="{{request.prefix}}{{widget.url}}">{{widget.title|upper}}&nbsp;<span class="fa fa-caret-right"></span></a>
-                    {% else %}<span style="cursor: default">{{widget.title|upper}}</span>
+            <div class="card widget h-100 trivision-widget-card" data-cockpit-widget="{{widget.name}}">
+                <div class="card-header trivision-card-header d-flex align-items-center" data-bs-toggle="tooltip" data-bs-placement="top" title="{{widget.tooltip|escape}}">
+                    ✨ {% if widget.url %}<a class="text-decoration-underline card-header-color ms-1" href="{{request.prefix}}{{widget.url}}">{{widget.title|upper}}</a>
+                    {% else %}<span class="ms-1" style="cursor: default">{{widget.title|upper}}</span>
                     {% endif %}
                     {% if widget.exporturl %}
                     <a class='fa fa-arrow-down d-inline-block ms-auto' href="{{request.prefix}}{{widget.url}}&amp;format=spreadsheet"></a>
-                    <span class='fa fa-times ms-2 panel-close'></span>
+                    <span class='fa fa-times ms-3 panel-close'></span>
 					          {% else %}
                     <span class='fa fa-times ms-auto panel-close'></span>
                     {% endif %}
-                    <span class="fa fa-arrows ms-2 widget-handle"></span>
+                    <span class="fa fa-plus ms-3 widget-handle font-weight-light"></span>
                 </div>
 				<div class="card-body">
 					{% if widget.asynchronous %}

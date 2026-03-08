@@ -4,12 +4,150 @@
 {% block extrastyle %}
 {{block.super}}
 <style>
-#objectlist li {
-    list-style-type: none;
-}
-#objectlist li a {
-    color: var(--bs-primary);
-}
+    /* Trivision Modern Purple Theme */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap');
+
+    #objectlist {
+        font-family: 'Inter', sans-serif;
+    }
+
+    .trivision-delete-card {
+        background-color: #FFFFFF;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.08);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(156,39,176,0.15);
+        padding: 2rem;
+        margin-top: 1rem;
+        margin-bottom: 2rem;
+    }
+    .trivision-delete-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(123,45,142,0.12);
+    }
+
+    .trivision-heading {
+        font-family: 'Inter', sans-serif;
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: #1A0033;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 1px 8px rgba(168,85,247,0.3);
+        display: flex;
+        align-items: center;
+    }
+
+    .trivision-heading::before {
+        content: '';
+        display: inline-block;
+        width: 4px;
+        height: 1.5rem;
+        background: linear-gradient(135deg, #2D004D 0%, #1A0033 40%, #7B2D8E 100%);
+        border-radius: 4px;
+        margin-right: 12px;
+    }
+
+    .trivision-text {
+        font-family: 'Inter', sans-serif;
+        color: #5C4670;
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+
+    #objectlist ul {
+        background: #F8F4FC;
+        border-radius: 8px;
+        padding: 1.5rem 1.5rem 1.5rem 3rem;
+        border: 1px solid rgba(156,39,176,0.15);
+        margin-bottom: 1.5rem;
+    }
+
+    #objectlist li {
+        list-style-type: none;
+        color: #5C4670;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        position: relative;
+    }
+
+    #objectlist li::before {
+        content: '\\f0da';
+        font-family: 'FontAwesome';
+        color: #9C27B0;
+        font-weight: bold;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+    }
+
+    #objectlist li a {
+        color: #7B2D8E;
+        text-decoration: none;
+        transition: all 0.25s ease;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    #objectlist li a:hover {
+        color: #A855F7;
+        background: rgba(168,85,247,0.15);
+        transform: translateY(-1px);
+        border-radius: 4px;
+        padding: 0 4px;
+        margin: 0 -4px;
+    }
+
+    .trivision-btn-danger {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        padding: 0.6rem 1.5rem !important;
+        transition: all 0.25s ease !important;
+        font-family: 'Inter', sans-serif;
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2) !important;
+    }
+
+    .trivision-btn-danger:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4) !important;
+    }
+
+    .trivision-btn-cancel {
+        background: #FAFAFE !important;
+        color: #5C4670 !important;
+        border: 1px solid rgba(156,39,176,0.15) !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        padding: 0.6rem 1.5rem !important;
+        transition: all 0.25s ease !important;
+        font-family: 'Inter', sans-serif;
+        margin-left: 1rem;
+        text-decoration: none;
+    }
+
+    .trivision-btn-cancel:hover {
+        background: #F3E5F6 !important;
+        color: #1A0033 !important;
+        border-color: #CE93D8 !important;
+        transform: translateY(-2px) !important;
+        box-shadow: 0 4px 12px rgba(123,45,142,0.08) !important;
+        text-decoration: none;
+    }
+
+    .trivision-alert-text {
+        font-family: 'Inter', sans-serif;
+        color: #2D004D;
+        font-weight: 600;
+        background: #F3E5F6;
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 4px solid #9C27B0;
+        margin-bottom: 1.5rem;
+    }
+
 </style>
 {% endblock %}
 
@@ -20,35 +158,39 @@
 {% block content %}
 <div class="row">
 <div class="col" id="objectlist">
-{% if perms_lacking %}
-    <p style="padding-top:7px">{% blocktrans with escaped_object=object %}Deleting the {{ object_name }} '{{ escaped_object }}' would result in deleting related objects, but your account doesn't have permission to delete the following types of objects:{% endblocktrans %}</p>
-    <ul>
-    {% for obj in perms_lacking %}
-        <li>{{ obj }}</li>
-    {% endfor %}
-    </ul>
-{% elif protected %}
-    <p style="padding-top:7px">{% blocktrans with escaped_object=object %}Deleting the {{ object_name }} '{{ escaped_object }}' would require deleting the following protected related objects:{% endblocktrans %}</p>
-    <ul>
-    {% for obj in protected %}
-        <li>{{ obj }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p class="pt-3">{% blocktrans with escaped_object=object %}Are you sure you want to delete the {{ object_name }} "{{ escaped_object }}"? All of the following related items will be deleted:{% endblocktrans %}</p>
-    <form class="pb-3" action="" method="post">{% csrf_token %}
-    <div>
-    <input type="hidden" name="post" value="yes" />
-    {% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1" />{% endif %}
-    {% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}" />{% endif %}
-    <input type="submit" class="btn btn-danger" value="{% trans "Yes, I'm sure" %}" />
-    <a href="#" onclick="window.history.back(); return false;" class="btn btn-gray">{% trans "No, take me back" %}</a>
+    <div class="trivision-delete-card">
+        {% if perms_lacking %}
+            <div class="trivision-alert-text">{% blocktrans with escaped_object=object %}Deleting the {{ object_name }} '{{ escaped_object }}' would result in deleting related objects, but your account doesn't have permission to delete the following types of objects:{% endblocktrans %}</div>
+            <ul>
+            {% for obj in perms_lacking %}
+                <li>{{ obj }}</li>
+            {% endfor %}
+            </ul>
+        {% elif protected %}
+            <div class="trivision-alert-text">{% blocktrans with escaped_object=object %}Deleting the {{ object_name }} '{{ escaped_object }}' would require deleting the following protected related objects:{% endblocktrans %}</div>
+            <ul>
+            {% for obj in protected %}
+                <li>{{ obj }}</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <div class="trivision-alert-text">{% blocktrans with escaped_object=object %}Are you sure you want to delete the {{ object_name }} "{{ escaped_object }}"? All of the following related items will be deleted:{% endblocktrans %}</div>
+            
+            <form class="pb-4" action="" method="post">{% csrf_token %}
+            <div class="d-flex align-items-center">
+            <input type="hidden" name="post" value="yes" />
+            {% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1" />{% endif %}
+            {% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}" />{% endif %}
+            <button type="submit" class="btn trivision-btn-danger">{% trans "Yes, I'm sure" %}</button>
+            <a href="#" onclick="window.history.back(); return false;" class="btn trivision-btn-cancel">{% trans "No, take me back" %}</a>
+            </div>
+            </form>
+            
+            {% include "admin/includes/object_delete_summary.html" %}
+            <h2 class="trivision-heading mt-4">{% trans "Objects"|capfirst %}</h2>
+            <ul class="pb-3">{{ deleted_objects|unordered_list }}</ul>
+        {% endif %}
     </div>
-    </form>
-    {% include "admin/includes/object_delete_summary.html" %}
-    <h2>{% trans "Objects"|capfirst %}</h2>
-    <ul class="pb-3">{{ deleted_objects|unordered_list }}</ul>
-{% endif %}
 </div>
 </div>
 {% endblock %}

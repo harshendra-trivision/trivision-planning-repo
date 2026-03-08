@@ -19,80 +19,156 @@
   }
 </script>
 {% endif %}
-<form role="form" method="post" {% if not widget %}action="{{request.prefix}}/execute/launch/runplan/"{% endif %}>{% csrf_token %}
-    <table class="w-100">
-    <tr>
-    <td style="vertical-align:top; padding: 15px">
-        <button type="submit" class="btn btn-primary"{% if widget %} onclick="launchRunPlan(event)"{% endif%}>{% trans "launch"|capfirst %}</button>
-    </td>
-    <td class="ps-3 pt-3 pe-3">
-    {% if widget and lastrun %}
-    <div class="row w-100 mb-2">
-    <div class="col mb-1"><span class="fw-bold">{% trans "started"|capfirst %}</span><br>{% if lastrun.started %}{{lastrun.started|date:"DATE_FORMAT"}} {{lastrun.started|date:"H:i:s"}}{% endif %}</div>
-    <div class="col mb-1"><span class="fw-bold">{% trans "finished"|capfirst %}</span><br>{% if lastrun.finished %}{{lastrun.finished|date:"DATE_FORMAT"}} {{lastrun.finished|date:"H:i:s"}}{% endif %}</div>
-    <div class="col mb-1"><span class="fw-bold">{% trans "status"|capfirst %}</span><br>
-      <span class="{% if lastrun.status != 'Done' and lastrun.status != 'Canceled' %}badge bg-danger{% endif %}">{{lastrun.status}}</span>
-      {% if lastrun.status == 'Waiting' or "%" in lastrun.status %}&nbsp;
-         <button class='btn btn-sm btn-primary' style='font-size:66%' onclick='cancelTask()'>{% filter force_escape %}{% trans 'Cancel' %}{% endfilter %}</button>
-      {% endif %}
-    </div>
-    </div>
-    {% endif %}
-    {% translate "Load all input data, run the planning algorithm, and export the results." %}<br><br>
-    {% if planning_options %}
-    <div {% if planning_options|length <= 1 %}class="d-none"{% endif %}><b>{% filter capfirst %}{% translate "planning steps" %}{% endfilter %}</b><br>
-    {% for b in planning_options %}
-    <div class="form-check">
-    <label class="form-check-label" for="option_{{b.0}}"
-    {% if b.2 %}data-bs-toggle="tooltip" data-bs-title="{{ b.2 }}"{% endif %}>
-    <input type="checkbox" class="form-check-input" name="env" {% if b.0 in current_options %}checked {% endif %}value="{{b.0}}" id="option_{{b.0}}">
-    {{b.1}}
-    {% if b.2 %}<span class="fa fa-question-circle"></span>{% endif %}
-    </label>
-    </div>
-    {% endfor %}
-    <br>
-    </div>
-    {% endif %}
-    <b>{% translate "Plan type" %}</b><br>
-    <div class="form-check">
-    <input class="form-check-input" type="radio" id="plantype1" name="plantype" {% if plantype != '2' %}checked {% endif %}value="1"/>
-    <label class="form-check-label" for="plantype1">
-        {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Generate a supply plan that respects all constraints.<br>In case of shortages the demand is planned late or short.">Constrained plan</span>{% endblocktrans %}
-    <span class="fa fa-question-circle" style="display:inline-block;"></span>
-    </label>
-    </div>
-    <div class="form-check">
-    <input class="form-check-input" type="radio" id="plantype2" name="plantype" {% if plantype == '2' %}checked {% endif %}value="2"/>
-    <label class="form-check-label" for="plantype2">
-        {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Generate a supply plan that shows material, capacity and operation problems that prevent the demand from being planned in time.<br>The demand is always met completely and on time.">Unconstrained plan</span>{% endblocktrans %}
-    <span class="fa fa-question-circle" style="display:inline-block;"></span>
-    </label>
-    </div>
-        <br>
-        <b>{% filter capfirst %}{% translate "constraints" %}{% endfilter %}</b><br>
-        <div class="form-check">
-        <label class="form-check-label" for="cb4">
-        <input class="form-check-input" type="checkbox" name="constraint" {% if capa_constrained %}checked {% endif %}value="capa" id="cb4"/>
-        {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Respect the capacity limits of your resources.">Capacity: respect capacity limits</span>{% endblocktrans %}
-        <span class="fa fa-question-circle"></span>
-        </label>
+<style>
+  .trivision-form-container {
+    background-color: #FAFAFE;
+    font-family: 'Inter', sans-serif;
+    color: #1A0033;
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  .trivision-card {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(123, 45, 142, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(156,39,176,0.15);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .trivision-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(123,45,142,0.12);
+  }
+  .trivision-btn-primary {
+    background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    padding: 0.6rem 2rem !important;
+    transition: all 0.25s ease !important;
+    font-family: 'Inter', sans-serif;
+  }
+  .trivision-btn-primary:hover {
+    background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(156,39,176,0.3) !important;
+  }
+  .trivision-section-header {
+    font-weight: 800;
+    color: #1A0033;
+    font-size: 1.1rem;
+    border-left: 4px solid #A855F7;
+    padding-left: 8px;
+    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+    background: linear-gradient(90deg, #F3E5F6 0%, #EDE7F6 100%);
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 0 4px 4px 0;
+  }
+  .trivision-checkbox {
+    accent-color: #9C27B0;
+  }
+  .trivision-radio {
+    accent-color: #7B2D8E;
+  }
+  .trivision-label {
+    color: #5C4670;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .trivision-badge-danger {
+    background-color: #F8F4FC !important;
+    color: #A855F7 !important;
+    border: 1px solid #CE93D8;
+  }
+  .trivision-status-flex {
+    background-color: #F8F4FC;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid rgba(156,39,176,0.15);
+  }
+</style>
+
+<form role="form" method="post" {% if not widget %}action="{{request.prefix}}/execute/launch/runplan/"{% endif %} class="trivision-form-container">{% csrf_token %}
+    <div class="row">
+        <div class="col-md-3 text-center mb-4">
+            <button type="submit" class="btn btn-primary btn-lg w-100 trivision-btn-primary"{% if widget %} onclick="launchRunPlan(event)"{% endif%}>{% trans "launch"|capfirst %}</button>
         </div>
-        <div class="form-check">
-        <label class="form-check-label" for="cb16">
-        <input class="form-check-input" type="checkbox" name="constraint" {% if mfg_lt_constrained %}checked {% endif %}value="mfg_lt" id="cb16"/>
-        {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Don't generate manufacturing orders or distribution orders that start or end in the past.<br>Proposed and approved activities must all be in the future.<br>Only confirmed activities are allowed to be in the past.">Manufacturing lead time: do not manufacture in the past</span>{% endblocktrans %}
-        <span class="fa fa-question-circle"></span>
-        </label>
+        
+        <div class="col-md-9 trivision-card">
+            {% if widget and lastrun %}
+            <div class="row w-100 mb-3 trivision-status-flex align-items-center">
+                <div class="col mb-1 text-center"><span class="fw-bold" style="color: #2D004D;">{% trans "started"|capfirst %}</span><br><span style="color:#5C4670">{% if lastrun.started %}{{lastrun.started|date:"DATE_FORMAT"}} {{lastrun.started|date:"H:i:s"}}{% endif %}</span></div>
+                <div class="col mb-1 text-center"><span class="fw-bold" style="color: #2D004D;">{% trans "finished"|capfirst %}</span><br><span style="color:#5C4670">{% if lastrun.finished %}{{lastrun.finished|date:"DATE_FORMAT"}} {{lastrun.finished|date:"H:i:s"}}{% endif %}</span></div>
+                <div class="col mb-1 text-center"><span class="fw-bold" style="color: #2D004D;">{% trans "status"|capfirst %}</span><br>
+                  <span class="{% if lastrun.status != 'Done' and lastrun.status != 'Canceled' %}badge trivision-badge-danger{% else %}badge bg-primary{% endif %}">{{lastrun.status}}</span>
+                  {% if lastrun.status == 'Waiting' or "%" in lastrun.status %}&nbsp;
+                     <button class='btn btn-sm trivision-btn-primary mt-1' style='font-size:0.8rem; padding: 0.2rem 0.8rem !important;' onclick='cancelTask()'>{% filter force_escape %}{% trans 'Cancel' %}{% endfilter %}</button>
+                  {% endif %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <p style="color: #5C4670; font-weight: 500;">{% translate "Load all input data, run the planning algorithm, and export the results." %}</p>
+            
+            {% if planning_options %}
+            <div {% if planning_options|length <= 1 %}class="d-none"{% endif %}>
+                <div class="trivision-section-header">{% filter capfirst %}{% translate "planning steps" %}{% endfilter %}</div>
+                {% for b in planning_options %}
+                <div class="form-check mb-2">
+                    <label class="form-check-label trivision-label" for="option_{{b.0}}"
+                    {% if b.2 %}data-bs-toggle="tooltip" data-bs-title="{{ b.2 }}"{% endif %}>
+                    <input type="checkbox" class="form-check-input trivision-checkbox" name="env" {% if b.0 in current_options %}checked {% endif %}value="{{b.0}}" id="option_{{b.0}}">
+                    {{b.1}}
+                    {% if b.2 %}<span class="fa fa-question-circle" style="color:#CE93D8; margin-left: 5px;"></span>{% endif %}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="trivision-section-header">{% translate "Plan type" %}</div>
+            <div class="form-check mb-2">
+                <input class="form-check-input trivision-radio" type="radio" id="plantype1" name="plantype" {% if plantype != '2' %}checked {% endif %}value="1"/>
+                <label class="form-check-label trivision-label" for="plantype1">
+                    {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Generate a supply plan that respects all constraints.<br>In case of shortages the demand is planned late or short.">Constrained plan</span>{% endblocktrans %}
+                    <span class="fa fa-question-circle" style="color:#CE93D8; margin-left: 5px;"></span>
+                </label>
+            </div>
+            <div class="form-check mb-3">
+                <input class="form-check-input trivision-radio" type="radio" id="plantype2" name="plantype" {% if plantype == '2' %}checked {% endif %}value="2"/>
+                <label class="form-check-label trivision-label" for="plantype2">
+                    {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Generate a supply plan that shows material, capacity and operation problems that prevent the demand from being planned in time.<br>The demand is always met completely and on time.">Unconstrained plan</span>{% endblocktrans %}
+                    <span class="fa fa-question-circle" style="color:#CE93D8; margin-left: 5px;"></span>
+                </label>
+            </div>
+            
+            <div class="trivision-section-header">{% filter capfirst %}{% translate "constraints" %}{% endfilter %}</div>
+            <div class="form-check mb-2">
+                <label class="form-check-label trivision-label" for="cb4">
+                    <input class="form-check-input trivision-checkbox" type="checkbox" name="constraint" {% if capa_constrained %}checked {% endif %}value="capa" id="cb4"/>
+                    {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Respect the capacity limits of your resources.">Capacity: respect capacity limits</span>{% endblocktrans %}
+                    <span class="fa fa-question-circle" style="color:#CE93D8; margin-left: 5px;"></span>
+                </label>
+            </div>
+            <div class="form-check mb-2">
+                <label class="form-check-label trivision-label" for="cb16">
+                    <input class="form-check-input trivision-checkbox" type="checkbox" name="constraint" {% if mfg_lt_constrained %}checked {% endif %}value="mfg_lt" id="cb16"/>
+                    {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Don't generate manufacturing orders or distribution orders that start or end in the past.<br>Proposed and approved activities must all be in the future.<br>Only confirmed activities are allowed to be in the past.">Manufacturing lead time: do not manufacture in the past</span>{% endblocktrans %}
+                    <span class="fa fa-question-circle" style="color:#CE93D8; margin-left: 5px;"></span>
+                </label>
+            </div>
+            <div class="form-check mb-2">
+                <label class="form-check-label trivision-label" for="cb32">
+                    <input class="form-check-input trivision-checkbox" type="checkbox" name="constraint" {% if po_lt_constrained %}checked {% endif %}value="po_lt" id="cb32"/>
+                    {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Don't generate purchase orders that start or end in the past.<br>Proposed and approved activities must all be in the future.<br>Only confirmed activities are allowed to be in the past.">Purchasing lead time: do not purchase in the past</span>{% endblocktrans %}
+                    <span class="fa fa-question-circle" style="color:#CE93D8; margin-left: 5px;"></span>
+                </label>
+            </div>
         </div>
-        <div class="form-check">
-        <label class="form-check-label" for="cb32">
-        <input class="form-check-input" type="checkbox" name="constraint" {% if po_lt_constrained %}checked {% endif %}value="po_lt" id="cb32"/>
-        {% blocktrans %}<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" data-bs-title="Don't generate purchase orders that start or end in the past.<br>Proposed and approved activities must all be in the future.<br>Only confirmed activities are allowed to be in the past.">Purchasing lead time: do not purchase in the past</span>{% endblocktrans %}
-          <span class="fa fa-question-circle"></span>
-        </label>
-        </div>
-    </td>
-    </tr>
-    </table>
+    </div>
 </form>
+

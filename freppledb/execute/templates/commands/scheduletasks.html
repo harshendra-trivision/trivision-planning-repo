@@ -1,20 +1,147 @@
 {% load i18n %}
+<style>
+  .trivision-container {
+    background-color: #FAFAFE;
+    font-family: 'Inter', sans-serif;
+    color: #1A0033;
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  .trivision-card {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(123, 45, 142, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(156,39,176,0.15);
+    padding: 0.8rem 1.5rem;
+    margin-bottom: 0.8rem;
+    align-items: center;
+  }
+  .trivision-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(123,45,142,0.12);
+  }
+  .trivision-edit-card {
+    background-color: #F8F4FC;
+    border-radius: 12px;
+    box-shadow: inset 0 2px 10px rgba(123, 45, 142, 0.05);
+    border: 1px solid rgba(156,39,176,0.2);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    margin-top: 0.5rem;
+  }
+  .trivision-btn-primary {
+    background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+    color: #FFFFFF !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.25s ease !important;
+    font-family: 'Inter', sans-serif;
+  }
+  .trivision-btn-primary:hover {
+    background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(156,39,176,0.3) !important;
+  }
+  .trivision-icon-btn {
+    background: transparent !important;
+    color: #7B2D8E !important;
+    border: 1px solid rgba(156,39,176,0.2) !important;
+    border-radius: 8px !important;
+    transition: all 0.25s ease !important;
+  }
+  .trivision-icon-btn:hover {
+    background: #A855F7 !important;
+    color: #fff !important;
+    transform: rotate(15deg) scale(1.1) !important;
+    border-color: #A855F7 !important;
+  }
+  .trivision-input {
+    border-radius: 10px !important;
+    border: 1px solid rgba(156,39,176,0.15) !important;
+    background: #FFFFFF !important;
+    color: #1A0033 !important;
+    transition: all 0.2s ease !important;
+  }
+  .trivision-input:focus {
+    box-shadow: 0 0 0 3px rgba(168,85,247,0.15) !important;
+    border: 1px solid rgba(168,85,247,0.5) !important;
+    outline: none !important;
+  }
+  .trivision-checkbox {
+    accent-color: #9C27B0;
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: 2px;
+  }
+  .trivision-header-text {
+    font-weight: 800;
+    color: #2D004D;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+  }
+  .trivision-grid-header {
+    font-weight: 800;
+    color: #1A0033;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid rgba(156,39,176,0.2);
+    margin-bottom: 1rem;
+  }
+  .trivision-label {
+    color: #5C4670;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .trivision-badge-danger {
+    background-color: #F8F4FC !important;
+    color: #A855F7 !important;
+    border: 1px solid #CE93D8;
+  }
+  .trivision-dropdown-menu {
+    border-radius: 10px !important;
+    box-shadow: 0 8px 30px rgba(123,45,142,0.12) !important;
+    border: 1px solid rgba(156,39,176,0.15) !important;
+  }
+  .trivision-link {
+    color: #9C27B0;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+  .trivision-link:hover {
+    color: #A855F7;
+    text-decoration: underline;
+  }
+  .trivision-close-btn {
+    background-color: rgba(156,39,176,0.1);
+    border-radius: 50%;
+    padding: 0.5rem;
+    transition: all 0.2s ease;
+  }
+  .trivision-close-btn:hover {
+    background-color: rgba(156,39,176,0.2);
+    transform: scale(1.1);
+  }
+</style>
+
+<div class="trivision-container">
 {% if widget and not schedules %}
 <div class="row">
-<div class="col"><p>You repeat the same sequence of tasks over and over again?<br>
-If so, <a class="text-decoration-underline" href="{{request.prefix}}/execute/#scheduletasks">define
+<div class="col"><p style="color: #5C4670;">You repeat the same sequence of tasks over and over again?<br>
+If so, <a class="trivision-link" href="{{request.prefix}}/execute/#scheduletasks">define
 a task</a> to simplify running the sequence and avoid mistakes.</p>
-<p>You can also schedule the execution automatically at specific times.</p>
+<p style="color: #5C4670;">You can also schedule the execution automatically at specific times.</p>
 </div>
 {% else %}
 {% if not widget %}
-<div class="row">
-<div class="col-9 offset-2"><p>
+<div class="row mb-3">
+<div class="col-9 offset-2"><p style="color: #5C4670; font-weight: 500;">
 {% trans "Run a sequence of tasks, and schedule it to run automatically." %}
 </p></div>
 </div>
 {% endif %}
-<div class="row">
+<div class="row trivision-grid-header">
 <div class="col-2"></div>
 {% if not widget %}
 <div class="col-6 fw-bold">{% trans "name"|capfirst %}</div>
@@ -27,48 +154,48 @@ a task</a> to simplify running the sequence and avoid mistakes.</p>
 {% endif %}
 </div>
 {% for schedule in schedules %}
-<div class="row{% if not schedule.name %} d-none" id="scheduledtask_headertemplate{% endif %}" data-schedule-name="{{ schedule.name }}" style="padding-top:5px; padding-bottom:5px">
+<div class="row trivision-card {% if not schedule.name %} d-none{% endif %}" {% if not schedule.name %}id="scheduledtask_headertemplate"{% endif %} data-schedule-name="{{ schedule.name }}">
   <div class="col-2 text-center">
     <form role="form" method="post" {% if not widget %}action="{{request.prefix}}/execute/launch/scheduletasks/"{% endif %}>{% csrf_token %}
-      <button type="submit" class="btn btn-primary btn-block"{% if widget %} onclick="launchScheduledTask(event)"{% endif%}>{% trans "launch"|capfirst %}</button>
+      <button type="submit" class="btn btn-primary w-100 trivision-btn-primary"{% if widget %} onclick="launchScheduledTask(event)"{% endif%}>{% trans "launch"|capfirst %}</button>
       <input type="hidden" name="schedule" value="{{schedule.name}}">
     </form>
   </div>
   {% if not widget %}
   <div class="col-6 d-flex">
-    <div class="d-flex align-items-center" data-field="name">{{ schedule.name }}</div>
+    <div class="d-flex align-items-center" data-field="name" style="color: #1A0033; font-weight: 600;">{{ schedule.name }}</div>
   </div>
   <div class="col-3 d-flex">
     {% if schedule.next_run %}
-    <div class="d-flex align-items-center" data-field="next-run">{{ schedule.next_run|date:"DATE_FORMAT" }} {{ schedule.next_run|date:"H:i:s" }}</div>
+    <div class="d-flex align-items-center" data-field="next-run" style="color: #5C4670;">{{ schedule.next_run|date:"DATE_FORMAT" }} {{ schedule.next_run|date:"H:i:s" }}</div>
     {% elif not schedule.name %}
-    <div class="d-flex align-items-center" data-field="next-run"></div>
+    <div class="d-flex align-items-center" data-field="next-run" style="color: #5C4670;"></div>
     {% endif %}
   </div>
   {% else %}
   <div class="col d-flex">
-    <div class="d-flex align-items-center" data-field="name">{{ schedule.name }}</div>
+    <div class="d-flex align-items-center" data-field="name" style="color: #1A0033; font-weight: 600;">{{ schedule.name }}</div>
   </div>
   <div class="col d-flex">
-    <div class="d-flex align-items-center" data-field="started">{{ schedule.lastrun.started|date:"DATE_FORMAT" }} {{ schedule.lastrun.started|date:"H:i:s" }}</div>
+    <div class="d-flex align-items-center" data-field="started" style="color: #5C4670;">{{ schedule.lastrun.started|date:"DATE_FORMAT" }} {{ schedule.lastrun.started|date:"H:i:s" }}</div>
   </div>
   <div class="col d-flex">
-    <div class="d-flex align-items-center" data-field="finished">{{ schedule.lastrun.finished|date:"DATE_FORMAT" }} {{ schedule.lastrun.finished|date:"H:i:s" }}</div>
+    <div class="d-flex align-items-center" data-field="finished" style="color: #5C4670;">{{ schedule.lastrun.finished|date:"DATE_FORMAT" }} {{ schedule.lastrun.finished|date:"H:i:s" }}</div>
   </div>
   <div class="col d-flex">
     <div class="d-flex align-items-center" data-field="status">
-      <a href="{{request.prefix}}/execute/">
-        <span class="{% if schedule.lastrun.status != 'Done' and schedule.lastrun.status != 'Canceled' %}badge bg-danger{% else %}text-decoration-underline{% endif %}">{{ schedule.lastrun.status }}</span>
+      <a href="{{request.prefix}}/execute/" class="text-decoration-none">
+        <span class="{% if schedule.lastrun.status != 'Done' and schedule.lastrun.status != 'Canceled' %}badge trivision-badge-danger{% else %}badge bg-primary text-decoration-underline{% endif %}">{{ schedule.lastrun.status }}</span>
       </a>
       {% if schedule.lastrun.status == 'Waiting' or "%" in schedule.lastrun.status %}&nbsp;
-      <button class='btn btn-sm btn-primary' style='font-size:66%' onclick='cancelScheduledTask({{schedule.lastrun.id}})'>{% filter force_escape %}{% trans 'Cancel' %}{% endfilter %}</button>
+      <button class='btn btn-sm btn-primary trivision-btn-primary ms-2' style='padding: 0.2rem 0.6rem !important;' onclick='cancelScheduledTask({{schedule.lastrun.id}})'>{% filter force_escape %}{% trans 'Cancel' %}{% endfilter %}</button>
       {% endif %}
     </div>
   </div>
   {% endif %}
   {% if perms.execute.add_scheduledtask and not widget %}
   <div class="col-1 text-center">
-    <button class="btn btn-sm btn-primary" onclick="editScheduledTask(this, event)"
+    <button class="btn btn-sm btn-primary trivision-icon-btn" onclick="editScheduledTask(this, event)"
       data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans "Edit" %}">
       <span class="fa fa-edit" ></span>
     </button>
@@ -76,56 +203,54 @@ a task</a> to simplify running the sequence and avoid mistakes.</p>
   {% endif %}
 </div>
 {% if perms.execute.add_scheduledtask %}
-<div class="row p-3 d-none{% if not schedule.name %}" id="scheduledtask_template{% endif%}" data-schedule-name="{{ schedule.name }}"
-  style="border-style:solid; border-radius:10px; border-width:1px; margin:10px 0 10px 0">
+<div class="row p-3 trivision-edit-card d-none{% if not schedule.name %}" id="scheduledtask_template{% endif%}" data-schedule-name="{{ schedule.name }}">
   <div class="col-2 text-center">
     <div>
-      <button class="btn btn-primary w-100 text-nowrap" style="margin-bottom:20px; margin-top: 15px" onclick="saveScheduledTask(this, event)">
+      <button class="btn btn-primary w-100 text-nowrap trivision-btn-primary" style="margin-bottom:15px; margin-top: 10px" onclick="saveScheduledTask(this, event)">
       {% trans "Save" %}</button>
     </div>
     <div>
-      <button class="btn btn-primary w-100 text-nowrap" onclick="deleteScheduledTask(this, event)">
+      <button class="btn btn-primary w-100 text-nowrap trivision-btn-primary" style="background: linear-gradient(135deg, #d32f2f 0%, #f44336 100%) !important;" onclick="deleteScheduledTask(this, event)">
       {% trans "Delete" %}
       </button>
     </div>
   </div>
   <div class="col">
-    <div class="row mb-3">
-      <label for="schedule-{{forloop.counter}}-name" class="col-3 col-form-label">{% trans "name"|capfirst %}</label>
+    <div class="row mb-3 align-items-center">
+      <label for="schedule-{{forloop.counter}}-name" class="col-3 col-form-label trivision-label">{% trans "name"|capfirst %}</label>
       <div class="col-9">
-        <input type="text" class="form-control" id="schedule-{{forloop.counter}}-name"
+        <input type="text" class="form-control trivision-input" id="schedule-{{forloop.counter}}-name"
           data-field="name" value="{{schedule.name}}" placeholder="{% trans "unique name"|capfirst %}">
       </div>
     </div>
     <div class="row mb-3">
-      <label class="col-3 col-form-label">{% trans "tasks"|capfirst %}</label>
+      <label class="col-3 col-form-label trivision-label">{% trans "tasks"|capfirst %}</label>
       <div class="col-9">
         {% for t in schedule.data.tasks %}
-        <div class="row mb-2 data-task">
+        <div class="row mb-2 data-task align-items-center">
           <div class="col-auto">
-            <select class="form-select" aria-label="select task" data-field="task-name">
+            <select class="form-select trivision-input" aria-label="select task" data-field="task-name">
                 {% for c in commands %}
                 <option value="{{ c }}"{% if c ==  t.name %} selected{% endif %}>{{c}}</option>
                 {% endfor %}
             </select>
           </div>
           <div class="col px-0">
-            <input data-field="task-arguments" class="form-control" type="text" placeholder="{% trans "arguments"|capfirst %}" value="{{ t.arguments }}">
+            <input data-field="task-arguments" class="form-control trivision-input" type="text" placeholder="{% trans "arguments"|capfirst %}" value="{{ t.arguments }}">
           </div>
-          <div class="col-auto">
-            <input class="form-check-input align-middle" data-field="task-abort-on-failure" type="checkbox" value="1" data-delay="500"
+          <div class="col-auto d-flex align-items-center">
+            <input class="form-check-input trivision-checkbox me-2" data-field="task-abort-on-failure" type="checkbox" value="1" data-delay="500"
                 {% if t.abort_on_failure %}checked{% endif %}
                 data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans "abort on failure"|capfirst %}">
-            &nbsp;
-            <button class="btn btn-sm btn-primary" onclick="deleteTask(this, event)">
+            <button class="btn btn-sm btn-primary trivision-icon-btn ms-1" onclick="deleteTask(this, event)">
               <span class="fa fa-trash-o" data-bs-toggle="tooltip" data-bs-placement="top"
                 data-bs-title="{% trans "Delete" %}"></span>
             </button>
-            <button class="btn btn-sm btn-primary" onclick="moveTaskDown(this, event)">
+            <button class="btn btn-sm btn-primary trivision-icon-btn ms-1" onclick="moveTaskDown(this, event)">
               <span class="fa fa-chevron-down" data-bs-toggle="tooltip" data-bs-placement="top"
                 data-bs-title="{% trans "Move down" %}"></span>
             </button>
-            <button class="btn btn-sm btn-primary" onclick="moveTaskUp(this, event)">
+            <button class="btn btn-sm btn-primary trivision-icon-btn ms-1" onclick="moveTaskUp(this, event)">
             <span class="fa fa-chevron-up" data-bs-toggle="tooltip" data-bs-placement="top"
               data-bs-title="{% trans "Move up" %}"></span>
             </button>
@@ -134,10 +259,10 @@ a task</a> to simplify running the sequence and avoid mistakes.</p>
         {% endfor %}
         {% if not widget %}
         <!-- extra empty row for new tasks -->
-        <div id="addScheduledTask" class="row">
+        <div id="addScheduledTask" class="row mt-2">
           <div class="col-auto ms-auto">
-            <button class="btn btn-sm btn-primary" onclick="addTask(this, event)"
-              data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans "Add" %}">
+            <button class="btn btn-sm btn-primary trivision-icon-btn" onclick="addTask(this, event)"
+              data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans "Add task" %}">
               <span class="fa fa-plus"></span>
             </button>
           </div>
@@ -145,16 +270,16 @@ a task</a> to simplify running the sequence and avoid mistakes.</p>
         {% endif %}
       </div>
     </div>
- 		<div class="row mb-3">
-      <label for="schedule-{{forloop.counter}}-start" class="col-3 col-form-label">{% trans "start time"|capfirst %}</label>
+ 		<div class="row mb-3 align-items-center">
+      <label for="schedule-{{forloop.counter}}-start" class="col-3 col-form-label trivision-label">{% trans "start time"|capfirst %}</label>
       <div class="col-9">
         <div class="input-group">
-          <input type="text" class="form-control" id="schedule-{{forloop.counter}}-at"
-            data-field="starttime" placeholder="HH:MM:SS  HH:MM:SS ..."
+          <input type="text" class="form-control trivision-input" id="schedule-{{forloop.counter}}-at"
+            data-field="starttime" placeholder="HH:MM:SS  HH:MM:SS ..." style="border-radius: 10px 0 0 10px !important;"
               value="{% for t in schedule.data.starttime %}{% if t < 86400 and t >= 0 %}{{t|timeformat}}  {% endif %}{% endfor %}">
-          <button class="btn btn-outline-primary dropdown-toggle" data-field="task-timezone"
+          <button class="btn btn-outline-primary dropdown-toggle" data-field="task-timezone" style="border-color: rgba(156,39,176,0.3); color: #7B2D8E; border-radius: 0 10px 10px 0;"
              type="button" data-bs-toggle="dropdown" aria-expanded="false">{% firstof schedule.tz default_timezone %}</button>
-          <ul class="dropdown-menu dropdown-menu-end" style="max-height: 30em; overflow-y: auto">
+          <ul class="dropdown-menu dropdown-menu-end trivision-dropdown-menu" style="max-height: 30em; overflow-y: auto">
             {% for tz in timezones %}
               <li><a class="timezone dropdown-item{% if default_timezone == tz.1 %} active{% endif %}" data-value="{{tz.1}}"
                   onclick="$(event.target).closest('ul').prev().text('{{tz.1}}')">{{tz.0}}&nbsp;&nbsp;{{tz.1}}</a></li>
@@ -163,94 +288,94 @@ a task</a> to simplify running the sequence and avoid mistakes.</p>
         </div>
       </div>
     </div>
-    <div class="row mb-3">
-      <label class="col-3 col-form-label">{% trans "weekly schedule"|capfirst %}</label>
+    <div class="row mb-3 align-items-center">
+      <label class="col-3 col-form-label trivision-label">{% trans "weekly schedule"|capfirst %}</label>
       <div class="col-9 d-flex justify-content-between">
-        <label>
-          <input data-field="monday" class="form-check-input" type="checkbox" {% if schedule.data.monday %}checked{% endif %}>&nbsp;{% trans "Mon" %}
+        <label class="trivision-label" style="font-weight: 500;">
+          <input data-field="monday" class="form-check-input trivision-checkbox" type="checkbox" {% if schedule.data.monday %}checked{% endif %}>&nbsp;{% trans "Mon" %}
         </label>
-        <label>
-          <input data-field="tuesday" class="form-check-input" type="checkbox" {% if schedule.data.tuesday %}checked{% endif %}>&nbsp;{% trans "Tue" %}
+        <label class="trivision-label" style="font-weight: 500;">
+          <input data-field="tuesday" class="form-check-input trivision-checkbox" type="checkbox" {% if schedule.data.tuesday %}checked{% endif %}>&nbsp;{% trans "Tue" %}
         </label>
-        <label>
-          <input data-field="wednesday" class="form-check-input" type="checkbox" {% if schedule.data.wednesday %}checked{% endif %}>&nbsp;{% trans "Wed" %}
+        <label class="trivision-label" style="font-weight: 500;">
+          <input data-field="wednesday" class="form-check-input trivision-checkbox" type="checkbox" {% if schedule.data.wednesday %}checked{% endif %}>&nbsp;{% trans "Wed" %}
         </label>
-        <label>
-          <input data-field="thursday" class="form-check-input" type="checkbox" {% if schedule.data.thursday %}checked{% endif %}>&nbsp;{% trans "Thu" %}
+        <label class="trivision-label" style="font-weight: 500;">
+          <input data-field="thursday" class="form-check-input trivision-checkbox" type="checkbox" {% if schedule.data.thursday %}checked{% endif %}>&nbsp;{% trans "Thu" %}
         </label>
-        <label>
-          <input data-field="friday" class="form-check-input" type="checkbox" {% if schedule.data.friday %}checked{% endif %}>&nbsp;{% trans "Fri" %}
+        <label class="trivision-label" style="font-weight: 500;">
+          <input data-field="friday" class="form-check-input trivision-checkbox" type="checkbox" {% if schedule.data.friday %}checked{% endif %}>&nbsp;{% trans "Fri" %}
         </label>
-        <label>
-          <input data-field="saturday" class="form-check-input" type="checkbox" {% if schedule.data.saturday %}checked{% endif %}>&nbsp;{% trans "Sat" %}
+        <label class="trivision-label" style="font-weight: 500;">
+          <input data-field="saturday" class="form-check-input trivision-checkbox" type="checkbox" {% if schedule.data.saturday %}checked{% endif %}>&nbsp;{% trans "Sat" %}
         </label>
-        <label>
-          <input data-field="sunday" class="form-check-input" type="checkbox" {% if schedule.data.sunday %}checked{% endif %}>&nbsp;{% trans "Sun" %}
+        <label class="trivision-label" style="font-weight: 500;">
+          <input data-field="sunday" class="form-check-input trivision-checkbox" type="checkbox" {% if schedule.data.sunday %}checked{% endif %}>&nbsp;{% trans "Sun" %}
         </label>
       </div>
     </div>
-    <div class="row mb-3">
-      <label for="schedule-{{forloop.counter}}-email-success" class="col-3 col-form-label">{% trans "email on success"|capfirst %}</label>
+    <div class="row mb-3 align-items-center">
+      <label for="schedule-{{forloop.counter}}-email-success" class="col-3 col-form-label trivision-label">{% trans "email on success"|capfirst %}</label>
       <div class="col-9">
-        <input type="email" class="form-control" id="schedule-{{forloop.counter}}-email-success"
+        <input type="email" class="form-control trivision-input" id="schedule-{{forloop.counter}}-email-success"
           placeholder="{% trans "List of emails, separated by commas"|capfirst %}" data-field="email_success"
           {% if schedule.email_success %}value="{{schedule.email_success}}"{% endif %}>
       </div>
     </div>
-    <div class="row mb-3">
-      <label for="schedule-{{forloop.counter}}-email-failure" class="col-3 col-form-label">{% trans "email on failure"|capfirst %}</label>
+    <div class="row mb-3 align-items-center">
+      <label for="schedule-{{forloop.counter}}-email-failure" class="col-3 col-form-label trivision-label">{% trans "email on failure"|capfirst %}</label>
       <div class="col-9">
-        <input type="email" class="form-control" id="schedule-{{forloop.counter}}-email-failure"
+        <input type="email" class="form-control trivision-input" id="schedule-{{forloop.counter}}-email-failure"
           placeholder="{% trans "List of emails, separated by commas"|capfirst %}" data-field="email_failure"
           {% if schedule.email_failure %}value="{{schedule.email_failure}}"{% endif %}>
       </div>
     </div>
   </div>
   <div class="col-auto">
-    <button type="button" class="btn-close float-end" onclick="closeScheduledTask(this, event)"></button>
+    <button type="button" class="btn-close float-end trivision-close-btn" onclick="closeScheduledTask(this, event)"></button>
   </div>
 </div>
 {% endif %}
 {% endfor %}
 {% if perms.execute.add_scheduledtask and not widget %}
-<div class="row">
+<div class="row mb-4 mt-2">
   <div class="offset-11 col-1 text-center">
-    <button class="btn btn-sm btn-primary" onclick="addScheduledTask(this, event)"
-      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans "Add" %}">
+    <button class="btn btn-sm btn-primary trivision-icon-btn shadow-sm" style="width: 40px; height: 40px; border-radius: 50% !important; font-size: 1.2rem;" onclick="addScheduledTask(this, event)"
+      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans "Add Schedule" %}">
       <span class="fa fa-plus"></span>
     </button>
   </div>
 </div>
-<div id="scheduledtask_tasktemplate" class="d-none row mb-2 data-task">
+<div id="scheduledtask_tasktemplate" class="d-none row mb-2 data-task align-items-center">
   <div class="col-auto">
-    <select class="form-select" aria-label="select task" data-field="task-name">
+    <select class="form-select trivision-input" aria-label="select task" data-field="task-name">
         {% for c in commands %}
         <option value="{{ c }}">{{c}}</option>
         {% endfor %}
     </select>
   </div>
   <div class="col px-0">
-    <input data-field="task-arguments" class="form-control" type="text" placeholder="{% trans "arguments"|capfirst %}">
+    <input data-field="task-arguments" class="form-control trivision-input" type="text" placeholder="{% trans "arguments"|capfirst %}">
   </div>
-  <div class="col-auto">
+  <div class="col-auto d-flex align-items-center">
     <input data-field="task-abort-on-failure" type="checkbox" value="1" data-delay="500"
-        class="form-check-input align-middle" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans "abort on failure"|capfirst %}">
-    &nbsp;
-    <button class="btn btn-sm btn-primary" onclick="deleteTask(this, event)">
+        class="form-check-input align-middle trivision-checkbox me-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans "abort on failure"|capfirst %}">
+    <button class="btn btn-sm btn-primary trivision-icon-btn ms-1" onclick="deleteTask(this, event)">
       <span class="fa fa-trash-o" data-bs-toggle="tooltip" data-bs-placement="top"
         data-bs-title="{% trans "Delete" %}"></span>
     </button>
-    <button class="btn btn-sm btn-primary" onclick="moveTaskDown(this, event)">
+    <button class="btn btn-sm btn-primary trivision-icon-btn ms-1" onclick="moveTaskDown(this, event)">
       <span class="fa fa-chevron-down" data-bs-toggle="tooltip" data-bs-placement="top"
         data-bs-title="{% trans "Move down" %}"></span>
     </button>
-    <button class="btn btn-sm btn-primary" onclick="moveTaskUp(this, event)">
+    <button class="btn btn-sm btn-primary trivision-icon-btn ms-1" onclick="moveTaskUp(this, event)">
     <span class="fa fa-chevron-up" data-bs-toggle="tooltip" data-bs-placement="top"
       data-bs-title="{% trans "Move up" %}"></span>
     </button>
   </div>
 </div>
 {% endif %}
+</div>
 
 <script>
 {% if not widget %}

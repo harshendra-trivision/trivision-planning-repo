@@ -124,32 +124,178 @@ def getWizardSteps(request, mode):
            <p>New steps unlock only if you complete the previous one.</p>
            """
     else:
-        welcome = """This wizard will guide you through the steps to load your data and configure up a
-           first basic planning model.<br>
-           <br>
-           Before you start, we need to set some expectations right:
-           <ol>
-           <li style="list-style-type: disc">
-           <p>It <b>will take you considerable time</b> before you get valid planning results
-           with frePPLe. You will need to read through quite a bit of documentation,
-           collect quite some data file and more forward by trial and error.</p>
-           </li>
-           <li style="list-style-type: disc">
-           <p>This wizard guides you towards a <b>basic model only</b>. The goal is simply to get
-           you started as quick and easy as possible.<br>You will find links to more
-           advanced features in the bonus section of the wizard.<br>
-           </p>
-           </li>
-           </ol>
-           <p>Ready to get going? Select the type of model you want to build.</p>
-           <div class="row">
-           <div class="col-md-4 text-center">
-             <a class="btn btn-primary" href="{prefix}/wizard/load/forecast/">Start data load wizard<br>for forecasting</a>
-           </div>
-           <div class="col-md-4 text-center">
-             <a class="btn btn-primary" href="{prefix}/wizard/load/production/">Start data load wizard<br>for production planning</a>
-           </div>
-           </div>
+        welcome = """
+        <style>
+            .trivision-wizard-column {{
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 1rem;
+                height: 100%%;
+            }}
+            .trivision-icon-container {{
+                position: relative;
+                display: inline-block;
+                margin-bottom: 1.5rem;
+            }}
+            .trivision-icon-circle {{
+                width: 70px;
+                height: 70px;
+                border-radius: 50%%;
+                border: 2px solid #E1BEE7;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.8rem;
+                color: #7B2D8E;
+                background: #FFFFFF;
+                transition: all 0.3s ease;
+            }}
+            .trivision-icon-letter {{
+                position: absolute;
+                top: -5px;
+                left: -5px;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%%;
+                background: #A855F7;
+                color: #FFFFFF;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.75rem;
+                font-weight: bold;
+                box-shadow: 0 2px 4px rgba(168,85,247,0.4);
+                font-family: 'Inter', sans-serif;
+            }}
+            .trivision-wizard-column:hover .trivision-icon-circle {{
+                transform: scale(1.05);
+                border-color: #A855F7;
+                box-shadow: 0 4px 12px rgba(168,85,247,0.2);
+            }}
+            .trivision-btn-primary {{
+                background: #A855F7 !important;
+                color: #FFFFFF !important;
+                border: none !important;
+                border-radius: 20px !important;
+                font-weight: 800 !important;
+                padding: 0.5rem 1.5rem !important;
+                transition: all 0.25s ease !important;
+                font-family: 'Inter', sans-serif;
+            }}
+            .trivision-btn-primary:hover, .trivision-btn-dropdown:hover {{
+                background: #7B2D8E !important;
+                transform: translateY(-2px) !important;
+                box-shadow: 0 4px 12px rgba(123,45,142,0.2) !important;
+            }}
+            .trivision-dropdown-menu {{
+                background-color: #FFFFFF !important;
+                border-radius: 10px !important;
+                box-shadow: 0 8px 30px rgba(123,45,142,0.12) !important;
+                border: 1px solid rgba(156,39,176,0.15) !important;
+                padding: 0.5rem !important;
+                min-width: 200px;
+            }}
+            .trivision-dropdown-item {{
+                color: #7B2D8E !important;
+                background: transparent !important;
+                border: none !important;
+                text-align: center !important;
+                font-weight: 600 !important;
+                border-radius: 6px !important;
+                padding: 0.5rem 1rem !important;
+                transition: all 0.2s ease !important;
+                margin-bottom: 0.25rem !important;
+                box-shadow: none !important;
+                font-family: 'Inter', sans-serif;
+            }}
+            .trivision-dropdown-item:hover {{
+                color: #A855F7 !important;
+                background: rgba(168,85,247,0.15) !important;
+                transform: translateY(-1px) !important;
+            }}
+            .trivision-row-card {{
+                display: flex;
+                align-items: center;
+                background: #FFFFFF;
+                border-radius: 12px;
+                padding: 1rem 1.5rem;
+                margin-bottom: 1rem;
+                box-shadow: 0 4px 12px rgba(123,45,142,0.05);
+                border: 1px solid rgba(156,39,176,0.1);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }}
+            .trivision-row-card:hover {{
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(123,45,142,0.1);
+                border-color: rgba(156,39,176,0.2);
+            }}
+        </style>
+        <div class="row pt-4 pb-2">
+            <div class="col-auto justify-content-center d-flex w-100">
+                <h1 style="font-family: 'Inter', sans-serif; font-weight: 800; font-size: 1.25rem; color: #1A0033;">Three ways to get started quickly</h1>
+            </div>
+        </div>
+        <div class="row pb-4 gy-4 justify-content-center" id="wizard">
+
+            <div class="col-md-4">
+                <div class="trivision-wizard-column">
+                    <div class="trivision-icon-container">
+                        <div class="trivision-icon-circle"><i class="fa fa-hand-pointer-o"></i></div>
+                        <div class="trivision-icon-letter">A</div>
+                    </div>
+                    <h2 style="font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 800; color: #1A0033; margin-bottom: 0.5rem;">Start with one item</h2>
+                    <p style="font-family: 'Inter', sans-serif; color:#9B8AAE; font-size: 0.8rem; margin-bottom: 1.5rem;">Begin exploring with a single product</p>
+                    <div class="dropdown-center mt-auto">
+                        <button class="btn btn-primary trivision-btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 140px; font-size: 0.75rem; letter-spacing: 0.5px;">
+                            QUICKSTART <i class="fa fa-angle-down ms-1" style="font-size: 0.9rem;"></i>
+                        </button>
+                        <ul class="dropdown-menu trivision-dropdown-menu">
+                            <li><a href="{prefix}/wizard/quickstart/forecast/" class="btn btn-primary w-100 trivision-dropdown-item">FORECAST</a></li>
+                            <li><a href="{prefix}/wizard/quickstart/production/" class="btn btn-primary w-100 trivision-dropdown-item">PRODUCTION</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="trivision-wizard-column">
+                    <div class="trivision-icon-container">
+                        <div class="trivision-icon-circle"><i class="fa fa-cloud-upload"></i></div>
+                        <div class="trivision-icon-letter">B</div>
+                    </div>
+                    <h2 style="font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 800; color: #1A0033; margin-bottom: 0.5rem;">Upload more data</h2>
+                    <p style="font-family: 'Inter', sans-serif; color:#9B8AAE; font-size: 0.8rem; margin-bottom: 1.5rem;">Import your datasets via CSV or Excel</p>
+                    <div class="dropdown-center mt-auto">
+                        <button class="btn btn-primary trivision-btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 140px; font-size: 0.75rem; letter-spacing: 0.5px;">
+                            UPLOAD <i class="fa fa-angle-down ms-1" style="font-size: 0.9rem;"></i>
+                        </button>
+                        <ul class="dropdown-menu trivision-dropdown-menu">
+                            <li><a class="btn btn-primary w-100 trivision-dropdown-item" href="{prefix}/wizard/load/forecast/">FORECAST</a></li>
+                            <li><a class="btn btn-primary w-100 trivision-dropdown-item" href="{prefix}/wizard/load/production/">PRODUCTION</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="trivision-wizard-column">
+                    <div class="trivision-icon-container">
+                        <div class="trivision-icon-circle"><i class="fa fa-link"></i></div>
+                        <div class="trivision-icon-letter">C</div>
+                    </div>
+                    <h2 style="font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 800; color: #1A0033; margin-bottom: 0.5rem;">Import from Odoo</h2>
+                    <p style="font-family: 'Inter', sans-serif; color:#9B8AAE; font-size: 0.8rem; margin-bottom: 1.5rem;">Sync directly with your ERP system</p>
+                    <div class="dropdown-center mt-auto">
+                        <a href="{prefix}/data/common/parameter/?noautofilter&name__contains=odoo" class="btn btn-primary trivision-btn-primary" style="min-width: 140px; font-size: 0.75rem; letter-spacing: 0.5px; display: inline-flex; justify-content: center; align-items: center;">
+                            CONNECT
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
         """
     steps.append(
         {
@@ -181,20 +327,14 @@ def getWizardSteps(request, mode):
          <p>Unsurprisingly, we start by loading some basic master data: items, locations and customers.</p>
          <p>You can either enter some sample records one by one, or (even better) load an Excel
          or CSV file you extract from another system.</p>
-         <table class="table">
-         <thead>
-         <tr>
-           <th style="width:90px"></th>
-           <th>Step</th>
-           <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-           <tr><td>
-           1<br>{label_data}
-           </td>
-           <td>
-           <p><b><a href="{prefix}/data/input/item/" class="text-decoration-underline" target="_blank">Load item data</a></b>
+         
+           
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/item/" class="text-decoration-underline" target="_blank">Load item data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/master-data/items.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -212,15 +352,20 @@ def getWizardSteps(request, mode):
            file directly on the grid area <span class="circle">B</span>.<br>
            <span class="circle">D</span> You can click the down arrow icon to export the existing data as a spreadsheet,
            make changes to the spreadsheet and then upload it again with the up arrow icon <span class="circle">C</span>.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load items')"><img src="/static/wizard/img/item.png" style="width: 200px"></a>
-           </td></tr>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load items')"><img src="/static/wizard/img/item.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
 
-           <tr><td>
-           2<br>{label_data}
-           </td>
-           <td><p><b><a href="{prefix}/data/input/location/" class="text-decoration-underline" target="_blank">Load location data</a></b>
+           
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/location/" class="text-decoration-underline" target="_blank">Load location data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/master-data/locations.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -233,15 +378,20 @@ def getWizardSteps(request, mode):
            <p>Load all locations from where items are sold to customers or where inventory is stored.<br>
            Location can be structured in a hierachical tree which allows intuitive
            navigation through the forecast data at aggregated levels.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load locations')"><img src="/static/wizard/img/location.png" style="width: 200px"></a>
-           </td></tr>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load locations')"><img src="/static/wizard/img/location.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
 
-           <tr><td>
-           3<br>{label_data}
-           </td>
-           <td><p><b><a href="{prefix}/data/input/customer/" class="text-decoration-underline" target="_blank">Load customer data</a></b>
+           
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/customer/" class="text-decoration-underline" target="_blank">Load customer data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/master-data/customers.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -254,11 +404,13 @@ def getWizardSteps(request, mode):
            <p>Load all customers for which you want to compute a forecast.<br>
            In a first model we recommend to keep the customer hierarchy simple: for instance,
            map all sales to a single aggregate customer.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load customers')"><img src="/static/wizard/img/customer.png" style="width: 200px"></a>
-           </td></tr>
-         </tbody></table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load customers')"><img src="/static/wizard/img/customer.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
          """.format(
                     **context
                 ),
@@ -286,18 +438,14 @@ def getWizardSteps(request, mode):
          data than the rules of thumb described above, but the statistical accuracy will then obviously
          be somewhat lower.</p>
 
-         <table class="table">
-         <thead>
-         <tr>
-           <th style="width:90px"></th>
-           <th>Step</th>
-           <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-           <td style="text-align: center">1<br>{label_data}</td>
-           <td><p><b><a href="{prefix}/data/input/demand/" class="text-decoration-underline" target="_blank">Load sales order data</a></b>
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/demand/" class="text-decoration-underline" target="_blank">Load sales order data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/master-data/sales-orders.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -312,11 +460,13 @@ def getWizardSteps(request, mode):
            be "closed". Overdue backlog orders can be loaded with the status "open".<br>
            Unless the number of sales orders exceeds 2 million, we recommend to load them
            directly. For larger data volumes you might consider aggregating the data per time bucket.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load sales orders')"><img src="/static/wizard/img/salesorder.png" style="width: 200px"></a>
-           </td></tr>
-         </tbody></table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load sales orders')"><img src="/static/wizard/img/salesorder.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
          """.format(
                     **context
                 ),
@@ -348,18 +498,15 @@ def getWizardSteps(request, mode):
          <p>Almost there! First, let's configure a few important parameters so
          that we can compute the statistical forecast for you.</p>
 
-         <table class="table">
-         <thead>
-         <tr>
-           <th style="width:90px"></th>
-           <th>Step</th>
-           <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
+         
 
-         <tr><td style="text-align: center">1<br>{label_config}</td>
-         <td><p><b><a href="{prefix}/data/common/parameter/?name=forecast.calendar" class="text-decoration-underline" target="_blank">Configure the forecasting time bucket size</a></b>:</p>
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_config}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/common/parameter/?name=forecast.calendar" class="text-decoration-underline" target="_blank">Configure the forecasting time bucket size</a></b>:</p>
          <p>Forecast values are computed by time bucket.<br>
          You need to configure what time bucket size you wish to use.</p>
          <div class="form-check ps-5 mb-2">
@@ -389,13 +536,20 @@ def getWizardSteps(request, mode):
          <p class=mt-3">You can always review and update your choice with the parameter "forecast.calendar"
          in the <a href="{prefix}/data/common/parameter/" class="text-decoration-underline" target="_blank">parameter table</a>
          (available in the "admin" menu).</p>
-         </td>
-         <td></td>
-         </tr>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
 
-         <tr>
-         <td style="text-align: center">2<br>{label_config}</td>
-         <td><p><b><a href="{prefix}/data/common/parameter/?name=forecast.Horizon_future" class="text-decoration-underline" target="_blank">Configure the forecasting horizon</a></b>:</p>
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_config}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/common/parameter/?name=forecast.Horizon_future" class="text-decoration-underline" target="_blank">Configure the forecasting horizon</a></b>:</p>
          <p>You also need to configure how far in the future you wish to forecast for:<br>
          <div class="ps-5 mt-2">
          <input class="form-control d-inline w-auto" style="width:20em" size="10" value="'''.format(
@@ -406,11 +560,20 @@ def getWizardSteps(request, mode):
          <p>You can always review and update your choice with the parameter "forecast.Horizon_future"
          in the <a href="{prefix}/data/common/parameter/" class="text-decoration-underline" target="_blank">parameter table</a>
          (available in the "admin" menu).</p>
-         </td><td colspan="2"></td></tr>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
 
-         <tr>
-         <td style="text-align: center">3<br>{label_config}</td>
-         <td><p><b><a href="{prefix}/data/common/parameter/?name=forecast.currentdate" class="text-decoration-underline" target="_blank">Configure the current date</a></b>:</p>
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_config}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/common/parameter/?name=forecast.currentdate" class="text-decoration-underline" target="_blank">Configure the current date</a></b>:</p>
          <p>In normal situations you'll want to compute the forecast starting from today onwards.<br>
          When your dataset is not recent you may want to step back to a moment in the past, and simulate
          generating a forecast from that moment onwards.</p>
@@ -425,21 +588,33 @@ def getWizardSteps(request, mode):
          <p>You can always review and update your choice with the parameter "currentdate"
          in the <a href="{prefix}/data/common/parameter/" class="text-decoration-underline" target="_blank">parameter table</a>
          (available in the "admin" menu).</p>
-         </td><td colspan="2"></td></tr>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
 
-         <tr><td style="text-align: center">4<br>{label_action}</td>
-         <td><p><b><a href="{prefix}/execute/" class="text-decoration-underline" target="_blank">Generate statistical forecast</a></b>:</p>
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">4<br>{label_action}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/execute/" class="text-decoration-underline" target="_blank">Generate statistical forecast</a></b>:</p>
          <p>You can now compute the first statistical forecast.</p>
          <p>Open the <a href="{prefix}/execute/">execution screen</a> (available in the "admin" menu) and select
          the "generate plan" <span class="circle">A</span> task. Make sure the option "generate forecast"
          <span class="circle">B</span>is checked.</p>
          <p><span class="circle">C</span> Launch the task and wait for it to complete. <span class="circle">D</span></p>
          <p>Whenever you change any of the intput data, you will need to come back here to recompute the forecast.</p>
-         </td>
-         <td style="text-align: center">
-         <a href="#" onclick="showModalImage(event, 'Generate statistical forecast')"><img src="/static/wizard/img/generate_forecast.png" style="width: 200px"></a>
-         </td></tr>
-         </tbody></table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Generate statistical forecast')"><img src="/static/wizard/img/generate_forecast.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
          """.format(
                     **context
                 ),
@@ -475,18 +650,14 @@ def getWizardSteps(request, mode):
                 "content": """
          <p>Now that the forecast has been computed, let's take some time to visit the main screens to
          review and update the results.</p>
-         <table class="table">
-         <thead>
-         <tr>
-         <th style="width:90px"></th>
-         <th>Step</th>
-         <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <td style="text-align: center">1<br>{label_analysis}</td>
-         <td><p><b><a href="{prefix}/forecast/editor/" class="text-decoration-underline" target="_blank">Review forecast editor</a></b><br>
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_analysis}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/forecast/editor/" class="text-decoration-underline" target="_blank">Review forecast editor</a></b><br>
          <p>The <a href="{prefix}/forecast/editor/" class="text-decoration-underline" target="_blank">forecast editor</a> (available
          in the "sales" menu) is the main screen for reviewing the results.<p>
          <p><span class="circle">A</span> Select a combination of item + location + customer in the top pane, and
@@ -497,24 +668,29 @@ def getWizardSteps(request, mode):
          <p><span class="circle">D</span> You can switch from units to monetary value.</p>
          <p><span class="circle">E</span> You can also visualize the report in different time bucket sizes.</p>
          </p>
-         </td>
-         <td style="text-align: center">
-         <a href="#" onclick="showModalImage(event, 'Forecast editor')"><img src="/static/wizard/img/forecast_editor.png" style="width: 200px"></a>
-         </td>
-         </tr>
-         <tr><td style="text-align: center">2<br>{label_analysis}</td>
-         <td><p><a href="{prefix}/forecast/" class="text-decoration-underline" target="_blank"><b>Review forecast report</b></a></p>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Forecast editor')"><img src="/static/wizard/img/forecast_editor.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_analysis}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><a href="{prefix}/forecast/" class="text-decoration-underline" target="_blank"><b>Review forecast report</b></a></p>
          <p>The <a href="{prefix}/forecast/" class="text-decoration-underline" target="_blank">forecast report</a> (available in the "sales" menu)
          is handy for going through a larger list of forecasts.</p>
          <p><span class="circle">A</span> In this screen you can easily export forecast data as a spreadsheet.<p>
          <p><span class="circle">B</span> You can also upload an Excel spreadsheet with forecast values from your sales team.</p>
-         </td>
-         <td style="text-align: center">
-         <a href="#" onclick="showModalImage(event, 'Forecast report')"><img src="/static/wizard/img/forecast_report.png" style="width: 200px"></a>
-         </td>
-         </tr>
-         </tbody>
-         </table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Forecast report')"><img src="/static/wizard/img/forecast_report.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
          <p class="mt-3">Congratulations! You are now able to use the forecasting capabilities of frePPLe.</p>
          """.format(
                     **context
@@ -533,41 +709,66 @@ def getWizardSteps(request, mode):
                 "content": """
          <p>With the basics under your belt, you are ready to dig into some more advanced
          modeling and configuration topics.</p>
-         <table class="table">
-         <thead>
-         <tr>
-         <th>Topic</th>
-         <th>Description</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <td><a href="{docroot}/videos/demand-forecasting/filter-outliers.html?highlight=outlier" class="text-decoration-underline" target="_blank">Outlier detection</a></td>
-         <td><p>Exceptional one-off sales can seriously impact the accuracy of the forecast.
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/videos/demand-forecasting/filter-outliers.html?highlight=outlier" class="text-decoration-underline" target="_blank">Outlier detection</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p>Exceptional one-off sales can seriously impact the accuracy of the forecast.
          FrePPLe provides mechanism to automatically detect and filter them out.</p>
-         </td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/forecasting/forecast-method" class="text-decoration-underline" target="_blank">Forecasting methods</a></td>
-         <td><p>This example model digs into the forecasting algorithms and their configuration.</p></td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/forecasting/middle-out-forecast" class="text-decoration-underline" target="_blank">Middle-out forecasting</a></td>
-         <td><p>The statistical forecast is computed by default at the lowest level in the
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/forecasting/forecast-method" class="text-decoration-underline" target="_blank">Forecasting methods</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p>This example model digs into the forecasting algorithms and their configuration.</p>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/forecasting/middle-out-forecast" class="text-decoration-underline" target="_blank">Middle-out forecasting</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p>The statistical forecast is computed by default at the lowest level in the
          hierarchies. In some situations, it's more appropriate to calculate the forecast at a higher level
-         to achieve more accurate results.</p></td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/forecasting/forecast-netting" class="text-decoration-underline" target="_blank">Forecast netting</a></td>
-         <td><p>Demand in the near future mostly consists of customer sales orders. Demand far out in the
+         to achieve more accurate results.</p>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/forecasting/forecast-netting" class="text-decoration-underline" target="_blank">Forecast netting</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p>Demand in the near future mostly consists of customer sales orders. Demand far out in the
          future consists mostly of forecast. In many industries, both sales and forecast
          will coexist in the same time bucket.</p>
          <p>The forecast netting (aka forecast consumption) subtracts the sales orders from the
          forecast to avoid double-planning the same demand.</p>
-         </td>
-         </tr>
-         </tbody>
-         </table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
          """.format(
                     **context
                 ),
@@ -594,20 +795,14 @@ def getWizardSteps(request, mode):
          <p>You can either enter some sample records one by one, or (even better) load an Excel
          or CSV file you extract from some existing database.</p>
 
-         <table class="table">
-         <thead>
-         <tr>
-           <th style="width:90px"></th>
-           <th>Step</th>
-           <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-           <tr><td>
-           1<br>{label_data}
-           </td>
-           <td>
-           <p><b><a href="{prefix}/data/input/item/" class="text-decoration-underline" target="_blank">Load item data</a></b>
+         
+           
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/item/" class="text-decoration-underline" target="_blank">Load item data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/master-data/items.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -627,15 +822,20 @@ def getWizardSteps(request, mode):
            file directly on the grid area <span class="circle">B</span>.<br>
            <span class="circle">D</span> You can click the down arrow icon to export the existing data as a spreadsheet,
            make changes to the spreadsheet and then upload it again with the up arrow icon <span class="circle">C</span>.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load items')"><img src="/static/wizard/img/item.png" style="width: 200px"></a>
-           </td></tr>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load items')"><img src="/static/wizard/img/item.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
 
-           <tr><td>
-           2<br>{label_data}
-           </td>
-           <td><p><b><a href="{prefix}/data/input/location/" class="text-decoration-underline" target="_blank">Load location data</a></b>
+           
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/location/" class="text-decoration-underline" target="_blank">Load location data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/master-data/locations.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -646,15 +846,20 @@ def getWizardSteps(request, mode):
              </a>
            </p>
            <p>Load all locations from where items are sold to customers or where inventory is stored.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load locations')"><img src="/static/wizard/img/location.png" style="width: 200px"></a>
-           </td></tr>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load locations')"><img src="/static/wizard/img/location.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
 
-           <tr><td>
-           3<br>{label_data}
-           </td>
-           <td><p><b><a href="{prefix}/data/input/customer/" class="text-decoration-underline" target="_blank">Load customer data</a></b>
+           
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/customer/" class="text-decoration-underline" target="_blank">Load customer data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/master-data/customers.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -665,11 +870,13 @@ def getWizardSteps(request, mode):
              </a>
            </p>
            <p>Load all customers to which products are sold.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load customers')"><img src="/static/wizard/img/customer.png" style="width: 200px"></a>
-           </td></tr>
-         </tbody></table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load customers')"><img src="/static/wizard/img/customer.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
          """.format(
                     **context
                 ),
@@ -689,19 +896,14 @@ def getWizardSteps(request, mode):
                 "content": """
          <p>With the master data in place we can now proceed and load the sales order book.</p>
 
-         <table class="table">
-         <thead>
-         <tr>
-         <th style="width:90px"></th>
-         <th>Step</th>
-         <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <td style="text-align: center">1<br>{label_data}</td>
-         <td>
-           <p><b><a href="{prefix}/data/input/demand/" class="text-decoration-underline" target"_blank">Load sales order data</a></b>
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/demand/" class="text-decoration-underline" target"_blank">Load sales order data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/master-data/sales-orders.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -713,11 +915,13 @@ def getWizardSteps(request, mode):
            </p>
            For planning we only need the open sales orders, the remaining quantity to ship
            and the delivery date expected by customers.</p>
-         </td>
-         <td style="text-align: center">
-         <a href="#" onclick="showModalImage(event, 'Load sales orders')"><img src="/static/wizard/img/salesorder.png" style="width: 200px"></a>
-         </td></tr>
-         </tbody></table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load sales orders')"><img src="/static/wizard/img/salesorder.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
          """.format(
                     **context
                 ),
@@ -760,19 +964,14 @@ def getWizardSteps(request, mode):
          </li>
          </ol>
 
-         <table class="table">
-         <thead>
-         <tr>
-         <th style="width:90px"></th>
-         <th>Step</th>
-         <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <td style="text-align: center">1<br>{label_data}</td>
-         <td>
-           <p><b><a href="{prefix}/data/input/operation/" class="text-decoration-underline" target="_blank">Load operation data</a></b>
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/operation/" class="text-decoration-underline" target="_blank">Load operation data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/manufacturing-bom/operations.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -785,15 +984,19 @@ def getWizardSteps(request, mode):
            <p>Defines the operations and their duration.</p>
            <p>An operation of type "routing" defines the producion routings. Extra records
            defines the step operations and their duration.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load operations')"><img src="/static/wizard/img/operation.png" style="width: 200px"></a>
-           </td>
-           </tr>
-         <tr>
-         <td style="text-align: center">2<br>{label_data}</td>
-         <td>
-           <p><b><a href="{prefix}/data/input/operationmaterial/" class="text-decoration-underline" target="_blank">Load operation material data</a></b>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load operations')"><img src="/static/wizard/img/operation.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/operationmaterial/" class="text-decoration-underline" target="_blank">Load operation material data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/manufacturing-bom/operation-materials.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -804,10 +1007,13 @@ def getWizardSteps(request, mode):
              </a>
            </p>
            <p>Defines the materials produced and consumed by the operations.</p>
-           </td><td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load operation materials')"><img src="/static/wizard/img/operationmaterial.png" style="width: 200px"></a>
-           </td></tr>
-         </tbody></table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load operation materials')"><img src="/static/wizard/img/operationmaterial.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
          """.format(
                     **context
                 ),
@@ -830,19 +1036,14 @@ def getWizardSteps(request, mode):
                 "content": """
          <p>In this step you define all suppliers and the lead times for purchasing items from them.</p>
 
-         <table class="table">
-         <thead>
-         <tr>
-         <th style="width:90px"></th>
-         <th>Step</th>
-         <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <td style="text-align: center">1<br>{label_data}</td>
-         <td>
-           <p><b><a href="{prefix}/data/input/supplier/" class="text-decoration-underline" target="_blank">Load supplier data</a></b>
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/supplier/" class="text-decoration-underline" target="_blank">Load supplier data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/purchasing/suppliers.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -853,14 +1054,19 @@ def getWizardSteps(request, mode):
              </a>
            </p>
            <p>Load all the suppliers from which you can purchase items.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load suppliers')"><img src="/static/wizard/img/supplier.png" style="width: 200px"></a>
-           </td></tr>
-           <tr>
-           <td style="text-align: center">2<br>{label_data}</td>
-           <td>
-           <p><b><a href="{prefix}/data/input/itemsupplier/" class="text-decoration-underline" target="_blank">Load item supplier data</a></b>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load suppliers')"><img src="/static/wizard/img/supplier.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+           
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/itemsupplier/" class="text-decoration-underline" target="_blank">Load item supplier data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/purchasing/item-suppliers.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -871,11 +1077,13 @@ def getWizardSteps(request, mode):
              </a>
            </p>
            <p>In this table you define which item can be purchased from which supplier.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load item suppliers')"><img src="/static/wizard/img/itemsupplier.png" style="width: 200px"></a>
-           </td></tr>
-         </tbody></table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load item suppliers')"><img src="/static/wizard/img/itemsupplier.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
          """.format(
                     **context
                 ),
@@ -900,18 +1108,14 @@ def getWizardSteps(request, mode):
                 "content": """
          <p>All right, it's time to for a first checkpoint. We'll verify the supply chain structure
          you have modeled in the previous steps.</p>
-         <table class="table">
-         <thead>
-         <tr>
-         <th style="width:90px"></th>
-         <th>Step</th>
-         <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <td style="text-align: center">1<br>{label_check}</td>
-         <td><p><b>Review the supply path of some sales orders</b></p>
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_check}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b>Review the supply path of some sales orders</b></p>
          <p>Go to the <a href="{prefix}/data/input/demand/" class="text-decoration-underline" target="_blank">sales order list</a>
          and click the triangle icon <span class="circle">A</span> to investigate some example sales orders.</p>
          <p>Select the "supply path" tab <span class="circle">B</span>, and study the graph.</p>
@@ -922,14 +1126,15 @@ def getWizardSteps(request, mode):
          understood and implemented the previous steps.</p>
          <p>If your paths are broken or contain cycles, you will need to review and correct the operations
          to get the supply path correct.</p>
-         </td>
-         <td style="text-align: center">
-         <a href="#" onclick="showModalImage(event, 'Sales order drilldown')"><img src="/static/wizard/img/salesorder_drilldown.png" style="width: 200px"></a>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Sales order drilldown')"><img src="/static/wizard/img/salesorder_drilldown.png" style="width: 200px"></a>
          <br><br>
          <a href="#" onclick="showModalImage(event, 'Sales order supply path')"><img src="/static/wizard/img/supplypath_mfg.png" style="width: 200px"></a>
-         </td>
-         </tr>
-         </tbody></table>
+            </div>
+        </div>
+        
+         
          """.format(
                     **context
                 ),
@@ -951,18 +1156,15 @@ def getWizardSteps(request, mode):
                 "content": """
          <p>We'll generate a first unconstrained plan and review the list of proposed manufacturing orders and
          purchase orders.</p>
-         <table class="table">
-         <thead>
-         <tr>
-         <th style="width:90px"></th>
-         <th>Step</th>
-         <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
+         
 
-         <tr><td style="text-align: center">1<br>{label_config}</td>
-         <td><p><b><a href="{prefix}/data/common/parameter/?name=forecast.populateForecastTable" class="text-decoration-underline" target="_blank">Enable or disable the use of forecast</a></b>:</p>
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_config}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/common/parameter/?name=forecast.populateForecastTable" class="text-decoration-underline" target="_blank">Enable or disable the use of forecast</a></b>:</p>
          <div class="form-check ps-5">
            <input class="form-check-input" id="fcst_auto" type="radio" name="fcstbckt" data-parameter="forecast.populateForecastTable" data-parameter-value="true"
            """.format(
@@ -995,29 +1197,40 @@ def getWizardSteps(request, mode):
          </div>
          <p>You can always update your choice later with the parameter "forecast.populateForecastTable"
          in the <a href="{prefix}/data/common/parameter/" class="text-decoration-underline" target="_blank">parameter table</a> (available in the "admin" menu).</p>
-         </td>
-         <td></td>
-         </tr>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
 
-         <tr>
-         <td style="text-align: center">2<br>{label_action}</td>
-         <td><p><b><a href="{prefix}/execute/" class="text-decoration-underline" target="_blank">Generate an unconstrained plan</a></b></p>
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_action}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/execute/" class="text-decoration-underline" target="_blank">Generate an unconstrained plan</a></b></p>
          <p>You can now compute the first plan.</p>
          <p>Open the <a href="{prefix}/execute/">execution screen</a> (available in the "admin" menu) and select
          the "generate plan" task. Make sure the "generate supply plan" option <span class="circle">A</span>
          is checked, and make sure to generate an unconstrained plan <span class="circle">B</span>.<p>
          <p><span class="circle">C</span> Launch the task and wait for it to complete. <span class="circle">D</span></p>
          <p><b>Whenever you change any of the input data, you will need to come back to this screen to recompute the plan.</b></p>
-         </td>
-         <td>
-         <a href="#" onclick="showModalImage(event, 'Generate unconstrained plan')"><img src="/static/wizard/img/generate_unconstrained.png" style="width: 200px"></a>
-         </td>
-         </tr>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Generate unconstrained plan')"><img src="/static/wizard/img/generate_unconstrained.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
 
-         <tr>
-         <td style="text-align: center">3<br>{label_analysis}</td>
-         <td>
-         <p><b><a href="{prefix}/data/input/manufacturingorder/" class="text-decoration-underline" target="_blank">Load Manufacturing order data</a></b></p>
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_analysis}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/manufacturingorder/" class="text-decoration-underline" target="_blank">Load Manufacturing order data</a></b></p>
          <p>The <a href="{prefix}/data/input/manufacturingorder/" class="text-decoration-underline" target="_blank">manufacturing order</a> screen
          (available in the "Manufacturing" menu) gives an overview of all manufacturing orders.
          The plan generated in the previous step created a set of proposed manufacturing
@@ -1027,16 +1240,20 @@ def getWizardSteps(request, mode):
          <p>If the list isn't empty, you can review that the timing, duration and quantity
          of the proposed manufacturing orders is matching your expectations. The result will
          match a textbook <a href="https://en.wikipedia.org/wiki/Material_requirements_planning" class="text-decoration-underline" target="_blank">MRP explosion</a>.</p>
-         </td>
-         <td>
-         <a href="#" onclick="showModalImage(event, 'Manufacturing orders')"><img src="/static/wizard/img/manufacturingorder.png" style="width: 200px"></a><br>
-         </td>
-         </tr>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Manufacturing orders')"><img src="/static/wizard/img/manufacturingorder.png" style="width: 200px"></a><br>
+            </div>
+        </div>
+        
 
-         <tr>
-         <td style="text-align: center">4<br>{label_analysis}</td>
-         <td>
-         <p><b><a href="{prefix}/data/input/purchaseorder/" class="text-decoration-underline" target="_blank">Load purchase order data</a></b></p>
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">4<br>{label_analysis}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/purchaseorder/" class="text-decoration-underline" target="_blank">Load purchase order data</a></b></p>
          <p>The purchase order report (available in the "purchasing" menu) gives an overview of all
          purchase orders. The plan generated in the previous step created a set of
          proposed purchase orders to meet your sales orders.</p>
@@ -1045,13 +1262,12 @@ def getWizardSteps(request, mode):
          <p>If the list isn't empty, you can review that the timing, duration and quantity
          of the proposed purchase orders is matching your expectations. The result will
          match a classic textbook <a href="https://en.wikipedia.org/wiki/Material_requirements_planning" class="text-decoration-underline" target="_blank">MRP explosion</a>.</p>
-         </td>
-         <td>
-         <a href="#" onclick="showModalImage(event, 'Purchase orders')"><img src="/static/wizard/img/purchaseorder.png" style="width: 200px"></a><br>
-         </td>
-         </tr>
-         </tbody>
-         </table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Purchase orders')"><img src="/static/wizard/img/purchaseorder.png" style="width: 200px"></a><br>
+            </div>
+        </div>
+        
          """.format(
                     **context
                 ),
@@ -1085,19 +1301,14 @@ def getWizardSteps(request, mode):
          <p>The plan in of the previous steps started with an empty factory and empty inventories.
          A correct plan obviously needs to consider the current stock and all purchase orders and
          manufacturing orders that are already ongoing or confirmed to start.</p>
-         <table class="table">
-         <thead>
-         <tr>
-         <th style="width:90px"></th>
-         <th>Step</th>
-         <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <td style="text-align: center">1<br>{label_data}</td>
-         <td>
-           <p><b><a href="{prefix}/data/input/buffer/" class="text-decoration-underline" target="_blank">Load inventory data</a></b>
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/buffer/" class="text-decoration-underline" target="_blank">Load inventory data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/master-data/buffers.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -1108,14 +1319,19 @@ def getWizardSteps(request, mode):
              </a>
            </p>
            <p>Load the current stock of all items. If the stock is 0, no record is required.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load on hand inventory')"><img src="/static/wizard/img/buffer.png" style="width: 200px"></a>
-           </td></tr>
-         <tr>
-         <td style="text-align: center">2<br>{label_data}</td>
-         <td>
-           <p><b><a href="{prefix}/data/input/purchaseorder/" class="text-decoration-underline" target="_blank">Load purchase order data</a></b>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load on hand inventory')"><img src="/static/wizard/img/buffer.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/purchaseorder/" class="text-decoration-underline" target="_blank">Load purchase order data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/purchasing/purchase-orders.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -1129,14 +1345,19 @@ def getWizardSteps(request, mode):
            The status field of the records should be "confirmed" to seperate them from the
            proposed purchase orders that were generated in the previous step.</p>
            <p>This table is thus used both as input and output.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load purchase order data')"><img src="/static/wizard/img/purchaseorder.png" style="width: 200px"></a>
-           </td></tr>
-         <tr>
-         <td style="text-align: center">3<br>{label_data}</td>
-         <td>
-           <p><b><a href="{prefix}/data/input/manufacturingorder/" class="text-decoration-underline" target="_blank">Load manufacturing order data</a></b>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load purchase order data')"><img src="/static/wizard/img/purchaseorder.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/manufacturingorder/" class="text-decoration-underline" target="_blank">Load manufacturing order data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/manufacturing-bom/manufacturing-orders.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -1150,11 +1371,13 @@ def getWizardSteps(request, mode):
            The status field of the records should be "confirmed" to seperate them from the
            proposed manufacturing orders that were generated in the previous step.</p>
            <p>This table is thus used both as input and output.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load manufacturing order data')"><img src="/static/wizard/img/manufacturingorder.png" style="width: 200px"></a>
-           </td></tr>
-         </tbody></table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load manufacturing order data')"><img src="/static/wizard/img/manufacturingorder.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
          """.format(
                     **context
                 ),
@@ -1190,19 +1413,14 @@ def getWizardSteps(request, mode):
          capacity planning.</p>
          </li>
          </ul>
-         <table class="table">
-         <thead>
-         <tr>
-         <th style="width:90px"></th>
-         <th>Step</th>
-         <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <td style="text-align: center">1<br>{label_data}</td>
-         <td>
-           <p><b><a href="{prefix}/data/input/resource/" class="text-decoration-underline" target="_blank">Load resource data</a></b>
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/resource/" class="text-decoration-underline" target="_blank">Load resource data</a></b>
              &nbsp;&nbsp;
              <a href="{docroot}/modeling-wizard/manufacturing-capacity/resources.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
@@ -1215,14 +1433,19 @@ def getWizardSteps(request, mode):
            <p>Load all resources.<br>
            A resource models a machine, a group of machines, an operator, a group of operators,
            or other capacity constraints.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load resource data')"><img src="/static/wizard/img/resource.png" style="width: 200px"></a>
-           </td></tr>
-         <tr>
-         <td style="text-align: center">2<br>{label_data}</td>
-         <td>
-           <p><b><a href="{prefix}/data/input/operationresource/" class="text-decoration-underline" target="_blank">Load operation resource data</a></b>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load resource data')"><img src="/static/wizard/img/resource.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/operationresource/" class="text-decoration-underline" target="_blank">Load operation resource data</a></b>
              <a href="{docroot}/modeling-wizard/manufacturing-capacity/operation-resources.html" target="_blank">
              <i class="fa fa-book fa-2x" aria-hidden="true" data-bs-toggle="tooltip" title="Documentation"></i>
              </a>
@@ -1231,11 +1454,13 @@ def getWizardSteps(request, mode):
              </a>
            </p>
            <p>This table associates each operation with the resources it utilizes.</p>
-           </td>
-           <td style="text-align: center">
-           <a href="#" onclick="showModalImage(event, 'Load operation resource data')"><img src="/static/wizard/img/operationresource.png" style="width: 200px"></a>
-           </td></tr>
-         </tbody></table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Load operation resource data')"><img src="/static/wizard/img/operationresource.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
          """.format(
                     **context
                 ),
@@ -1270,29 +1495,26 @@ def getWizardSteps(request, mode):
          <p>The constrained plan generated in this step will respect all the capacity, material
          availability, and procurement lead times. In case of lead time or capacity shortages,
          demands will be planned late.</p>
-         <table class="table">
-         <thead>
-         <tr>
-         <th style="width:90px"></th>
-         <th>Step</th>
-         <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <td style="text-align: center">1<br>{label_action}</td>
-         <td>
-         <p><b><a href="{prefix}/execute/" class="text-decoration-underline" target="_blank">Generate constrained plan</a></b></p>
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_action}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/execute/" class="text-decoration-underline" target="_blank">Generate constrained plan</a></b></p>
          <p>Navigate to the <a href="{prefix}/execute/" class="text-decoration-underline">execution screen</a> (available in the "admin"
          menu) and select the "generate plan" task <span class="circle">A</span>. Make sure the options "generate supply
          plan" and "constrained plan" <span class="circle">B</span> are both checked.</p>
          <p><span class="circle">C</span> Launch the task and wait for it to complete. <span class="circle">D</span></p>
          <p><b>Whenever you change any of the input data, you will need to come back here to regenerate the plan.</b></p>
-         </td>
-         <td style="text-align: center">
-         <a href="#" onclick="showModalImage(event, 'Generate constrained plan')"><img src="/static/wizard/img/generate_constrained.png" style="width: 200px"></a>
-         </td></tr>
-         </tbody></table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Generate constrained plan')"><img src="/static/wizard/img/generate_constrained.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
+         
          """.format(
                     **context
                 ),
@@ -1309,19 +1531,14 @@ def getWizardSteps(request, mode):
                 "locked": locked,
                 "content": """
          <p>A number of new screens are ready to be explored now!</p>
-         <table class="table">
-         <thead>
-         <tr>
-         <th style="width:90px"></th>
-         <th>Step</th>
-         <th style="text-align: center; width:250px">Screenshot</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <td style="text-align: center">1<br>{label_analysis}</td>
-         <td>
-         <p><b><a href="{prefix}/resource/" class="text-decoration-underline" target="_blank">Capacity report</a></b></p>
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_analysis}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/resource/" class="text-decoration-underline" target="_blank">Capacity report</a></b></p>
          <p>This report visualizes the utilization of all resources per time bucket.</p>
          <p><span class="circle">A</span> The results can be displayed as a graph or as a table. You can click on
          cells in the table or buckets in the graph to get more detailed information.</p>
@@ -1332,10 +1549,19 @@ def getWizardSteps(request, mode):
          their order.</p>
          <td style="text-align: center">
          <a href="#" onclick="showModalImage(event, 'Capacity report')"><img src="/static/wizard/img/resourcereport.png" style="width: 200px"></a>
-         </td></tr>
-         <tr>
-         <td style="text-align: center">2<br>{label_analysis}</td>
-         <td><p><b><a href="{prefix}/data/input/demand/" class="text-decoration-underline" target="_blank">Sales order</a></b></p>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_analysis}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/data/input/demand/" class="text-decoration-underline" target="_blank">Sales order</a></b></p>
          <p>At the start of the planning run, you loaded the sales orders in frePPLe. The constrained
          planning run you have just completed has 1) computed the planned delivery date for all sales
          orders and 2) collected the reasons why a certain demand was planned short or late.</p>
@@ -1346,23 +1572,28 @@ def getWizardSteps(request, mode):
          <p><span class="circle">C</span> The "plan" tab shows all operations planned to deliver the order.<p>
          <p><span class="circle">D</span> The "why short or late" tab shows all constraints causing lateness
          in the delivery of the order.</p>
-         </td>
-         <td style="text-align: center">
-         <a href="#" onclick="showModalImage(event, 'Sales order drilldown')"><img src="/static/wizard/img/salesorder_analysis.png" style="width: 200px"></a>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Sales order drilldown')"><img src="/static/wizard/img/salesorder_analysis.png" style="width: 200px"></a>
          <br><br>
          <a href="#" onclick="showModalImage(event, 'Gantt plan editor')"><img src="/static/wizard/img/salesorder_why_short_or_late.png" style="width: 200px"></a>
-         </td></tr>
-         <tr>
-         <td style="text-align: center">3<br>{label_analysis}</td>
-         <td>
-         <p><b><a href="{prefix}/buffer/" class="text-decoration-underline" target="_blank">Inventory report</a></b></p>
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_analysis}</h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                <p><b><a href="{prefix}/buffer/" class="text-decoration-underline" target="_blank">Inventory report</a></b></p>
          <p>This report visualizes the planned inventory for all item-locations per time bucket.</p>
-         </td>
-         <td style="text-align: center">
-         <a href="#" onclick="showModalImage(event, 'Inventory report')"><img src="/static/wizard/img/inventoryreport.png" style="width: 200px"></a>
-         </td></tr>
-         </tbody>
-         </table>
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Inventory report')"><img src="/static/wizard/img/inventoryreport.png" style="width: 200px"></a>
+            </div>
+        </div>
+        
          <p>Congratulations! You are now able to use the production planning capabilities of frePPLe.</p>
          """.format(
                     **context
@@ -1381,72 +1612,162 @@ def getWizardSteps(request, mode):
                 "content": """
          <p>With the basics under your belt, you are ready to dig into some more advanced
          modeling and configuration topics.</p>
-         <table class="table">
-         <thead>
-         <tr>
-         <th>Topic</th>
-         <th>Description</th>
-         </tr>
-         </thead>
-         <tbody>
-         <tr>
-         <td><a href="{docroot}/modeling-wizard/common-modeling-mistakes.html" class="text-decoration-underline" target="_blank">Common mistakes</a></td>
-         <td>Learn about the most common gotchas and mistakes made by first-time users.</td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/calendar/calendar-working-hours.html" class="text-decoration-underline" target="_blank">Working&nbsp;hours</a></td>
-         <td>Modeling working hours, shifts and holidays is required to get a realistic plan.</td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/operation/operation-type.html" class="text-decoration-underline" target="_blank">Operation&nbsp;types</a></td>
-         <td>This example model demonstrates the different operation types.</td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/resource/resource-type.html" class="text-decoration-underline" target="_blank">Resource&nbsp;types</a></td>
-         <td>This example model demonstrates the different resource types.</td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/resource/resource-skills.html" class="text-decoration-underline" target="_blank">Resource&nbsp;skills</a></td>
-         <td>Resources can be assigned skills, which represent certain qualifications.<br>
-         You can specify a required skill for an operation.</td>
-         </tr>
-         <tr>
-         <td><a href={docroot}/examples/resource/resource-setup-matrices.html" class="text-decoration-underline" target="_blank">Setup&nbsp;matrices</a></td>
-         <td>Resources can require a setup time to change the configuration between different setups/configurations.
+         
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/modeling-wizard/common-modeling-mistakes.html" class="text-decoration-underline" target="_blank">Common mistakes</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                Learn about the most common gotchas and mistakes made by first-time users.
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/calendar/calendar-working-hours.html" class="text-decoration-underline" target="_blank">Working&nbsp;hours</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                Modeling working hours, shifts and holidays is required to get a realistic plan.
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/operation/operation-type.html" class="text-decoration-underline" target="_blank">Operation&nbsp;types</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                This example model demonstrates the different operation types.
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/resource/resource-type.html" class="text-decoration-underline" target="_blank">Resource&nbsp;types</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                This example model demonstrates the different resource types.
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/resource/resource-skills.html" class="text-decoration-underline" target="_blank">Resource&nbsp;skills</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                Resources can be assigned skills, which represent certain qualifications.<br>
+         You can specify a required skill for an operation.
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href={docroot}/examples/resource/resource-setup-matrices.html" class="text-decoration-underline" target="_blank">Setup&nbsp;matrices</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                Resources can require a setup time to change the configuration between different setups/configurations.
          This models the time required for cleaning, installation of new tooling, re-calibration, feeding new
-         raw materials, etc.</td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/demand/demand-priorities.html" class="text-decoration-underline" target="_blank">Demand&nbsp;priorities</a></td>
-         <td>Demand priorities give you control over the allocation of constrained supply.
+         raw materials, etc.
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/demand/demand-priorities.html" class="text-decoration-underline" target="_blank">Demand&nbsp;priorities</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                Demand priorities give you control over the allocation of constrained supply.
          Top priority orders will be the first to get the required material and capacity.
          Less prioritized orders are planned with the remaining availability and have
-         a higher chance of being planned late or short.</td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/demand/demand-policies.html" class="text-decoration-underline" target="_blank">Demand&nbsp;policies</a></td>
-         <td>This model describes how to model demand policies like "ship all in full", "allow
-         partial deliveries", "don't plan late shipments", etc.</td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/operation/operation-autofence.html" class="text-decoration-underline" target="_blank">Release&nbsp;fence</a></td>
-         <td>A release fence can be set to specify a frozen zone in the planning horizon in which
+         a higher chance of being planned late or short.
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/demand/demand-policies.html" class="text-decoration-underline" target="_blank">Demand&nbsp;policies</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                This model describes how to model demand policies like "ship all in full", "allow
+         partial deliveries", "don't plan late shipments", etc.
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/operation/operation-autofence.html" class="text-decoration-underline" target="_blank">Release&nbsp;fence</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                A release fence can be set to specify a frozen zone in the planning horizon in which
          the planning algorithm cannot propose any new manufacturing orders, purchase orders or distribution
          orders. The fence represents a period during which the plan is already being executed and can no
-         longer be changed.</td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/buffer/transfer-batch.html" class="text-decoration-underline" target="_blank">Transfer&nbsp;batching</a></td>
-         <td>Transfer batching refers to operations that are planned with some overlap. The subsequent
-         operation can already start when the previous one hasn't completely finished yet.</td>
-         </tr>
-         <tr>
-         <td><a href="{docroot}/examples/buffer/alternate-materials.html" class="text-decoration-underline" target="_blank">Alternate&nbsp;materials</a></td>
-         <td>In many industries the bill of materials can contain alternate materials: the same product
-         can be produced using different components.</td>
-         </tr>
-         </tbody>
-         </table>
+         longer be changed.
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/buffer/transfer-batch.html" class="text-decoration-underline" target="_blank">Transfer&nbsp;batching</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                Transfer batching refers to operations that are planned with some overlap. The subsequent
+         operation can already start when the previous one hasn't completely finished yet.
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
+         
+        <div class="trivision-row-card">
+            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
+                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/buffer/alternate-materials.html" class="text-decoration-underline" target="_blank">Alternate&nbsp;materials</a></h3>
+            </div>
+            <div style="flex: 1; color:#5C4670;">
+                In many industries the bill of materials can contain alternate materials: the same product
+         can be produced using different components.
+            </div>
+            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                
+            </div>
+        </div>
+        
          """.format(
                     **context
                 ),
@@ -1462,37 +1783,34 @@ def getWizardSteps(request, mode):
                 "title": "Give us feedback",
                 "icon": None,
                 "content": """
-          <table style="width:100%">
-            <tr>
-              <td style="width:50px">
-                <span id="happy" class="fa fa-smile-o" style="font-size: 40px; color: green"></span>
-              </td>
-              <td rowspan="3">
-              <textarea id='textarea' class="form-control" style="width: 100%" rows=10
+          
+        <div class="trivision-row-card" style="align-items: flex-start;">
+            <div style="flex: 0 0 80px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px; display: flex; flex-direction: column; gap: 15px; margin-top: 10px;">
+                <span id="happy" class="fa fa-smile-o" style="font-size: 40px; color: #4CAF50; cursor: pointer; transition: all 0.2s ease;"></span>
+                <span id="average" class="fa fa-meh-o" style="font-size: 40px; color: #DCDCDC; cursor: pointer; transition: all 0.2s ease;"></span>
+                <span id="nothappy" class="fa fa-frown-o" style="font-size: 40px; color: #DCDCDC; cursor: pointer; transition: all 0.2s ease;"></span>
+            </div>
+            <div style="flex: 1; display: flex; flex-direction: column;">
+                <textarea id='textarea' class="form-control" style="width: 100%; border-radius: 12px; border: 1px solid rgba(156,39,176,0.15); box-shadow: 0 2px 8px rgba(123,45,142,0.05); padding: 1rem; color: #5C4670; font-family: 'Inter', sans-serif; resize: vertical; transition: all 0.3s ease;" rows="8"
                 placeholder="We're eager to hear how well you found your way around.
 
-Choose a smiley and share your comments to help us improve frePPLe!"></textarea>
-            </td>
-          </tr>
-          <tr>
-            <td style="width:50px">
-            <span id="average" class="fa fa-meh-o" style="font-size: 40px; color: #DCDCDC"></span>
-            </td>
-          </tr>
-          <tr>
-            <td style="width:50px">
-            <span id="nothappy" class="fa fa-frown-o" style="font-size: 40px; color: #DCDCDC"></span>
-            </td>
-          </tr>
-          <tr>
-          <td></td>
-          <td>
-          <div class="pt-1">
-          <button class="btn btn-primary" disabled id='submit'>Send us feedback</button>
-          </div>
-          </td>
-          </tr>
-        </table>
+Choose a smiley and share your comments to help us improve!"></textarea>
+                <div class="pt-3 text-end">
+                    <button class="btn btn-primary trivision-btn-primary" disabled id='submit' style="min-width: 160px; pointer-events: auto;">Send us feedback</button>
+                </div>
+            </div>
+        </div>
+        <style>
+            #textarea:focus {{
+                box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
+                border-color: rgba(168,85,247,0.5);
+                outline: none;
+            }}
+            #happy:hover, #average:hover, #nothappy:hover {{
+                transform: scale(1.1);
+            }}
+        </style>
+
       """.format(
                     **context
                 ),
@@ -1513,19 +1831,19 @@ Choose a smiley and share your comments to help us improve frePPLe!"></textarea>
 
        // Set default value of smiley to happy (let's be optimistic)
        $happy.click( function() {
-         $happy.css("color", "green");
+         $happy.css("color", "#4CAF50");
          $average.css("color", "#DCDCDC");
          $nothappy.css("color", "#DCDCDC");
          });
        $average.click( function() {
          $happy.css("color", "#DCDCDC");
-         $average.css("color", "orange");
+         $average.css("color", "#FF9800");
          $nothappy.css("color", "#DCDCDC");
          });
        $nothappy.click( function() {
          $happy.css("color", "#DCDCDC");
          $average.css("color", "#DCDCDC");
-         $nothappy.css("color", "red");
+         $nothappy.css("color", "#F44336");
          });
 
        $('#submit').click(function(e) {
@@ -1533,7 +1851,7 @@ Choose a smiley and share your comments to help us improve frePPLe!"></textarea>
                type: "POST",
                url: '/wizard/sendsurveymail/',
                data: {
-                 'feeling': $happy.css("color") == "rgb(0, 128, 0)" ? "Happy" : ($nothappy.css("color") == "rgb(255, 0, 0)" ? "Not happy" : "Average"),
+                 'feeling': $happy.css("color") == "rgb(76, 175, 80)" ? "Happy" : ($nothappy.css("color") == "rgb(244, 67, 54)" ? "Not happy" : "Average"),
                  'comments': $textarea.val()
                  },
                success: function() {
