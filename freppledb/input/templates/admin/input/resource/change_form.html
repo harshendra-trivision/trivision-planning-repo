@@ -1,27 +1,255 @@
 {% extends "admin/change_form.html" %}
-{% load i18n %}
+{% load i18n admin_modify %}
+
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    :root {
+        --primary-purple: #7B2D8E;
+        --deep-purple: #2D004D;
+        --bright-accent: #9C27B0;
+        --soft-purple-bg: rgba(123, 45, 142, 0.04);
+        --border-color: #E5E7EB;
+        --card-bg: #FFFFFF;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+        --input-bg: #FFFFFF;
+    }
+
+    body {
+        background-color: var(--background-color) !important;
+    }
+
+    #content-main {
+        background: transparent !important;
+        margin-top: 1.5rem !important;
+    }
+
+    /* Card-like container for the form */
+    fieldset.module {
+        background: var(--card-bg) !important;
+        border-radius: 16px !important;
+        border: 1px solid var(--border-color) !important;
+        box-shadow: 0 4px 20px rgba(45, 0, 77, 0.03) !important;
+        padding: 2rem !important;
+        margin-bottom: 2rem !important;
+    }
+
+    fieldset h2 {
+        display: none !important; /* Hide default fieldset headers */
+    }
+
+    /* Modernizing Form Rows */
+    .form-row {
+        border-bottom: 1px solid #F3F4F6 !important;
+        padding: 1.25rem 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap;
+    }
+
+    .form-row:last-child {
+        border-bottom: none !important;
+    }
+
+    /* Labels */
+    .col-form-label, label {
+        color: var(--text-primary) !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Inputs */
+    .form-control, input[type="text"], input[type="number"], select, textarea {
+        border-radius: 8px !important;
+        border: 1px solid var(--border-color) !important;
+        padding: 0.6rem 1rem !important;
+        background-color: var(--input-bg) !important;
+        transition: all 0.2s ease !important;
+        font-size: 0.9rem !important;
+        box-shadow: none !important;
+    }
+
+    .form-control:focus, input[type="text"]:focus, input[type="number"]:focus, select:focus {
+        border-color: var(--primary-purple) !important;
+        box-shadow: 0 0 0 4px rgba(123, 45, 142, 0.08) !important;
+        outline: none !important;
+    }
+
+    /* Related Widgets (Search glass etc) */
+    .related-widget-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .related-widget-wrapper > a {
+        background: var(--soft-purple-bg);
+        color: var(--primary-purple) !important;
+        border-radius: 6px;
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        border: 1px solid rgba(123, 45, 142, 0.1);
+    }
+
+    .related-widget-wrapper > a:hover {
+        background: var(--primary-purple);
+        color: white !important;
+    }
+
+    /* Submit Row (Buttons) */
+    .submit-row {
+        background: transparent !important;
+        padding: 1.5rem 0 !important;
+        display: flex !important;
+        gap: 12px !important;
+        border-top: none !important;
+        justify-content: flex-start !important;
+        flex-direction: row-reverse;
+    }
+
+    .submit-row input[type="submit"], .submit-row a {
+        border-radius: 8px !important;
+        padding: 0.6rem 1.5rem !important;
+        font-weight: 600 !important;
+        text-transform: none !important;
+        letter-spacing: normal !important;
+        transition: all 0.2s !important;
+        margin: 0 !important;
+        border: none !important;
+        font-size: 0.85rem !important;
+    }
+
+    .submit-row input[name="_save"] {
+        background: var(--primary-purple) !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.2) !important;
+    }
+
+    .submit-row input[name="_save"]:hover {
+        background: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 15px rgba(123, 45, 142, 0.3) !important;
+    }
+
+    .submit-row input[name="_addanother"], .submit-row input[name="_continue"] {
+        background: white !important;
+        color: var(--primary-purple) !important;
+        border: 1px solid rgba(123, 45, 142, 0.2) !important;
+    }
+
+    .submit-row input[name="_addanother"]:hover, .submit-row input[name="_continue"]:hover {
+        background: var(--soft-purple-bg) !important;
+        border-color: var(--primary-purple) !important;
+    }
+
+    /* Related Links Card */
+    .related-card {
+        background: var(--card-bg) !important;
+        border-radius: 16px !important;
+        border: 1px solid var(--border-color) !important;
+        box-shadow: 0 4px 20px rgba(45, 0, 77, 0.03) !important;
+        overflow: hidden;
+    }
+
+    .related-card .card-header {
+        background: linear-gradient(135deg, #F8F4FC 0%, #FFFFFF 100%) !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        padding: 1.25rem !important;
+    }
+
+    .related-card .card-title {
+        color: var(--deep-purple) !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        font-size: 0.75rem !important;
+        letter-spacing: 0.05em !important;
+        margin: 0 !important;
+    }
+
+    .related-link-item {
+        padding: 1rem 1.25rem !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--text-primary) !important;
+        text-decoration: none !important;
+        transition: all 0.2s;
+        border-bottom: 1px solid #F3F4F6;
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+
+    .related-link-item:last-child {
+        border-bottom: none;
+    }
+
+    .related-link-item:hover {
+        background-color: var(--soft-purple-bg);
+        color: var(--primary-purple) !important;
+    }
+
+    .related-link-item i {
+        color: var(--bright-accent);
+        font-size: 0.8rem;
+    }
+
+    /* Error Handling */
+    .errornote {
+        background-color: #FEF2F2 !important;
+        color: #B91C1C !important;
+        border: 1px solid #FEE2E2 !important;
+        border-radius: 8px !important;
+        padding: 1rem !important;
+        margin-bottom: 1.5rem !important;
+        font-weight: 600 !important;
+    }
+
+    .errors input, .errors select {
+        border-color: #EF4444 !important;
+    }
+
+    .errorlist {
+        color: #EF4444 !important;
+        font-size: 0.8rem !important;
+        font-weight: 500 !important;
+        margin-top: 4px !important;
+    }
+
+    /* Help text */
+    .help {
+        color: var(--text-secondary) !important;
+        font-size: 0.8rem !important;
+        margin-top: 6px !important;
+    }
+</style>
+{% endblock %}
 
 {% block inline_field_sets %}
 {{ block.super }}
 {% if object_id %}
 <div class="col-lg-auto col-md-6 col-sm-12 mb-3">
-<div class="card">
-  <div class="card-header">
-    <h5 class="card-title text-capitalize">{% trans "related" %}</h5>
-  </div>
-  <div class="card-body">
-
-  <div class="w-100 mb-2 ms-3 me-3">
-     <a href="{{ request.prefix }}/data/input/operationresource/?resource__name__ico={{ object_id | urlencode }}&noautofilter">
-     {% trans "operation resources"|capfirst %}&nbsp;<i class="fa fa-caret-right"></i></a>
-  </div>
-  <div class="w-100 mb-2 ms-3 me-3">
-     <a href="{{ request.prefix }}/data/input/resourceskill/?resource__name__ico={{ object_id | urlencode }}&noautofilter">
-     {% trans "resource skills"|capfirst %}&nbsp;<i class="fa fa-caret-right"></i></a>
-  </div>
-
-</div>  <!-- card body -->
-</div>  <!-- card -->
-</div>  <!-- col -->
+    <div class="related-card border-0">
+        <div class="card-header">
+            <h5 class="card-title">{% trans "related" %}</h5>
+        </div>
+        <div class="card-body p-0">
+            <a href="{{ request.prefix }}/data/input/operationresource/?resource__name__ico={{ object_id | urlencode }}&noautofilter" class="related-link-item">
+                {% trans "operation resources"|capfirst %}
+                <i class="fa fa-chevron-right"></i>
+            </a>
+            <a href="{{ request.prefix }}/data/input/resourceskill/?resource__name__ico={{ object_id | urlencode }}&noautofilter" class="related-link-item">
+                {% trans "resource skills"|capfirst %}
+                <i class="fa fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+</div>
 {% endif %}
 {% endblock %}
