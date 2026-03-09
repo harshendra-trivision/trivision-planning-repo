@@ -1,7 +1,8 @@
 {% extends "admin/base_site_grid.html" %}
 {% load i18n %}
 
-{% block extrahead %}{{block.super}}
+{% block extrahead %}
+{{ block.super }}
 <style>
     :root {
         --primary-purple: #7B2D8E;
@@ -145,6 +146,23 @@
         background: var(--soft-purple-bg) !important;
     }
 
+    /* Checkbox styling */
+    .ui-jqgrid tr.ui-row-ltr td.td_cbox, 
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby="grid_cb"],
+    .ui-jqgrid .ui-jqgrid-htable th#grid_cb {
+        padding: 12px 0px !important;
+        text-align: center;
+        width: 45px !important;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td.td_cbox input,
+    #grid_cb input {
+        margin: 0 !important;
+        cursor: pointer;
+        accent-color: var(--primary-purple);
+        transform: scale(1.1);
+    }
+
     /* Enhanced empty state styling */
     .grid-empty-message {
         background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%);
@@ -171,6 +189,30 @@
         margin-bottom: 1rem;
     }
 
+    .add-bucket-btn {
+        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+        margin-top: 1rem;
+    }
+
+    .add-bucket-btn:hover {
+        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(123, 45, 142, 0.25);
+        color: white;
+        text-decoration: none;
+    }
+
     /* Link styling in grid */
     .ui-jqgrid td a {
         color: var(--primary-purple);
@@ -194,42 +236,10 @@
         font-size: 0.875rem;
     }
 
-    /* Message type badges */
-    .ui-jqgrid td[aria-describedby$="_type"] {
+    /* Level badge styling */
+    .ui-jqgrid td[aria-describedby$="_level"] {
         font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 0.05em;
-    }
-
-    /* User column styling */
-    .ui-jqgrid td[aria-describedby$="_user"] {
-        font-weight: 500;
         color: var(--primary-purple);
-    }
-
-    /* Attachment link styling */
-    .ui-jqgrid td a.text-decoration-underline {
-        color: var(--primary-purple);
-        text-decoration: none !important;
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
-        transition: all 0.2s ease;
-    }
-
-    .ui-jqgrid td a.text-decoration-underline:hover {
-        background: var(--soft-purple-bg);
-        color: var(--bright-accent);
-    }
-
-    /* Comment column styling */
-    .ui-jqgrid td[aria-describedby$="_comment"] {
-        line-height: 1.5;
-        color: var(--text-primary);
     }
 
     /* Info banner */
@@ -269,33 +279,7 @@
         line-height: 1.5;
         margin: 0;
     }
-
-    /* Date column styling */
-    .ui-jqgrid td[aria-describedby$="_lastmodified"] {
-        font-family: 'Monaco', 'Menlo', monospace;
-        font-size: 0.8rem;
-        color: #374151;
-    }
 </style>
-
-<script>
-
-function attachment(cellvalue, options, row)
-{
-  return cellvalue ?
-      '<a class="text-decoration-underline" href="/uploads/' +
-      cellvalue + '" target="_blank">.' + cellvalue.split('.').pop().toLowerCase() + '&nbsp;<i class="fa fa-paperclip"></i></a>' :
-      '';
-}
-
-function objectfmt(cellvalue, options, row)
-{
-  var role = row['app'] + "/" + row['model']
-  return cellvalue + "<a href=\"" + url_prefix + "/detail/" + role
-    + "/" + admin_escape(cellvalue) + "/\" onclick='event.stopPropagation()'><span class='ps-2 fa fa-caret-right' role='"
-    + role + "'></span></a>";
-}
-</script>
 {% endblock %}
 
 {% block before_table %}
@@ -304,12 +288,12 @@ function objectfmt(cellvalue, options, row)
         <div class="col">
             <p class="text-muted small mb-1">{% trans "Admin" %}</p>
             <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
-                {% trans "Messages"|capfirst %}
+                {% trans "Buckets"|capfirst %}
             </h2>
         </div>
         <div class="col-auto">
             <div class="header-badge">
-                <i class="fa fa-comment me-1"></i> {% trans "System messages & logs" %}
+                <i class="fa fa-calendar me-1"></i> {% trans "Time bucket definitions" %}
             </div>
         </div>
     </div>
@@ -319,8 +303,8 @@ function objectfmt(cellvalue, options, row)
 <div class="info-banner">
     <i class="fa fa-info-circle"></i>
     <div class="info-banner-content">
-        <strong>{% trans "About Messages"|capfirst %}</strong>
-        <p>{% trans "Messages track system events, user actions, and important notifications. Review this log to monitor activity, troubleshoot issues, and audit changes across the application." %}</p>
+        <strong>{% trans "About Time Buckets"|capfirst %}</strong>
+        <p>{% trans "Time buckets define the time granularity for planning and reporting. Configure daily, weekly, monthly, quarterly, or yearly buckets to match your business planning cycles." %}</p>
     </div>
 </div>
 {% endblock %}
