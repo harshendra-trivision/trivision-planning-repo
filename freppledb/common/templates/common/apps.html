@@ -2,11 +2,550 @@
 {% load i18n %}
 
 {% block extrahead %}{{block.super}}
+<style>
+    :root {
+        --primary-purple: #7B2D8E;
+        --deep-purple: #2D004D;
+        --bright-accent: #9C27B0;
+        --soft-purple-bg: rgba(123, 45, 142, 0.04);
+        --border-color: #E5E7EB;
+        --card-bg: #FFFFFF;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+    }
+
+    /* Page Background */
+    body {
+        background: #F8F9FC;
+    }
+
+    /* Modern Page Header */
+    .modern-apps-header {
+        background: linear-gradient(135deg, var(--card-bg) 0%, #F8F9FC 100%);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .modern-apps-header h1 {
+        color: var(--deep-purple);
+        font-weight: 800;
+        font-size: 2rem;
+        letter-spacing: -0.02em;
+        margin-bottom: 0.5rem;
+    }
+
+    .modern-apps-header small {
+        color: var(--text-secondary);
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    .modern-apps-header .description {
+        color: var(--text-secondary);
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-top: 0.75rem;
+    }
+
+    .modern-apps-header .help-link {
+        background: var(--soft-purple-bg);
+        color: var(--primary-purple);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border: 1px solid rgba(123, 45, 142, 0.1);
+    }
+
+    .modern-apps-header .help-link:hover {
+        background: var(--primary-purple);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.2);
+    }
+
+    /* Section Headers */
+    .section-header {
+        color: var(--deep-purple);
+        font-weight: 700;
+        font-size: 1.25rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .section-header::before {
+        content: '';
+        width: 4px;
+        height: 24px;
+        background: linear-gradient(135deg, var(--primary-purple) 0%, var(--bright-accent) 100%);
+        border-radius: 2px;
+    }
+
+    .section-header .count-badge {
+        background: var(--soft-purple-bg);
+        color: var(--primary-purple);
+        border-radius: 12px;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        border: 1px solid rgba(123, 45, 142, 0.1);
+    }
+
+    /* Modern Compact Cards */
+    .app-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.25rem;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        position: relative;
+        overflow: hidden;
+        min-height: 200px;
+        max-height: 280px;
+    }
+
+    .app-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-purple) 0%, var(--bright-accent) 100%);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
+    .app-card:hover {
+        border-color: rgba(123, 45, 142, 0.3);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(123, 45, 142, 0.15);
+    }
+
+    .app-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    /* Subtle gradient overlay on hover */
+    .app-card::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(123, 45, 142, 0.01) 0%, rgba(156, 39, 176, 0.02) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .app-card:hover::after {
+        opacity: 1;
+    }
+
+    /* App Card Header */
+    .app-card-header {
+        margin-bottom: 0.75rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .app-card-title {
+        color: var(--deep-purple);
+        font-weight: 700;
+        font-size: 1rem;
+        line-height: 1.4;
+        margin: 0;
+        display: block;
+        padding-right: 5.5rem;
+    }
+
+    .app-version {
+        background: var(--soft-purple-bg);
+        color: var(--primary-purple);
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.2rem 0.5rem;
+        border-radius: 6px;
+        border: 1px solid rgba(123, 45, 142, 0.15);
+        white-space: nowrap;
+        display: inline-block;
+        margin-left: 0.5rem;
+        vertical-align: middle;
+    }
+
+    /* App Description */
+    .app-description {
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+        flex-grow: 1;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* App Card Footer */
+    .app-card-footer {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: auto;
+        padding-top: 1rem;
+        border-top: 1px solid #F3F4F6;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Status Badge */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .status-badge.installed {
+        background: rgba(16, 185, 129, 0.1);
+        color: #059669;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-badge.optional {
+        background: rgba(251, 191, 36, 0.1);
+        color: #D97706;
+        border: 1px solid rgba(251, 191, 36, 0.2);
+    }
+
+    /* Action Buttons */
+    .app-card .btn-uninstall {
+        background: white;
+        color: #DC2626;
+        border: 1px solid rgba(220, 38, 38, 0.3);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+    }
+
+    .app-card .btn-uninstall:hover:not(:disabled) {
+        background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%);
+        color: white;
+        border-color: transparent;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(220, 38, 38, 0.2);
+    }
+
+    .app-card .btn-install {
+        background: linear-gradient(135deg, var(--primary-purple) 0%, var(--bright-accent) 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.12);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+    }
+
+    .app-card .btn-install:hover:not(:disabled) {
+        background: linear-gradient(135deg, var(--deep-purple) 0%, var(--primary-purple) 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(123, 45, 142, 0.25);
+    }
+
+    .app-card .btn-documentation {
+        background: white;
+        color: var(--primary-purple);
+        border: 1px solid rgba(123, 45, 142, 0.25);
+        border-radius: 8px;
+        padding: 0.5rem 1rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .app-card .btn-documentation:hover {
+        background: var(--soft-purple-bg);
+        border-color: var(--primary-purple);
+        color: var(--deep-purple);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1);
+        text-decoration: none;
+    }
+
+    .app-card button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Grid Layout - Compact 4-column responsive grid */
+    .apps-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.25rem;
+        margin-bottom: 3rem;
+    }
+
+    @media (min-width: 1400px) {
+        .apps-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1399px) {
+        .apps-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 991px) {
+        .apps-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+        color: white;
+        animation: spin 1s linear infinite;
+        margin-right: 0.375rem;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    /* Card entrance animation */
+    .app-card {
+        animation: slideUp 0.4s ease-out;
+        animation-fill-mode: both;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Stagger animation for cards */
+    .app-card:nth-child(1) { animation-delay: 0.05s; }
+    .app-card:nth-child(2) { animation-delay: 0.1s; }
+    .app-card:nth-child(3) { animation-delay: 0.15s; }
+    .app-card:nth-child(4) { animation-delay: 0.2s; }
+    .app-card:nth-child(5) { animation-delay: 0.25s; }
+    .app-card:nth-child(6) { animation-delay: 0.3s; }
+    .app-card:nth-child(7) { animation-delay: 0.35s; }
+    .app-card:nth-child(8) { animation-delay: 0.4s; }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .apps-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .app-card {
+            padding: 1rem;
+            min-height: 180px;
+        }
+
+        .modern-apps-header {
+            padding: 1.5rem;
+        }
+
+        .modern-apps-header h1 {
+            font-size: 1.5rem;
+        }
+
+        .app-card-title {
+            font-size: 0.95rem;
+            padding-right: 4.5rem;
+        }
+
+        .status-badge {
+            font-size: 0.65rem;
+            padding: 0.3rem 0.6rem;
+        }
+
+        .app-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .app-icon i {
+            font-size: 1.25rem;
+        }
+    }
+
+    /* Optional Apps Section */
+    .optional-section {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        border-top: 2px solid #F3F4F6;
+    }
+
+    /* Installed Badge Icon */
+    .app-card.installed-app {
+        background: linear-gradient(135deg, var(--card-bg) 0%, #FAFBFC 100%);
+        border-color: #E5E7EB;
+    }
+
+    .app-card.installed-app:hover {
+        background: var(--card-bg);
+    }
+
+    /* Empty state for no apps */
+    .no-apps-message {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%);
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+    }
+
+    .no-apps-message i {
+        font-size: 3rem;
+        color: var(--primary-purple);
+        opacity: 0.3;
+        margin-bottom: 1rem;
+    }
+
+    /* Container Padding */
+    #content {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    /* App Icon Area */
+    .app-icon {
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--soft-purple-bg) 0%, rgba(156, 39, 176, 0.06) 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        border: 1px solid rgba(123, 45, 142, 0.08);
+        transition: all 0.3s ease;
+    }
+
+    .app-card:hover .app-icon {
+        background: linear-gradient(135deg, var(--primary-purple) 0%, var(--bright-accent) 100%);
+        transform: scale(1.05) rotate(5deg);
+        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.2);
+    }
+
+    .app-icon i {
+        font-size: 1.5rem;
+        color: var(--primary-purple);
+        transition: all 0.3s ease;
+    }
+
+    .app-card:hover .app-icon i {
+        color: white;
+    }
+
+    /* App Name with Icon Mapping */
+    .app-card[data-app-type="forecast"] .app-icon i::before {
+        content: "\f080";
+    }
+
+    .app-card[data-app-type="wizard"] .app-icon i::before {
+        content: "\f0d0";
+    }
+
+    .app-card[data-app-type="metrics"] .app-icon i::before {
+        content: "\f200";
+    }
+
+    .app-card[data-app-type="reportmanager"] .app-icon i::before {
+        content: "\f15c";
+    }
+
+    .app-card[data-app-type="executesql"] .app-icon i::before {
+        content: "\f1c0";
+    }
+
+    .app-card[data-app-type="debugreport"] .app-icon i::before {
+        content: "\f188";
+    }
+
+    .app-card[data-app-type="odoo"] .app-icon i::before {
+        content: "\f0c1";
+    }
+
+    .app-card[data-app-type="ml"] .app-icon i::before {
+        content: "\f0e7";
+    }
+
+    /* Default icon for unknown apps */
+    .app-icon i::before {
+        content: "\f12e";
+    }
+
+    /* Status badge positioning */
+    .status-badge {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        z-index: 2;
+    }
+</style>
+
 <script>
 
 function updateApp(appname, action, el) {
    $(el).find(".fa-cog").removeClass("d-none");
-   $("#installedapps .btn-sm, #installableapps .btn-sm").prop('disabled', true);
+   $(el).find(".btn-text").addClass("d-none");
+   $("#installedapps button, #installableapps button").prop('disabled', true);
    $.ajax({
       url: window.location.href,
       type: 'POST',
@@ -20,12 +559,14 @@ function updateApp(appname, action, el) {
 		setTimeout(function(){
 			window.location.href = window.location.href;
 			$(el).find(".fa-cog").addClass("d-none");
-			$("#installedapps .btn-sm, #installableapps .btn-sm").prop('disabled', false);
+			$(el).find(".btn-text").removeClass("d-none");
+			$("#installedapps button, #installableapps button").prop('disabled', false);
 		}, 2000);
 	  },
       error: function(result, stat, errorThrown) {
 		$(el).find(".fa-cog").addClass("d-none");
-		$("#installedapps .btn-sm, #installableapps .btn-sm").prop('disabled', false);
+		$(el).find(".btn-text").removeClass("d-none");
+		$("#installedapps button, #installableapps button").prop('disabled', false);
 		ajaxerror(result, stat, errorThrown)
 	  }
     });
@@ -34,92 +575,147 @@ function updateApp(appname, action, el) {
 </script>
 {% endblock %}
 
-{% block content_title %}
-<div class="row mt-3">
-  <div class="col">
-    <h1>{{title|capfirst|force_escape}}&nbsp;&nbsp;<small>{{edition|capfirst}}</small></h1>
-  </div>
-  <div class="col-auto d-flex ms-auto align-items-center">
-	<h1>
-	<a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'help'|capfirst|force_escape %}"
-	  href="{% setting "DOCUMENTATION_URL" %}/docs/{% version_short %}/user-interface/getting-around/apps.html"
-	  target="_blank">
-	    <span class="fa fa-question"></span>
-	</a>
-	</h1>
-  </div>
-</div>
-{% endblock %}
+{% block content_title %}{% endblock %}
 
 {% block content %}
-<div class="row mb-2">
-	<div class="col">
-	From this screen you can install and uninstall extension apps.<br>
-	Extensions can be provided by the frepple team, the frepple user community
-	or developed by yourself.
-	</div>
+<!-- Modern Page Header -->
+<div class="modern-apps-header">
+    <div class="row align-items-center">
+        <div class="col">
+            <p class="text-muted small mb-2" style="font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">{% trans "Admin" %}</p>
+            <h1>{{title|capfirst|force_escape}} <small>{{edition|capfirst}}</small></h1>
+            <p class="description mb-0">
+                From this screen you can install and uninstall extension apps.
+                Extensions can be provided by the frepple team, the frepple user community or developed by yourself.
+            </p>
+        </div>
+        <div class="col-auto">
+            <a data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="{% trans 'help'|capfirst|force_escape %}"
+              href="{% setting "DOCUMENTATION_URL" %}/docs/{% version_short %}/user-interface/getting-around/apps.html"
+              target="_blank" class="help-link">
+                <span class="fa fa-question"></span>
+            </a>
+        </div>
+    </div>
 </div>
 
-<!-- Installed apps -->
-<div class="row mb-2">
-	<div class="col">
-		<h1>{% trans "installed apps"|capfirst %}</h1>
-	</div>
-</div>
-<div class="row mb-3 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 g-4" id="installedapps">
+<!-- Installed Apps Section -->
+<h2 class="section-header">
+    <span>{% trans "Installed apps"|capfirst %}</span>
+</h2>
+
+<div class="apps-grid" id="installedapps">
 	{% for app in apps %}{% if app.installed %}
-	<div class="col d-flex align-items-stretch">
-	<div class="card w-100">
-		<div class="card-body d-flex flex-column">
-			<h5 class="mb-2 fw-bold row align-items-center">
-			<div class="col">{{ app.summary|capfirst|safe }} {% if app.version %}&nbsp;&nbsp;<span class="fs-6 fw-normal">v{{ app.version }}{% endif %}</div>
-			{% if request.user.is_superuser %}
-				<div class="col-auto">
-					<button type="button" class="btn btn-danger btn-sm" onclick="updateApp('{{ app.name }}', 'uninstall', this)">
-						<span class="fa fa-cog fa-spin d-none"></span>
-						{% trans "uninstall"|capfirst %}
-					</button>
-				</div>
-			{% endif %}
-		    </h5>
-			{% if app.description %}<div class="row mb-1">{{ app.description|safe }}</div>{% endif %}
-			<div class="row mt-auto mb-0">
-			   {% if app.documentation_url %}<div class="col"><a role="button" rel="noopener" href="{{ app.documentation_url|safe }}" target="_blank" class="btn btn-primary btn-sm float-end">{% trans "documentation"|capfirst %}</a></div>{% endif %}
-			</div>
-		</div>
-	</div>
+    <div class="app-card installed-app" data-app-type="{{ app.name }}">
+        <!-- Status Badge -->
+        <span class="status-badge installed">
+            <i class="fa fa-check-circle"></i>
+            {% trans "installed"|capfirst %}
+        </span>
+
+        <!-- App Icon -->
+        <div class="app-icon">
+            <i class="fa"></i>
+        </div>
+
+        <!-- Card Header -->
+        <div class="app-card-header">
+            <h3 class="app-card-title">
+                {{ app.summary|capfirst|safe }}
+                {% if app.version %}
+                <span class="app-version">v{{ app.version }}</span>
+                {% endif %}
+            </h3>
+        </div>
+
+        <!-- Card Description -->
+        {% if app.description %}
+        <div class="app-description">
+            {{ app.description|safe }}
+        </div>
+        {% else %}
+        <div class="app-description" style="color: #9CA3AF; font-style: italic;">
+            Extension app for frePPLe
+        </div>
+        {% endif %}
+
+        <!-- Card Footer -->
+        <div class="app-card-footer">
+            {% if app.documentation_url %}
+            <a href="{{ app.documentation_url|safe }}" target="_blank" rel="noopener" class="btn-documentation">
+                <i class="fa fa-book"></i>
+                {% trans "Docs"|capfirst %}
+            </a>
+            {% endif %}
+            {% if request.user.is_superuser %}
+            <button type="button" class="btn-uninstall ms-auto" onclick="updateApp('{{ app.name }}', 'uninstall', this)">
+                <span class="fa fa-cog fa-spin d-none loading-spinner"></span>
+                <span class="btn-text">{% trans "Uninstall"|capfirst %}</span>
+            </button>
+            {% endif %}
+        </div>
     </div>
 	{% endif %}{% endfor %}
 </div>
 
-<div class="row mb-2">
-	<div class="col">
-		<h1>{% trans "optional extra apps"|capfirst %}</h1>
-	</div>
-</div>
-<div class="row mb-2 row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 g-4" id="installableapps">
-	{% for app in apps %}{% if not app.installed %}
-	<div class="col d-flex align-items-stretch">
-	<div class="card w-100">
-		<div class="card-body d-flex flex-column">
-			<h5 class="mb-2 fw-bold row align-items-center">
-			<div class="col">{{ app.summary|capfirst|safe }} {% if app.version %}&nbsp;&nbsp;<span class="fs-6 fw-normal">v{{ app.version }}{% endif %}</div>
-			{% if request.user.is_superuser %}
-				<div class="col-auto">
-					<button type="button" class="btn btn-danger btn-sm" onclick="updateApp('{{ app.name }}', 'install', this)">
-						<span class="fa fa-cog fa-spin d-none"></span>
-						{% trans "install"|capfirst %}
-					</button>
-				</div>
-			{% endif %}
-		    </h5>
-			{% if app.description %}<div class="row mb-1">{{ app.description|safe }}</div>{% endif %}
-			<div class="row mt-auto mb-0">
-			   {% if app.documentation_url %}<div class="col"><a role="button" rel="noopener" href="{{ app.documentation_url|safe }}" target="_blank" class="btn btn-primary btn-sm float-end">{% trans "documentation"|capfirst %}</a></div>{% endif %}
-			</div>
-		</div>
-	</div>
+<!-- Optional Extra Apps Section -->
+<div class="optional-section">
+    <h2 class="section-header">
+        <span>{% trans "Optional extra apps"|capfirst %}</span>
+    </h2>
+
+    <div class="apps-grid" id="installableapps">
+        {% for app in apps %}{% if not app.installed %}
+        <div class="app-card" data-app-type="{{ app.name }}">
+            <!-- Status Badge -->
+            <span class="status-badge optional">
+                <i class="fa fa-download"></i>
+                {% trans "optional"|capfirst %}
+            </span>
+
+            <!-- App Icon -->
+            <div class="app-icon">
+                <i class="fa"></i>
+            </div>
+
+            <!-- Card Header -->
+            <div class="app-card-header">
+                <h3 class="app-card-title">
+                    {{ app.summary|capfirst|safe }}
+                    {% if app.version %}
+                    <span class="app-version">v{{ app.version }}</span>
+                    {% endif %}
+                </h3>
+            </div>
+
+            <!-- Card Description -->
+            {% if app.description %}
+            <div class="app-description">
+                {{ app.description|safe }}
+            </div>
+            {% else %}
+            <div class="app-description" style="color: #9CA3AF; font-style: italic;">
+                Extension app for frePPLe
+            </div>
+            {% endif %}
+
+            <!-- Card Footer -->
+            <div class="app-card-footer">
+                {% if app.documentation_url %}
+                <a href="{{ app.documentation_url|safe }}" target="_blank" rel="noopener" class="btn-documentation">
+                    <i class="fa fa-book"></i>
+                    {% trans "Docs"|capfirst %}
+                </a>
+                {% endif %}
+                {% if request.user.is_superuser %}
+                <button type="button" class="btn-install ms-auto" onclick="updateApp('{{ app.name }}', 'install', this)">
+                    <span class="fa fa-cog fa-spin d-none loading-spinner"></span>
+                    <span class="btn-text">{% trans "Install"|capfirst %}</span>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}{% endfor %}
     </div>
-	{% endif %}{% endfor %}
 </div>
 {% endblock %}
