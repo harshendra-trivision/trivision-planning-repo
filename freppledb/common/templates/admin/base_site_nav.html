@@ -198,8 +198,111 @@
 
 /* Submenu/Scenario specific hover */
 .trivision-scenario-select + .dropdown-menu .dropdown-item:hover {
-    transform: translateX(0); /* Don't slide horizontally for the scenario selector to keep it centered */
-    transform: translateY(-2px);
+  transform: translateX(0); /* Don't slide horizontally for the scenario selector to keep it centered */
+  transform: translateY(-2px);
+}
+
+/* Enhanced Search Typeahead Styling */
+.twitter-typeahead {
+  width: 100% !important;
+}
+
+.tt-menu {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.1) !important;
+  padding: 0.5rem !important;
+  min-width: 300px !important;
+  max-width: 400px !important;
+  backdrop-filter: blur(10px);
+  margin-top: 8px !important;
+  animation: trivisionFadeInSlide 0.25s ease-out forwards;
+  overflow: hidden;
+  z-index: 9999 !important;
+}
+
+.tt-suggestion {
+  padding: 0.75rem 1rem !important;
+  border-radius: 8px !important;
+  margin-bottom: 2px !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer;
+  border: none !important;
+}
+
+.tt-suggestion:hover,
+.tt-suggestion.tt-cursor {
+  background: linear-gradient(135deg, #A855F7 0%, #7B2D8E 100%) !important;
+  color: #FFFFFF !important;
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(168, 85, 247, 0.25);
+}
+
+.tt-suggestion p {
+  margin: 0 !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  color: #7B2D8E !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(123, 45, 142, 0.1) !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.tt-suggestion:hover p,
+.tt-suggestion.tt-cursor p {
+  color: #FFFFFF !important;
+  border-bottom-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.tt-suggestion li {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.tt-suggestion a {
+  color: #374151 !important;
+  text-decoration: none !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  display: block !important;
+  padding: 0.25rem 0 !important;
+}
+
+.tt-suggestion:hover a,
+.tt-suggestion.tt-cursor a {
+  color: #FFFFFF !important;
+}
+
+.tt-external {
+  float: right !important;
+  opacity: 0.7 !important;
+}
+
+.tt-external:hover {
+  opacity: 1 !important;
+}
+
+.tt-external a {
+  color: #7B2D8E !important;
+  padding: 0.25rem !important;
+  border-radius: 4px !important;
+  transition: all 0.2s ease !important;
+}
+
+.tt-suggestion:hover .tt-external a,
+.tt-suggestion.tt-cursor .tt-external a {
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Search input focus enhancement */
+.trivision-search-input.tt-input {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: #A855F7 !important;
+  box-shadow: 0 0 0 3px rgba(168,85,247,0.3) !important;
 }
 </style>
 <script>
@@ -247,7 +350,7 @@ $(function() {
 			<form class="navbar-form me-start mt-3 mb-3" role="search">
 				<div class="trivision-search-container" style="width: 100%;">
                   <i class="fa fa-search trivision-search-icon"></i>
-				  <input class="form-control typeahead trivision-search-input w-100" type="text" placeholder="{% trans 'Search...' %}">
+				  <input class="form-control typeahead search-input trivision-search-input w-100" type="text" placeholder="{% trans 'Search...' %}">
 				</div>
 			</form>
 			<ul class="nav navbar-nav ms-auto" class="selectdb">
@@ -292,7 +395,7 @@ $(function() {
 			<form class="navbar-form me-start mt-1 mb-1 ms-3 d-none d-lg-block" role="search">
 				<div class="trivision-search-container">
                   <i class="fa fa-search trivision-search-icon"></i>
-				  <input class="form-control typeahead trivision-search-input" type="text" placeholder="{% trans 'Search...' %}">
+				  <input class="form-control typeahead search-input trivision-search-input" type="text" placeholder="{% trans 'Search...' %}">
 				</div>
 			</form>
 
