@@ -11,14 +11,13 @@
         --soft-purple-bg: rgba(123, 45, 142, 0.04);
         --border-color: #E5E7EB;
         --card-bg: #FFFFFF;
-        --success-green: #10B981;
-        --error-red: #EF4444;
-        --warning-orange: #F59E0B;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
     }
 
     /* Modernizing the page header */
     #content > h1 {
-        display: none; /* We'll use our own header */
+        display: none;
     }
 
     /* Grid container modernization */
@@ -31,15 +30,28 @@
         margin-top: 1rem !important;
     }
 
-    /* Modernized status indicators */
-    .invStatus {
-        border-radius: 20px;
-        padding: 2px 10px;
-        color: white;
-        font-weight: 600;
-        font-size: 0.75rem;
-        display: inline-block;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    /* Toolbar buttons modernization */
+    .btn-primary, #save, #undo, #toolicons .btn {
+        background: var(--primary-purple) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 600 !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
+    }
+
+    .btn-primary:hover, #save:hover, #undo:hover, #toolicons .btn:hover {
+        background: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(123, 45, 142, 0.2) !important;
+    }
+
+    #save:disabled, #undo:disabled {
+        background: #E5E7EB !important;
+        color: #9CA3AF !important;
+        transform: none !important;
+        box-shadow: none !important;
     }
 
     /* Detailed styling for the grid header */
@@ -64,6 +76,10 @@
         font-size: 0.85rem;
     }
 
+    .ui-jqgrid tr.ui-state-hover td {
+        background-color: var(--soft-purple-bg) !important;
+    }
+
     /* Fix for checkbox column alignment */
     .ui-jqgrid tr.ui-row-ltr td.td_cbox, 
     .ui-jqgrid tr.ui-row-ltr td[aria-describedby="grid_cb"],
@@ -77,8 +93,39 @@
 
     .ui-jqgrid tr.ui-row-ltr td.td_cbox input,
     #grid_cb input {
+        margin: 0 !important;
+        cursor: pointer;
         accent-color: var(--primary-purple);
         transform: scale(1.1);
+    }
+
+    /* Searching / Filtering modern look */
+    #addsearch {
+        border-radius: 8px 0 0 8px !important;
+        border: 1px solid var(--border-color) !important;
+        padding: 0.5rem 1rem !important;
+    }
+
+    .input-group-text {
+        background: white !important;
+        border: 1px solid var(--border-color) !important;
+        border-left: none !important;
+        border-radius: 0 8px 8px 0 !important;
+        color: var(--primary-purple) !important;
+    }
+
+    /* Pager styling */
+    #gridpager {
+        background: #FFFFFF !important;
+        border: none !important;
+        border-top: 1px solid var(--border-color) !important;
+        padding: 12px 0 !important;
+    }
+
+    .ui-pg-input, .ui-pg-selbox {
+        border-radius: 4px !important;
+        border: 1px solid var(--border-color) !important;
+        padding: 2px 4px !important;
     }
 
     /* Toolbar icon buttons premium look */
@@ -87,7 +134,6 @@
         color: var(--primary-purple) !important;
         border: 1px solid rgba(123, 45, 142, 0.2) !important;
         box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
-        border-radius: 8px !important;
     }
 
     #toolicons .btn-primary:hover {
@@ -97,10 +143,9 @@
         box-shadow: 0 4px 12px rgba(123, 45, 142, 0.15) !important;
     }
 
-    /* Save/Undo buttons */
+    /* Save/Undo buttons should be prominent */
     #save, #undo {
         padding: 0.6rem 2rem !important;
-        border-radius: 8px !important;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         font-size: 0.8rem;
@@ -110,72 +155,6 @@
         background: linear-gradient(135deg, var(--primary-purple) 0%, var(--bright-accent) 100%) !important;
     }
 </style>
-<script>
-
-function delayfmt(cellvalue, options, rowdata) {
-  var days = 0;
-  var seconds = 0;
-  var sign;
-  var d = [];
-  var t = [];
-
-  if (cellvalue === undefined || cellvalue === '' || cellvalue === null) return '';
-  if (typeof cellvalue === "number") {
-    seconds = cellvalue;
-    sign = Math.sign(seconds);
-  } else {
-    sign = (cellvalue.indexOf('-') > -1)?-1:1;
-    d = cellvalue.replace(/ +/g, " ").split(" ");
-    if (d.length == 1)
-    {
-      t = cellvalue.split(":");
-      days = 0;
-    }
-    else
-    {
-      t = d[1].split(":");
-      days = (d[0]!='' ? parseFloat(d[0]) : 0);
-    }
-    switch (t.length)
-    {
-      case 0: // Days only
-        seconds = Math.abs(days) * 86400;
-        break;
-      case 1: // Days, seconds
-        seconds = Math.abs(days) * 86400 + (t[0]!='' ? Math.abs(parseFloat(t[0])) : 0);
-        break;
-      case 2: // Days, minutes and seconds
-        seconds = Math.abs(days) * 86400 + (t[0]!='' ? Math.abs(parseFloat(t[0])) : 0) * 60 + (t[1]!='' ? parseFloat(t[1]) : 0);
-        break;
-      default:
-        // Days, hours, minutes, seconds
-        seconds = Math.abs(days) * 86400 + (t[0]!='' ? Math.abs(parseFloat(t[0])) : 0) * 3600 + (t[1]!='' ? parseFloat(t[1]) : 0) * 60 + (t[2]!='' ? parseFloat(t[2]) : 0);
-    }
-  }
-  seconds = Math.abs(seconds); //remove the sign
-  days = sign < 0 ? Math.floor(seconds / 86400) : Math.ceil(seconds / 86400);
-
-  var thecolor = '';
-  var thenumber = sign * days;
-  if (thenumber <= 0)
-    thecolor = 'var(--success-green)';
-  else if (thenumber > 7)
-    thecolor = 'var(--error-red)';
-  else
-    thecolor = 'var(--warning-orange)';
-  
-  return `<div class="invStatus" style="background-color: ${thecolor}">${(sign*days)} ${gettext("days")}</div>`;
-}
-
-function plannedquantitycellattr(cellvalue, options, rowdata) {
-  var tmp = parseFloat(rowdata.plannedquantity);
-  if ((isNaN(tmp) || parseFloat(rowdata.quantity) - tmp > 0) && rowdata.status != 'closed' && rowdata.status != 'canceled')
-    return `<div class="invStatus" style="background-color: var(--error-red)">${grid.formatNumber(cellvalue)}</div>`;
-  else
-    return grid.formatNumber(cellvalue);
-}
-
-</script>
 {% endblock %}
 
 {% block before_table %}
@@ -184,12 +163,12 @@ function plannedquantitycellattr(cellvalue, options, rowdata) {
         <div class="col">
             <p class="text-muted small mb-1">{% trans "Sales" %}</p>
             <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
-                {% trans "Sales orders" %}
+                {% trans "Items" %}
             </h2>
         </div>
         <div class="col-auto">
             <div class="badge bg-soft-purple text-primary p-2 px-3" style="background: var(--soft-purple-bg); border: 1px solid rgba(123, 45, 142, 0.1); border-radius: 20px; color: var(--primary-purple) !important; font-weight: 600;">
-                <i class="fa fa-shopping-cart me-1"></i> {% trans "Customer demand and status" %}
+                <i class="fa fa-cube me-1"></i> {% trans "Product catalog and master data" %}
             </div>
         </div>
     </div>

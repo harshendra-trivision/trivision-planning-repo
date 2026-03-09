@@ -2,173 +2,420 @@
 {% load i18n %}
 
 {% block extrahead %}{{block.super}}
+<style>
+/* Modern SaaS UI Styling - Trivision Modern Purple Theme */
+:root {
+    --primary-purple: #7B2D8E;
+    --deep-purple: #2D004D;
+    --bright-accent: #9C27B0;
+    --bg-color: #F8F9FC;
+    --card-bg: #FFFFFF;
+    --text-primary: #1A1A1A;
+    --text-secondary: #6B7280;
+    --border-color: #E5E7EB;
+    --soft-purple-bg: rgba(123, 45, 142, 0.04);
+}
+
+.wizard-container {
+    max-width: 850px;
+    margin: 2rem auto;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.premium-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+}
+
+.intro-card {
+    border-left: 4px solid var(--primary-purple);
+    background: linear-gradient(to right, #ffffff, #faf9fc);
+}
+
+.intro-content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.5rem;
+}
+
+.intro-text h2 {
+    color: var(--deep-purple);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+}
+
+.intro-text p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+/* Wizard Steps Indicator */
+.wizard-steps {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    background: #F3F4F6;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.step-item {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.step-item.active {
+    background: white;
+    color: var(--primary-purple);
+}
+
+.step-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--primary-purple);
+}
+
+.step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #E5E7EB;
+    color: #6B7280;
+    font-size: 0.75rem;
+}
+
+.active .step-number {
+    background: var(--primary-purple);
+    color: white;
+}
+
+/* Form Styling */
+.form-group-modern {
+    margin-bottom: 1.5rem;
+}
+
+.label-modern {
+    display: block;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.input-modern {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: #fcfcfd;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.input-modern:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 0 4px rgba(123, 45, 142, 0.1);
+    background-color: white;
+}
+
+.submit-btn-modern {
+    background: var(--primary-purple);
+    color: white;
+    padding: 0.85rem 2.5rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px -1px rgba(123, 45, 142, 0.3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.submit-btn-modern:hover {
+    background: var(--deep-purple);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(123, 45, 142, 0.25);
+}
+
+.submit-btn-modern:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Results View */
+.results-header {
+    margin-bottom: 1.5rem;
+}
+
+.result-tag {
+    background: var(--soft-purple-bg);
+    color: var(--primary-purple);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.action-card {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+    height: 100%;
+    text-decoration: none !important;
+}
+
+.action-card:hover {
+    border-color: var(--primary-purple);
+    background: var(--soft-purple-bg);
+    transform: translateY(-4px);
+}
+
+.action-card img {
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.action-card b {
+    color: var(--deep-purple);
+    display: block;
+    margin-top: 0.5rem;
+}
+
+.info-list {
+    list-style: none;
+    padding: 0;
+}
+
+.info-list li {
+    padding-left: 1.5rem;
+    position: relative;
+    margin-bottom: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.info-list li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--primary-purple);
+    font-weight: bold;
+}
+
+.help-icon {
+    color: #9CA3AF;
+    font-size: 0.875rem;
+    cursor: help;
+}
+</style>
+
 <script>
 $(function() {
 	$("#submitform").on("submit", function() {
-		$('<i class="fa fa-spinner fa-spin"></i>').prependTo("#submitbutton");
-		$("#submitbutton").prop("disabled", true);
+		$('<i class="fa fa-spinner fa-spin"></i>').prependTo(".submit-btn-modern");
+		$(".submit-btn-modern").prop("disabled", true);
 	});
 });
 </script>
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-12 mb-3" style="max-width: 900px" role="tablist">
-    <div class="card">
-      <div class="card-body">
-        <div class="pull-right">
-          <img src="/static/img/forecast-editor-thumbnail.png" style="width: 150px" alt="Forecast Editor">
+<div class="wizard-container">
+    
+    <!-- Introduction Section -->
+    <div class="premium-card intro-card">
+        <div class="intro-content">
+            <div class="intro-text">
+                <h2>{% trans "Forecasting Analytics" %}</h2>
+                <p>
+                    Our forecasting module intelligently analyzes your sales history 
+                    (the <span style="color: #4CAF50; font-weight: 600;">green records</span>) 
+                    to compute highly accurate future sales estimates 
+                    (the <span style="color: #F44336; font-weight: 600;">red projections</span>).
+                </p>
+                <p>Review results, collaborate with your team, and fine-tune your projections with ease.</p>
+            </div>
+            <div class="d-none d-md-block">
+                <img src="/static/img/forecast-editor-thumbnail.png" style="width: 140px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));" alt="Forecast Editor">
+            </div>
         </div>
-        <p>The forecasting module analyzes the sales history (the <span style="color:rgb(139, 186, 0)">green line</span> in the graph) and
-        computes the estimated sales for the future periods (the <span style="color:rgb(255, 0, 0)">red line</span> in the graph).
-        </p>
-        <p>You can review the forecast results, collaborate with your team members, adjust the
-        forecast manually and upload your own forecast values.</p>
-        <p>Let's start simple by giving us the sales history for a single item + location + customer combination.</p>
-      </div>
     </div>
-  </div>
-</div>
-{% if not post %}
-<div class="row mb-3">
-	<div class="col-12" style="max-width: 900px" role="tablist">
-		<div class="card">
-			<div class="card-header wizard-1-of-2" role="tab">
-				<table style="width:100%">
-					<tr>
-						<td style="width:50%">Step 1: Enter sales history</td>
-						<td style="width:50%">Step 2: Results</td>
-					</tr>
-				</table>
-			</div>
-			<div class="panel-collapse" role="tabpanel">
-				<div class="card-body">
-				  <h2 style="margin-top: 0; margin-bottom:10px">
-				  Enter the sales history of a item + location + customer combination
-				  </h2>
-					<form id="submitform" action="{{request.prefix}}/wizard/quickstart/forecast/" method="post">
-						{% csrf_token %}
-						<div class="row mb-3">
-							<label class="col-sm-3 form-label text-end" for="wizarditem"
-                data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true"
-                data-bs-title="Item of the item+location+customer<br>combination to be forecasted.">
-                {% trans "item"|capfirst %}
-                <i class="fa fa-question-circle"></i>
-              </label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="wizarditem" name="item" required
-									maxlength="300" placeholder="{% trans "item name"|capfirst %}">
-							</div>
-						</div>
-						<div class="row mb-3">
-							<label class="col-sm-3 col-form-label text-end" for="wizardlocation"
-                data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true"
-                data-bs-title="Location of the item+location+customer<br>combination to be forecasted.">
-                {% trans "location"|capfirst %}
-                <i class="fa fa-question-circle"></i>
-              </label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="wizardlocation" name="location" required
-									maxlength="300" placeholder="{% trans "location name"|capfirst %}">
-							</div>
-						</div>
-						<div class="row mb-3">
-							<label class="col-sm-3 col-form-label text-end" for="wizardcustomer"
-                data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true"
-                data-bs-title="Customer of the item+location+customer<br>combination to be forecasted.">
-                {% trans "customer"|capfirst %}
-                <i class="fa fa-question-circle"></i>
-              </label>
-							<div class="col-sm-9">
-								<input type="text" class="form-control" id="wizardcustomer" name="customer" required
-									maxlength="300" placeholder="{% trans "customer name"|capfirst %}">
-							</div>
-						</div>
-						<div class="row mb-3">
-							<label class="col-sm-3 col-form-label text-end" style="white-space: nowrap" for="wizardhistory"
-                data-bs-toggle="tooltip" data-bs-placement="right" data-bs-html="true"
-                data-bs-title="Sales history.<br>For good statistical results we need at least 5 periods of history.<br>For seasonal patterns we need at least 2 cycles of history.">
-                {% blocktrans %}Sales history in the last {{buckets}}{% endblocktrans %}
-                <i class="fa fa-question-circle"></i>
-              </label>
-							<div class="col-sm-9">
-								<input type="text" required class="form-control" name="history"
-									pattern="[0-9 \t]*" placeholder="{% trans "a list of integers:eg 10  20  30"|capfirst %}">
-							</div>
-						</div>
-						<div class="row mt-3 justify-content-center">
-              <div class="col-auto">
-                <button id="submitbutton" type="submit" class="btn btn-primary d-block">
-                {% trans "Generate forecast"|capfirst %}
-                </button>
-              </div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-{% else %}
-<div class="row">
-  <div class="col-12" style="max-width:900px" role="tablist">
-    <div class="card" id="wizard-2">
-      <div class="card-header wizard-2-of-2" role="tab">
-        <h5 class="card-title">
-        <table style="width:100%">
-        <tr>
-        <td style="width:50%">
-          <a class="text-decoration-underline" href="{{request.prefix}}/wizard/quickstart/forecast/">Step 1: Enter sales history</a>
-        </td>
-        <td style="width:50%">Step 2: Results</td>
-        </tr>
-        </table>
-        </h5>
-      </div>
-      <div class="panel-collapse" role="tabpanel">
-        <div class="card-body">
-          <div>
-          <p>Here are the forecasts for {{post.item}} - {{post.location}} - {{post.customer}}:</p>
-          </div>
-          <div class="row justify-content-evenly">
-          <div class="col-auto mb-3" style="max-width:130px"
-            data-bs-toggle="tooltip" data-bs-placement="bottom"
-            data-bs-title="Review forecast values across multiple dimensions">
-            <p><a target="_blank" rel="noopener" href="{{request.prefix}}/forecast/editor/{{post.item|admin_quote}}/">
-              <img src="/static/wizard/img/forecast_editor_thumbnail.png" style="width: 100%" alt="Forecast Editor"><br>
-              <b>Forecast Editor</b>
-            </a></p>
-          </div>
-          <div class="col-auto mb-3" style="max-width:130px"
-            data-bs-toggle="tooltip" data-bs-placement="bottom"
-            data-bs-title="Scroll through a list of forecast values">
-            <p><a target="_blank" rel="noopener" href="{{request.prefix}}/forecast/?noautofilter&item={{post.item|admin_quote}}&location={{post.location|admin_quote}}&customer={{post.customer|admin_quote}}">
-              <img src="/static/wizard/img/forecast_report_thumbnail.png" style="width: 100%" alt="Forecast report"><br>
-              <b>Forecast Report</b>
-            </a></p>
-          </div>
-          </div>
-          <div>
-          <p>Check out what we did with your input data:</p>
-            <ul>
-              {% for msg in post.messages %}
-              <li class="disc"><p>{{ msg | safe }}</p></li>
-              {% endfor %}
-            </ul>
-          </div>
-          <div>
-          <p>Next actions:</p>
-            <ul>
-            <li class="disc"><p><a class="text-decoration-underline" href="{{request.prefix}}/wizard/quickstart/forecast/">Repeat these steps</a> for another item + location + customer.</p></li>
-            <li class="disc"><p><a class="text-decoration-underline" href="{{request.prefix}}/wizard/load/forecast/" target="_blank" rel="noopener">Learn how to load Excel spreadsheets</a>
-          to repeat this calculation for many items, locations and customers.</p></li>
-            </ul>
-          </div>
+
+    {% if not post %}
+    <!-- Form Section -->
+    <div class="premium-card">
+        <div class="wizard-steps">
+            <div class="step-item active">
+                <span class="step-number">1</span>
+                <span>Enter sales history</span>
+            </div>
+            <div class="step-item">
+                <span class="step-number">2</span>
+                <span>Review Results</span>
+            </div>
         </div>
+
+        <div class="p-4 p-md-5">
+            <h3 style="font-weight: 700; color: var(--deep-purple); margin-bottom: 2rem;">
+                Set up your first forecast
+            </h3>
+            
+            <form id="submitform" action="{{request.prefix}}/wizard/quickstart/forecast/" method="post">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group-modern">
+                            <label class="label-modern" for="wizarditem">
+                                {% trans "Item" %}
+                                <i class="fa fa-question-circle help-icon" data-bs-toggle="tooltip" data-bs-title="Item of the combination to be forecasted."></i>
+                            </label>
+                            <input type="text" class="input-modern" id="wizarditem" name="item" required
+                                maxlength="300" placeholder="{% trans "Enter item name" %}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-modern">
+                            <label class="label-modern" for="wizardlocation">
+                                {% trans "Location" %}
+                                <i class="fa fa-question-circle help-icon" data-bs-toggle="tooltip" data-bs-title="Location of the combination to be forecasted."></i>
+                            </label>
+                            <input type="text" class="input-modern" id="wizardlocation" name="location" required
+                                maxlength="300" placeholder="{% trans "Enter location" %}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-modern">
+                            <label class="label-modern" for="wizardcustomer">
+                                {% trans "Customer" %}
+                                <i class="fa fa-question-circle help-icon" data-bs-toggle="tooltip" data-bs-title="Customer of the combination to be forecasted."></i>
+                            </label>
+                            <input type="text" class="input-modern" id="wizardcustomer" name="customer" required
+                                maxlength="300" placeholder="{% trans "Enter customer name" %}">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-modern">
+                            <label class="label-modern" for="wizardhistory">
+                                {% blocktrans %}History (Last {{buckets}}){% endblocktrans %}
+                                <i class="fa fa-question-circle help-icon" data-bs-toggle="tooltip" data-bs-html="true"
+                                   data-bs-title="Minimum 5 periods required.<br>For seasonal patterns, 2 cycles needed."></i>
+                            </label>
+                            <input type="text" required class="input-modern" name="history"
+                                pattern="[0-9 \t]*" placeholder="e.g. 10  20  30  40  50">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-4 text-center border-top">
+                    <button id="submitbutton" type="submit" class="submit-btn-modern">
+                        {% trans "Generate Forecast" %}
+                    </button>
+                    <p class="text-muted mt-3 mb-0" style="font-size: 0.85rem;">
+                        {% trans "This will compute projections based on your input history." %}
+                    </p>
+                </div>
+            </form>
         </div>
-      </div>
     </div>
-  </div>
-{% endif %}
+
+    {% else %}
+    <!-- Results View Section -->
+    <div class="premium-card">
+        <div class="wizard-steps">
+            <a href="{{request.prefix}}/wizard/quickstart/forecast/" class="step-item" style="text-decoration: none; color: inherit;">
+                <span class="step-number" style="background-color: #4CAF50; color: white;"><i class="fa fa-check"></i></span>
+                <span>Enter sales history</span>
+            </a>
+            <div class="step-item active">
+                <span class="step-number">2</span>
+                <span>Review Results</span>
+            </div>
+        </div>
+
+        <div class="p-4 p-md-5">
+            <div class="results-header">
+                <div class="result-tag mb-2">{% trans "Results Generated" %}</div>
+                <h3 style="font-weight: 700; color: var(--deep-purple);">
+                    {{post.item}} - {{post.location}} - {{post.customer}}
+                </h3>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <div class="col-sm-6 col-md-4">
+                    <a target="_blank" rel="noopener" href="{{request.prefix}}/forecast/editor/{{post.item|admin_quote}}/" class="action-card d-block">
+                        <img src="/static/wizard/img/forecast_editor_thumbnail.png" class="img-fluid" alt="Forecast Editor">
+                        <b>Forecast Editor</b>
+                        <p class="text-muted small mt-2">Multi-dimensional value review</p>
+                    </a>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <a target="_blank" rel="noopener" href="{{request.prefix}}/forecast/?noautofilter&item={{post.item|admin_quote}}&location={{post.location|admin_quote}}&customer={{post.customer|admin_quote}}" class="action-card d-block">
+                        <img src="/static/wizard/img/forecast_report_thumbnail.png" class="img-fluid" alt="Forecast report">
+                        <b>Forecast Report</b>
+                        <p class="text-muted small mt-2">Scrollable list of forecast values</p>
+                    </a>
+                </div>
+            </div>
+
+            <div class="modern-info-section mb-5 p-4 rounded-3" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+                <h5 style="color: var(--deep-purple); font-weight: 700; margin-bottom: 1rem;">Data Insights</h5>
+                <ul class="info-list">
+                    {% for msg in post.messages %}
+                    <li>{{ msg | safe }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="next-actions border-top pt-4">
+                <h6 style="color: var(--text-primary); font-weight: 700;">Suggested Next Steps</h6>
+                <div class="d-flex flex-column gap-2 mt-3">
+                    <a href="{{request.prefix}}/wizard/quickstart/forecast/" class="text-decoration-none" style="color: var(--primary-purple); font-weight: 500;">
+                        <i class="fa fa-refresh me-2"></i> Repeat for another combination
+                    </a>
+                    <a href="{{request.prefix}}/wizard/load/forecast/" target="_blank" rel="noopener" class="text-decoration-none" style="color: var(--primary-purple); font-weight: 500;">
+                        <i class="fa fa-file-excel-o me-2"></i> Learn to load bulk data via Excel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}

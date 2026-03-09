@@ -1,45 +1,249 @@
 {% extends "admin/base_site_nav.html" %}
 {% load i18n %}
 
+{% block extrahead %}{{block.super}}
+<style>
+/* Modern SaaS UI Styling - Trivision Modern Purple Theme */
+:root {
+    --primary-purple: #7B2D8E;
+    --deep-purple: #2D004D;
+    --bright-accent: #9C27B0;
+    --bg-color: #F8F9FC;
+    --card-bg: #FFFFFF;
+    --text-primary: #1A1A1A;
+    --text-secondary: #6B7280;
+    --border-color: #E5E7EB;
+    --soft-purple-bg: rgba(123, 45, 142, 0.04);
+}
+
+.load-wizard-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.premium-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    overflow: hidden;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+}
+
+.task-card {
+    border: 1px solid var(--border-color);
+}
+
+.task-header {
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.2s;
+}
+
+.task-header:hover {
+    background: var(--soft-purple-bg);
+}
+
+.task-header h5 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--deep-purple);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.task-header.locked {
+    cursor: not-allowed;
+    background: #FAFBFC;
+    opacity: 0.7;
+}
+
+.task-header.locked h5 {
+    color: var(--text-secondary);
+}
+
+.task-icon {
+    font-size: 1.25rem;
+    width: 24px;
+    text-align: center;
+}
+
+.task-header .status-icon {
+    font-size: 1.1rem;
+}
+
+.task-header .status-icon.fa-check-square-o {
+    color: #10B981; /* Success Green */
+}
+
+.task-header .status-icon.fa-lock {
+    color: #9CA3AF;
+}
+
+.task-body {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    background: white;
+}
+
+.progress-card {
+    position: sticky;
+    top: 2rem;
+}
+
+.progress-header {
+    background: var(--deep-purple);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-bottom: none;
+}
+
+.progress-header h5 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+.progress-body {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #FFFFFF;
+}
+
+.progress-body svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Customizing the accordion arrow/plus */
+.task-header .toggle-icon {
+    transition: transform 0.2s ease;
+    color: var(--primary-purple);
+}
+
+.task-header[aria-expanded="true"] .toggle-icon {
+    transform: rotate(45deg);
+}
+
+/* Title on top */
+.page-title {
+    color: var(--deep-purple);
+    font-weight: 800;
+    margin-bottom: 2rem;
+    font-size: 1.75rem;
+}
+
+</style>
+{% endblock %}
+
 {% block content %}
-{% if wizard %}
-<div class="row">
-  <div id="tasks" class="col-lg-7 order-lg-1 col-sm-12 order-sm-2 mb-3" role="tablist" aria-multiselectable="true">
-  {% for step in wizard.steps %}
-    <div class="card mb-2" id="wizard-{{ step.index }}">
-       <div id="wizardhead-{{ step.index }}" data-bs-target="#wizardcontent-{{ step.index }}" class="card-header" role="tab"
-       {% if step.locked %}data-bs-toggle="tooltip" data-bs-placement="top" title="Complete the previous step to earn access!"{% else %}data-bs-toggle="collapse"{% endif %}>
-        {% if step.icon %}<span style="font-size:1.5em" class="fa {{ step.icon }} float-end"></span>{% endif %}
-        <h5 class="card-title">{{ step.title }}&nbsp;&nbsp;<small><span class="fa fa-plus fa-xs"></span></small></h5>
-      </div>
-      {% if step.content and not step.locked %}
-      <div id="wizardcontent-{{ step.index }}" aria-labelledby="wizardhead-{{ step.index }}" class="{% if step.index != currentstep %}collapse{% endif %}" role="tabpanel">
-        <div class="card-body">{{ step.content|safe }}</div>
-      </div>
-      {% endif %}
+<div class="load-wizard-container">
+    {% if wizard %}
+    
+    <div class="row">
+        <div class="col-12">
+            <h1 class="page-title">{% trans "Data loading wizard for " %}{{ wizard.mode }}</h1>
+        </div>
     </div>
-  {% endfor %}
-  </div>
-  {% if mode %}
-   <div class="col-lg-5 order-lg-2 col-sm-12 order-sm-1 mb-3">
-     <div class="card">
-     <div class="card-header"><h5 class="card-title">Your progress</h5></div>
-     <div class="card-body">
-     {% if wizard.mode == "forecast" %}{% include 'wizard/progress_forecasting.svg' %}
-     {% else %}{% include 'wizard/progress_productionplanning.svg' %}{% endif %}
-     </div>
-   </div>
-  {% endif %}
-  {% if wizard.script %}
-  <script>
-  $(function() {
-  	{{ wizard.script|safe }}
-  });
-  </script>
-  {% endif %}
-  </div>
+
+    <div class="row">
+        <!-- Task List -->
+        <div id="tasks" class="col-lg-7 order-lg-1 col-sm-12 order-sm-2 mb-3" role="tablist" aria-multiselectable="true">
+            {% for step in wizard.steps %}
+            <div class="premium-card task-card" id="wizard-{{ step.index }}">
+                <div id="wizardhead-{{ step.index }}" 
+                     data-bs-target="#wizardcontent-{{ step.index }}" 
+                     class="task-header {% if step.locked %}locked{% endif %}" 
+                     role="tab"
+                     {% if step.locked %}
+                     data-bs-toggle="tooltip" 
+                     data-bs-placement="top" 
+                     title="{% trans 'Complete the previous step to earn access!' %}"
+                     {% else %}
+                     data-bs-toggle="collapse"
+                     aria-expanded="{% if step.index == currentstep %}true{% else %}false{% endif %}"
+                     {% endif %}>
+                    
+                    <h5>
+                        <span class="step-badge" style="background: {% if step.locked %}#E5E7EB{% else %}var(--primary-purple){% endif %}; color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem;">{{ forloop.counter }}</span>
+                        {{ step.title }}
+                    </h5>
+                    
+                    <div class="d-flex align-items-center gap-3">
+                        {% if step.icon %}
+                        <span class="task-icon status-icon fa {{ step.icon }}"></span>
+                        {% endif %}
+                        {% if not step.locked %}
+                        <span class="fa fa-plus toggle-icon small"></span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if step.content and not step.locked %}
+                <div id="wizardcontent-{{ step.index }}" 
+                     aria-labelledby="wizardhead-{{ step.index }}" 
+                     class="{% if step.index != currentstep %}collapse{% endif %}" 
+                     role="tabpanel"
+                     data-bs-parent="#tasks">
+                    <div class="task-body">
+                        {{ step.content|safe }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Progress Sidebar -->
+        {% if mode or wizard.mode %}
+        <div class="col-lg-5 order-lg-2 col-sm-12 order-sm-1 mb-4">
+            <div class="premium-card progress-card">
+                <div class="progress-header">
+                    <h5><i class="fa fa-line-chart me-2"></i>{% trans "Your progress" %}</h5>
+                </div>
+                <div class="progress-body">
+                    {% if wizard.mode == "forecast" %}
+                        {% include 'wizard/progress_forecasting.svg' %}
+                    {% else %}
+                        {% include 'wizard/progress_productionplanning.svg' %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if wizard.script %}
+    <script>
+    $(function() {
+        {{ wizard.script|safe }}
+        
+        // Ensure tooltips are initialized
+        $('[data-bs-toggle="tooltip"]').tooltip();
+        
+        // Custom animation for plus icon
+        $('.task-header').on('click', function() {
+            if ($(this).hasClass('locked')) return;
+            var isExpanded = $(this).attr('aria-expanded') === 'true';
+            $(this).find('.toggle-icon').css('transform', isExpanded ? 'rotate(45deg)' : 'rotate(0deg)');
+        });
+    });
+    </script>
+    {% endif %}
+
+    {% else %}
+        {{ block.super }}
+    {% endif %}
 </div>
-{% else %}
-{{ block.super }}
-{% endif %}
 {% endblock %}

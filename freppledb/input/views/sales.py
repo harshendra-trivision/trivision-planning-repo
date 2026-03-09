@@ -59,6 +59,7 @@ logger = logging.getLogger(__name__)
 
 
 class LocationList(GridReport):
+    template = "input/location.html"
     title = _("locations")
     basequeryset = Location.objects.all()
     model = Location
@@ -110,6 +111,7 @@ class LocationList(GridReport):
 
 
 class CustomerList(GridReport):
+    template = "input/customer.html"
     title = _("customers")
     basequeryset = Customer.objects.all()
     model = Customer
@@ -154,6 +156,7 @@ class CustomerList(GridReport):
 
 
 class ItemList(GridReport):
+    template = "input/item.html"
     title = _("items")
     basequeryset = Item.objects.all()
     model = Item

@@ -341,6 +341,7 @@ class BufferList(GridReport):
 
 
 class ItemDistributionList(GridReport):
+    template = "input/itemdistribution.html"
     title = _("item distributions")
     basequeryset = ItemDistribution.objects.all()
     model = ItemDistribution
@@ -628,8 +629,8 @@ class ItemDistributionList(GridReport):
                 reportclass.attr_sql += "itemdistribution.%s, " % f.name.split("__")[-1]
 
 
-class DistributionOrderList(OperationPlanMixin):
-    template = "input/operationplanreport.html"
+class DistributionOrderList(OperationPlanMixin, GridReport):
+    template = "input/distributionorder.html"
     title = _("distribution orders")
     default_sort = (1, "desc")
     model = DistributionOrder
@@ -637,6 +638,13 @@ class DistributionOrderList(OperationPlanMixin):
     multiselect = True
     editable = True
     height = 250
+
+    @classmethod
+    def extra_context(reportclass, request, *args, **kwargs):
+        ctx = super().extra_context(request, *args, **kwargs)
+        if reportclass.template == "input/operationplanreport.html":
+            reportclass.template = "input/distributionorder.html"
+        return ctx
     help_url = "modeling-wizard/distribution/distribution-orders.html"
     message_when_empty = Template(
         """

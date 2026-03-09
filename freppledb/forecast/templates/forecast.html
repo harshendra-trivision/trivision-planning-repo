@@ -12,6 +12,49 @@
 <script type="module" src="{{STATIC_URL}}forecast/main.js"></script>
 {% endif %}
 <style>
+    :root {
+        --primary-purple: #7B2D8E;
+        --deep-purple: #2D004D;
+        --bright-accent: #9C27B0;
+        --soft-purple-bg: rgba(123, 45, 142, 0.04);
+        --border-color: #E5E7EB;
+        --card-bg: #FFFFFF;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+    }
+
+    /* Modernizing the page header */
+    #content > h1 {
+        display: none;
+    }
+
+    #forecast-editor-header {
+        margin-bottom: 2rem;
+    }
+
+    .modern-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(45, 0, 77, 0.05);
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+    }
+
+    .btn-primary {
+        background: var(--primary-purple) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 600 !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .btn-primary:hover {
+        background: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.2) !important;
+    }
+
 
 #forecasttable thead th {
   background-color: #aaa;

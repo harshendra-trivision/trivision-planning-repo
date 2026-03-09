@@ -1,8 +1,6 @@
 {% extends "admin/base_site_grid.html" %}
 {% load i18n %}
 
-{% block tabs %}{% if args.0 %}{% tabs "input.item" %}{% endif %}{{block.super}}{% endblock %}
-
 {% block extrahead %}
 {{ block.super }}
 <style>
@@ -15,9 +13,6 @@
         --card-bg: #FFFFFF;
         --text-primary: #1A1A1A;
         --text-secondary: #6B7280;
-        --success-green: #10B981;
-        --error-red: #EF4444;
-        --warning-orange: #F59E0B;
     }
 
     /* Modernizing the page header */
@@ -43,74 +38,41 @@
         padding: 0.5rem 1.25rem !important;
         font-weight: 600 !important;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
     }
 
     .btn-primary:hover, #save:hover, #undo:hover, #toolicons .btn:hover {
         background: var(--deep-purple) !important;
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(123, 45, 142, 0.2) !important;
+        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.2) !important;
     }
 
     /* Grid styling */
     .ui-jqgrid .ui-jqgrid-hdiv {
-        background: linear-gradient(to bottom, #F8F4FC, #FFFFFF) !important;
+        background: #F9FAFB !important;
         border-bottom: 2px solid var(--primary-purple) !important;
     }
 
     .ui-jqgrid .ui-jqgrid-htable th {
         color: var(--deep-purple) !important;
         font-weight: 700 !important;
-        padding: 15px 10px !important;
+        padding: 16px 12px !important;
         text-transform: uppercase;
-        font-size: 0.7rem;
-        letter-spacing: 0.08em;
+        font-size: 0.75rem;
     }
 
     .ui-jqgrid tr.ui-row-ltr td {
         border-bottom: 1px solid #F3F4F6 !important;
-        padding: 12px 10px !important;
-        font-size: 0.85rem;
+        padding: 14px 12px !important;
     }
 
-    .ui-jqgrid tr.ui-state-hover td {
-        background-color: var(--soft-purple-bg) !important;
-    }
-
-    /* Pager styling */
+    /* Pager modernization */
     #gridpager {
         background: #FFFFFF !important;
         border: none !important;
         border-top: 1px solid var(--border-color) !important;
         padding: 12px 0 !important;
     }
-
-    .status-badge {
-        border-radius: 20px;
-        padding: 2px 10px;
-        color: white;
-        font-weight: 600;
-        font-size: 0.75rem;
-        display: inline-block;
-    }
 </style>
-<script>
-function enddatecellattr(rowId, value, rowdata) {
-  var delay = parseFloat(rowdata.delay);
-  if (isNaN(delay) || rowdata.status == 'closed' || rowdata.status == 'canceled')
-  	return '';
-  
-  var color;
-  if (delay <= 0)
-  	color = 'var(--success-green)';
-  else if (delay > 7)
-  	color = 'var(--error-red)';
-  else
-    color = 'var(--warning-orange)';
-    
-  return 'style="background-color: ' + color + '; color: white; font-weight: 600;"';
-}
-</script>
 {% endblock %}
 
 {% block before_table %}
@@ -119,12 +81,12 @@ function enddatecellattr(rowId, value, rowdata) {
         <div class="col">
             <p class="text-muted small mb-1">{% trans "Sales" %}</p>
             <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
-                {% trans "Delivery orders" %}
+                {% trans "Forecast measures" %}
             </h2>
         </div>
         <div class="col-auto">
             <div class="badge bg-soft-purple text-primary p-2 px-3" style="background: var(--soft-purple-bg); border: 1px solid rgba(123, 45, 142, 0.1); border-radius: 20px; color: var(--primary-purple) !important; font-weight: 600;">
-                <i class="fa fa-truck me-1"></i> {% trans "Shipping and fulfillment tracking" %}
+                <i class="fa fa-calculator me-1"></i> {% trans "KPI and measurement configuration" %}
             </div>
         </div>
     </div>
