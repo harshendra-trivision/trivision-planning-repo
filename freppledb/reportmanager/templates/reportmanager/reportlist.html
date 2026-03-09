@@ -2,15 +2,136 @@
 {% load i18n %}
 
 {% block extrahead %}{{block.super}}
-<script>
+<style>
+/* My Reports - Enhanced Styling following existing patterns */
+.reports-link {
+  color: #7B2D8E;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
 
+.reports-link:hover {
+  color: #9C27B0;
+  text-decoration: none;
+}
+
+.reports-link .fa {
+  color: #6B7280;
+  transition: all 0.2s ease;
+}
+
+.reports-link:hover .fa {
+  color: #7B2D8E;
+  transform: translateX(2px);
+}
+
+/* Enhanced empty state styling */
+.grid-empty-message {
+  background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  margin: 2rem auto;
+  max-width: 600px;
+  text-align: center;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.grid-empty-message h3 {
+  color: #2D004D;
+  font-weight: 700;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.grid-empty-message p {
+  color: #6B7280;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.add-report-btn {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  margin-top: 1rem;
+}
+
+.add-report-btn:hover {
+  background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(123, 45, 142, 0.25);
+  color: white;
+  text-decoration: none;
+}
+
+/* SQL Query column styling */
+.sql-preview {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #374151;
+  background: #F9FAFB;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #E5E7EB;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Public status badge */
+.public-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.public-badge.public-yes {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+}
+
+.public-badge.public-no {
+  background: rgba(107, 114, 128, 0.1);
+  color: #6B7280;
+}
+</style>
+
+<script>
 var dont_show_related_objects_for_deletion = true;
 
-function reportlink(cellvalue, options, row)
-{
-  return "<a href=\"" + url_prefix + "/reportmanager/" + row["id"] + "/\">"
+function reportlink(cellvalue, options, row) {
+  return "<a href=\"" + url_prefix + "/reportmanager/" + row["id"] + "/\" class=\"reports-link\">"
       + cellvalue
-      + "<span class='ps-2 fa fa-caret-right'></span></a><br>";
+      + "<span class='ps-2 fa fa-caret-right'></span></a>";
+}
+
+function sqlPreview(cellvalue, options, row) {
+  if (!cellvalue) return '';
+  return "<div class='sql-preview' title='" + cellvalue.replace(/'/g, '&apos;') + "'>" + cellvalue + "</div>";
+}
+
+function publicBadge(cellvalue, options, row) {
+  if (cellvalue === true) {
+    return "<span class='public-badge public-yes'>Public</span>";
+  } else {
+    return "<span class='public-badge public-no'>Private</span>";
+  }
 }
 </script>
 {% endblock %}
