@@ -968,19 +968,21 @@ class BucketDetailList(GridReport):
 
 class AttributeList(GridReport):
     title = _("attributes")
+    template = "common/attributelist.html"
     basequeryset = Attribute.objects.all()
     model = Attribute
     frozenColumns = 1
     help_url = "model-reference/attributes.html"
     message_when_empty = Template(
         """
+        <div class="grid-empty-message">
         <h3>Extend frePPLe with your own attributes</h3>
-        <br>
-        Every business uses specific attributes on items, sales orders, suppliers...<br>
-        You can edit, filter, sort, import and export your attribute fields like all other fields.<br>
-        <br><br>
-        <a href="{{request.prefix}}/data/common/attribute/add/" class="btn btn-primary">Add attribute</a>
-        <br>
+        <p>Every business uses specific attributes on items, sales orders, suppliers, and more.</p>
+        <p>You can edit, filter, sort, import and export your attribute fields like all other fields.</p>
+        <a href="{{request.prefix}}/data/common/attribute/add/" class="add-attribute-btn">
+        <i class="fa fa-plus"></i> Add attribute
+        </a>
+        </div>
         """
     )
 
