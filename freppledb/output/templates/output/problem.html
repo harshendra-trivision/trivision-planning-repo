@@ -1,10 +1,64 @@
 {% extends "admin/base_site_grid.html" %}
 
 {% block extrahead %}{{block.super}}
-<script>
+<style>
+/* Problem Report - Enhanced Styling following existing patterns */
+.problem-entity {
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  font-size: 0.75em;
+  font-weight: bold;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.375rem;
+  text-transform: uppercase;
+}
 
-function probfmt(cellvalue, options, row)
-{
+.problem-entity.material {
+  background-color: #28a745;
+}
+
+.problem-entity.capacity {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.problem-entity.demand {
+  background-color: #007bff;
+}
+
+.problem-entity.operation {
+  background-color: #6f42c1;
+}
+
+.problem-entity.forecast {
+  background-color: #dc3545;
+}
+
+.problem-link {
+  color: #7B2D8E;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.problem-link:hover {
+  color: #9C27B0;
+  text-decoration: underline;
+}
+
+.problem-description {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+</style>
+
+<script>
+function probfmt(cellvalue, options, row) {
   if (row['entity'] == 'material')
     var role = 'input/buffer';
   else if (row['entity'] == 'capacity')
@@ -12,7 +66,7 @@ function probfmt(cellvalue, options, row)
   else if (row['entity'] == 'forecast'){
     var forecast = row['owner'].substring(0,row['owner'].lastIndexOf(" - "));
     return cellvalue + "<a href=\"" + url_prefix + "/detail/forecast/forecast/" + admin_escape(forecast)
-     + "/\"><span class='ps-1 context fa fa-caret-right'></span></a>";
+     + "/\" class=\"problem-link\"><span class='ps-1 context fa fa-caret-right'></span></a>";
     }
   else if (row['entity'] == 'demand')
     var role = 'input/demand';
@@ -20,9 +74,11 @@ function probfmt(cellvalue, options, row)
     var role = 'input/operation';
   return $.jgrid.htmlEncode(cellvalue) + "<a href=\"" + url_prefix + "/detail/" + role
      + "/" + admin_escape(cellvalue)
-     + "/\"><span class='ps-2 context fa fa-caret-right'></span></a>";
+     + "/\" class=\"problem-link\"><span class='ps-2 context fa fa-caret-right'></span></a>";
 }
 
+function entityfmt(cellvalue, options, row) {
+  return '<span class="problem-entity ' + cellvalue + '">' + cellvalue + '</span>';
+}
 </script>
 {% endblock %}
-

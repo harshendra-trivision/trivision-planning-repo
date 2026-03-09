@@ -1,46 +1,102 @@
 {% load i18n %}
 {% if perms.auth.run_db %}
-<form class="form" role="form" method="post"
+<style>
+.loaddata-container {
+  background: #F8F9FC;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.loaddata-btn {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.loaddata-btn:hover {
+  background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(123, 45, 142, 0.25);
+  color: white;
+}
+
+.loaddata-dropdown {
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+.loaddata-dropdown:hover {
+  border-color: #9C27B0;
+}
+
+.loaddata-label {
+  color: #374151;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.loaddata-checkbox {
+  accent-color: #7B2D8E;
+}
+</style>
+
+<form class="form loaddata-container" role="form" method="post"
   onsubmit="return $('#loaddatafile').val() != ''"
   action="{{request.prefix}}/execute/launch/loaddata/">{% csrf_token %}
-<table>
-  <tr>
-    <td style="padding:15px; vertical-align:top">
-      <button  class="btn btn-primary" id="load" type="submit" value="{% trans "launch"|capfirst %}">
-        {% trans "launch"|capfirst %}
+  
+<div class="row align-items-start">
+  <div class="col-md-3 mb-3">
+    <button class="loaddata-btn" id="load" type="submit" value="{% trans "launch"|capfirst %}">
+      <i class="fa fa-play me-2"></i>{% trans "launch"|capfirst %}
+    </button>
+  </div>
+  
+  <div class="col-md-5 mb-3">
+    <p class="text-muted mb-2">{% trans "Load one of the available datasets." %}</p>
+    <div class="dropdown">
+      <button class="dropdown-toggle form-control loaddata-dropdown text-start" id="entity" type="button" data-bs-toggle="dropdown">
+        <span class="text-muted">Select dataset...</span>
       </button>
-    </td>
-    <td style="padding:15px">
-      <div class="dropdown">
-        <p>{% trans "Load one of the available datasets." %}</p>
-        <button class="d-inline dropdown-toggle form-control" id="entity" type="button" data-bs-toggle="dropdown">
-          <span>-</span>
-        </button>
-        <ul class="dropdown-menu col-12" aria-labelledby="entity" id="entityul">
-          {% for i in fixtures %}<li><a class="dropdown-item">{{i}}</a></li>{% endfor %}
-        </ul>
+      <ul class="dropdown-menu w-100" aria-labelledby="entity" id="entityul">
+        {% for i in fixtures %}<li><a class="dropdown-item">{{i}}</a></li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+  
+  <div class="col-md-4 mb-3">
+    <div class="mb-3">
+      <div class="form-check">
+        <input class="form-check-input loaddata-checkbox" type="checkbox" id="loaddatacb2" onclick="checkbox_changed(this, '#emptyvar')" checked />
+        <label class="form-check-label loaddata-label" for="loaddatacb2">
+          {% trans "Purge all data before loading" %}
+        </label>
       </div>
-    </td>
-    <td style="padding:15px">
-      <div class="mb-2">
-        <input class="form-check-input" type="checkbox" id="loaddatacb2" onclick="checkbox_changed(this, '#emptyvar')" checked />
-        <label for="loaddatacb2">{% trans "Purge all data before loading" %}</label>
-      </div>
-      <div>
-        <input class="form-check-input" type="checkbox" id="loaddatacb1" onclick="checkbox_changed(this, '#regeneratevar')" checked />
-        <label for="loaddatacb1">{% trans "Execute plan after loading" %}</label>
-      </div>
-    </td>
-  </tr>
-</table>
+    </div>
+    <div class="form-check">
+      <input class="form-check-input loaddata-checkbox" type="checkbox" id="loaddatacb1" onclick="checkbox_changed(this, '#regeneratevar')" checked />
+      <label class="form-check-label loaddata-label" for="loaddatacb1">
+        {% trans "Execute plan after loading" %}
+      </label>
+    </div>
+  </div>
+</div>
+
 <input type="hidden" name="fixture" id="loaddatafile" value="">
 <input type="hidden" name="regenerateplan" id="regeneratevar" value="true">
 <input type="hidden" name="emptybefore" id="emptyvar" value="true">
 </form>
+
 <script>
 $(function() {
   $("#entityul li a").click(function(){
-    $("#entity span").text($(this).text());
+    $("#entity span").text($(this).text()).removeClass('text-muted');
     $("#loaddatafile").val($(this).text());
   });
 });
@@ -49,5 +105,8 @@ function checkbox_changed(checkbox, slctr) {
 };
 </script>
 {% else %}
+<div class="alert alert-warning">
+  <i class="fa fa-exclamation-triangle me-2"></i>
   {% trans "Sorry, You don't have any execute permissions..." %}
+</div>
 {% endif %}
