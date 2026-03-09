@@ -2,58 +2,243 @@
 
 {% block extrahead %}{{block.super}}
 <style>
-/* Problem Report - Enhanced Styling following existing patterns */
+/* Problem Report - Modern Premium UI following existing patterns */
+
+/* Enhanced Entity Badges */
 .problem-entity {
-  display: inline-block;
-  padding: 0.2em 0.6em;
-  font-size: 0.75em;
-  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   line-height: 1;
   color: #fff;
   text-align: center;
   white-space: nowrap;
-  vertical-align: baseline;
-  border-radius: 0.375rem;
+  border-radius: 20px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.problem-entity:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .problem-entity.material {
-  background-color: #28a745;
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
 }
 
 .problem-entity.capacity {
-  background-color: #ffc107;
-  color: #212529;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: #FFFFFF;
 }
 
 .problem-entity.demand {
-  background-color: #007bff;
+  background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
 }
 
 .problem-entity.operation {
-  background-color: #6f42c1;
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
 }
 
 .problem-entity.forecast {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
 }
 
+/* Enhanced Problem Links */
 .problem-link {
   color: #7B2D8E;
   text-decoration: none;
   font-weight: 500;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .problem-link:hover {
   color: #9C27B0;
-  text-decoration: underline;
+  text-decoration: none;
+  transform: translateX(2px);
 }
 
+.problem-link .fa {
+  color: #6B7280;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+}
+
+.problem-link:hover .fa {
+  color: #7B2D8E;
+  transform: scale(1.1);
+}
+
+/* Enhanced Description Styling */
 .problem-description {
-  max-width: 300px;
+  max-width: 350px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: #374151;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* Enhanced Table Styling */
+.ui-jqgrid .ui-jqgrid-htable th {
+  background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%) !important;
+  border-bottom: 2px solid #7B2D8E !important;
+  color: #2D004D !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  padding: 1rem 0.75rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ui-jqgrid .ui-jqgrid-btable td {
+  padding: 0.875rem 0.75rem !important;
+  font-size: 0.9rem !important;
+  border-bottom: 1px solid #F1F5F9 !important;
+  vertical-align: middle !important;
+}
+
+.ui-jqgrid .ui-jqgrid-btable tr:hover td {
+  background: rgba(123, 45, 142, 0.02) !important;
+}
+
+.ui-jqgrid .ui-jqgrid-btable tr:nth-child(even) {
+  background: #FAFBFC !important;
+}
+
+/* Enhanced Grid Container */
+.ui-jqgrid {
+  border: 1px solid #E5E7EB !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Enhanced Pagination */
+.ui-jqgrid .ui-jqgrid-pager {
+  background: #F8F9FC !important;
+  border-top: 1px solid #E5E7EB !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.ui-jqgrid .ui-jqgrid-pager .ui-pager-control {
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 6px !important;
+  color: #374151 !important;
+  margin: 0 2px !important;
+  padding: 0.375rem 0.75rem !important;
+  transition: all 0.2s ease !important;
+  font-weight: 500 !important;
+}
+
+.ui-jqgrid .ui-jqgrid-pager .ui-pager-control:hover {
+  background: #7B2D8E !important;
+  color: #FFFFFF !important;
+  border-color: #7B2D8E !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(123, 45, 142, 0.2) !important;
+}
+
+/* Enhanced Action Buttons */
+.btn-sm.btn-primary {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.5rem 1rem !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 3px rgba(123, 45, 142, 0.2) !important;
+}
+
+.btn-sm.btn-primary:hover {
+  background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 3px 8px rgba(123, 45, 142, 0.3) !important;
+}
+
+/* Enhanced Filter Section */
+#filterform {
+  background: #F8F9FC !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1rem !important;
+  margin-bottom: 1rem !important;
+  border: 1px solid #E5E7EB !important;
+}
+
+#filterform input[type="text"] {
+  border: 1px solid #E5E7EB !important;
+  border-radius: 6px !important;
+  padding: 0.5rem 0.75rem !important;
+  transition: all 0.2s ease !important;
+}
+
+#filterform input[type="text"]:focus {
+  border-color: #7B2D8E !important;
+  box-shadow: 0 0 0 3px rgba(123, 45, 142, 0.1) !important;
+  outline: none !important;
+}
+
+/* Enhanced Search and Filter Buttons */
+.input-group-text {
+  background: #7B2D8E !important;
+  border-color: #7B2D8E !important;
+  color: #FFFFFF !important;
+  transition: all 0.2s ease !important;
+}
+
+.input-group-text:hover {
+  background: #9C27B0 !important;
+  border-color: #9C27B0 !important;
+}
+
+/* Enhanced Empty State */
+#grid_empty_message {
+  background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%) !important;
+  border-radius: 12px !important;
+  padding: 3rem 2rem !important;
+  margin: 2rem !important;
+  text-align: center !important;
+  border: 1px solid #E5E7EB !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+}
+
+#grid_empty_message h3 {
+  color: #2D004D !important;
+  font-weight: 700 !important;
+  margin-bottom: 1rem !important;
+}
+
+#grid_empty_message p {
+  color: #6B7280 !important;
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+  .problem-entity {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .ui-jqgrid .ui-jqgrid-htable th {
+    padding: 0.75rem 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+  
+  .ui-jqgrid .ui-jqgrid-btable td {
+    padding: 0.75rem 0.5rem !important;
+    font-size: 0.85rem !important;
+  }
 }
 </style>
 
