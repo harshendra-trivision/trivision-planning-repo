@@ -69,6 +69,7 @@ logger = logging.getLogger(__name__)
 
 
 class SetupMatrixList(GridReport):
+    template = "input/capacity_list.html"
     title = _("setup matrices")
     basequeryset = SetupMatrix.objects.all()
     model = SetupMatrix
@@ -102,6 +103,7 @@ class SetupMatrixList(GridReport):
 
 
 class SetupRuleList(GridReport):
+    template = "input/capacity_list.html"
     title = _("setup rules")
     basequeryset = SetupRule.objects.all()
     model = SetupRule
@@ -154,6 +156,7 @@ class SetupRuleList(GridReport):
 
 
 class ResourceList(GridReport):
+    template = "input/resource.html"
     title = _("resources")
     basequeryset = Resource.objects.all()
     model = Resource
@@ -296,6 +299,7 @@ class ResourceList(GridReport):
 
 
 class SkillList(GridReport):
+    template = "input/capacity_list.html"
     title = _("skills")
     basequeryset = Skill.objects.all()
     model = Skill
@@ -330,6 +334,7 @@ class SkillList(GridReport):
 
 
 class ResourceSkillList(GridReport):
+    template = "input/capacity_list.html"
     title = _("resource skills")
     basequeryset = ResourceSkill.objects.all()
     model = ResourceSkill
@@ -501,6 +506,13 @@ class ResourceDetail(OperationPlanMixin):
     editable = True
     multiselect = True
     height = 250
+
+    @classmethod
+    def extra_context(reportclass, request, *args, **kwargs):
+        ctx = super().extra_context(request, *args, **kwargs)
+        if reportclass.template == "input/operationplanreport.html":
+            reportclass.template = "input/resourcedetail.html"
+        return ctx
     help_url = "user-interface/plan-analysis/resource-detail-report.html"
     message_when_empty = Template(
         """

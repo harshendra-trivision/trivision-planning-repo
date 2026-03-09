@@ -116,6 +116,7 @@ def CreateOrEditBuffer(request, buffer_id):
 
 
 class BufferList(GridReport):
+    template = "input/buffer.html"
     title = _("buffers")
     basequeryset = Buffer.objects.all()
     model = Buffer
@@ -1409,6 +1410,13 @@ class InventoryDetail(OperationPlanMixin):
     editable = True
     multiselect = True
     height = 250
+
+    @classmethod
+    def extra_context(reportclass, request, *args, **kwargs):
+        ctx = super().extra_context(request, *args, **kwargs)
+        if reportclass.template == "input/operationplanreport.html":
+            reportclass.template = "input/inventorydetail.html"
+        return ctx
     help_url = "user-interface/plan-analysis/inventory-detail-report.html"
     message_when_empty = Template(
         """
