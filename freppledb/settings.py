@@ -259,7 +259,7 @@ INTERNAL_IPS = ("127.0.0.1",)
 # manually specified.
 DEFAULT_CHARSET = "utf-8"
 
-BRANDING = "frePPLe"
+BRANDING = "Trivision.ai"
 
 # Default characterset for writing and reading CSV files.
 # We are assuming here that the default encoding of clients is the same as the server.
