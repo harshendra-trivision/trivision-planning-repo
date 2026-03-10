@@ -265,6 +265,72 @@
   }
 }
 {% endif %}
+
+/* Modern Customize Modal Scrollbar Styling */
+#DroppointRows::-webkit-scrollbar,
+#Rows::-webkit-scrollbar,
+#DroppointCrosses::-webkit-scrollbar,
+#Crosses::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+#DroppointRows::-webkit-scrollbar-track,
+#Rows::-webkit-scrollbar-track,
+#DroppointCrosses::-webkit-scrollbar-track,
+#Crosses::-webkit-scrollbar-track {
+  background: #F3F4F6;
+  border-radius: 4px;
+}
+
+#DroppointRows::-webkit-scrollbar-thumb,
+#Rows::-webkit-scrollbar-thumb,
+#DroppointCrosses::-webkit-scrollbar-thumb,
+#Crosses::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+#DroppointRows::-webkit-scrollbar-thumb:hover,
+#Rows::-webkit-scrollbar-thumb:hover,
+#DroppointCrosses::-webkit-scrollbar-thumb:hover,
+#Crosses::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
+}
+
+/* Modern Customize Modal Backdrop */
+.modal-backdrop.show {
+  opacity: 0.6;
+  backdrop-filter: blur(4px);
+}
+
+/* Smooth animations for customize modal */
+.modal.fade .modal-dialog {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+/* List item drag and drop visual feedback */
+.sortable-drag {
+  opacity: 0.8;
+  box-shadow: 0 8px 30px rgba(123, 45, 142, 0.25) !important;
+  transform: rotate(2deg) scale(1.02) !important;
+  border: 2px solid #9C27B0 !important;
+  background: linear-gradient(135deg, #F8F4FC 0%, #F3E8FF 100%) !important;
+}
+
+.sortable-ghost {
+  opacity: 0.3;
+  background: rgba(156, 39, 176, 0.1) !important;
+}
+
+/* Focus states for select dropdown in frozen columns */
+#frozen:focus {
+  outline: none;
+  border-color: #9C27B0 !important;
+  box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.15) !important;
+}
+
 </style>
 
 <script>

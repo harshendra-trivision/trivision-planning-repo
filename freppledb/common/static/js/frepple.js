@@ -781,16 +781,22 @@ var grid = {
       '' :
       '<div class="row mb-3">' +
       '<div class="col">' +
-      '<div class="card"><div class="card-header">' + gettext("Available options") + '</div>' +
-      '<div class="card-body">' +
-      '<ul class="list-group" id="DroppointRows" style="height: 160px; overflow-y: scroll;">placeholder1</ul>' +
+      '<div class="card" style="border: 1px solid rgba(156, 39, 176, 0.2); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(123, 45, 142, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">' +
+      '<div class="card-header" style="background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%); border-bottom: none; padding: 1rem 1.25rem; font-weight: 700; color: #FFFFFF; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 2px 8px rgba(123, 45, 142, 0.15);">' +
+      gettext("Available options") +
+      '</div>' +
+      '<div class="card-body" style="padding: 1rem; background: #FAFAFE;">' +
+      '<ul class="list-group" id="DroppointRows" style="height: 200px; overflow-y: auto; border: 1px solid #E5E7EB; border-radius: 8px; background: #FFFFFF; padding: 0.5rem;">placeholder1</ul>' +
       '</div>' +
       '</div>' +
       '</div>' +
       '<div class="col">' +
-      '<div class="card"><div class="card-header">' + gettext("Selected options") + '</div>' +
-      '<div class="card-body">' +
-      '<ul class="list-group" id="Rows" style="height: 160px; overflow-y: scroll;">placeholder0</ul>' +
+      '<div class="card" style="border: 1px solid rgba(156, 39, 176, 0.2); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(123, 45, 142, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">' +
+      '<div class="card-header" style="background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%); border-bottom: none; padding: 1rem 1.25rem; font-weight: 700; color: #FFFFFF; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 2px 8px rgba(123, 45, 142, 0.15);">' +
+      gettext("Selected options") +
+      '</div>' +
+      '<div class="card-body" style="padding: 1rem; background: #FAFAFE;">' +
+      '<ul class="list-group" id="Rows" style="height: 200px; overflow-y: auto; border: 1px solid #E5E7EB; border-radius: 8px; background: #FFFFFF; padding: 0.5rem;">placeholder0</ul>' +
       '</div>' +
       '</div>' +
       '</div>' +
@@ -811,7 +817,7 @@ var grid = {
       else if (colModel[i].name != "rn" && colModel[i].name != "cb" && colModel[i].counter != null && colModel[i].label != '' && !('alwayshidden' in colModel[i])) {
         if (colModel[i].frozen) maxfrozen = parseInt(i, 10) + 1 - skipped;
         if (!colModel[i].hidden)
-          val0s += '<li id="' + (i) + '"  class="list-group-item" style="cursor: move; border: none">' + colModel[i].label + '</li>';
+          val0s += '<li id="' + (i) + '"  class="list-group-item" style="cursor: move; border: none; background: #FFFFFF; padding: 0.625rem 0.875rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #1A1A1A; transition: all 0.2s ease; border: 1px solid #E5E7EB;" onmouseover="this.style.background=\'rgba(156,39,176,0.08)\'; this.style.borderColor=\'#9C27B0\'; this.style.transform=\'translateX(4px)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateX(0)\';">' + colModel[i].label + '</li>';
         else
           val0a[colModel[i].label] = i;
       }
@@ -825,28 +831,28 @@ var grid = {
       // Add list of crosses
       var row1 = '<div class="row">' +
         '<div class="col">' +
-        '<div class="card">' +
-        '<div class="card-header">' +
+        '<div class="card" style="border: 1px solid rgba(156, 39, 176, 0.2); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(123, 45, 142, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">' +
+        '<div class="card-header" style="background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%); border-bottom: none; padding: 1rem 1.25rem; font-weight: 700; color: #FFFFFF; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 2px 8px rgba(123, 45, 142, 0.15);">' +
         gettext('Available Cross') +
         '</div>' +
-        '<div class="card-body">' +
-        '<ul class="list-group" id="DroppointCrosses" style="height: 160px; overflow-y: scroll;">placeholder1</ul>' +
+        '<div class="card-body" style="padding: 1rem; background: #FAFAFE;">' +
+        '<ul class="list-group" id="DroppointCrosses" style="height: 200px; overflow-y: auto; border: 1px solid #E5E7EB; border-radius: 8px; background: #FFFFFF; padding: 0.5rem;">placeholder1</ul>' +
         '</div>' +
         '</div>' +
         '</div>' +
         '<div class="col">' +
-        '<div class="card">' +
-        '<div class="card-header">' +
+        '<div class="card" style="border: 1px solid rgba(156, 39, 176, 0.2); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(123, 45, 142, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">' +
+        '<div class="card-header" style="background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%); border-bottom: none; padding: 1rem 1.25rem; font-weight: 700; color: #FFFFFF; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 2px 8px rgba(123, 45, 142, 0.15);">' +
         gettext('Selected Cross') +
         '</div>' +
-        '<div class="card-body">' +
-        '<ul class="list-group" id="Crosses" style="height: 160px; overflow-y: scroll;">placeholder0</ul>' +
+        '<div class="card-body" style="padding: 1rem; background: #FAFAFE;">' +
+        '<ul class="list-group" id="Crosses" style="height: 200px; overflow-y: auto; border: 1px solid #E5E7EB; border-radius: 8px; background: #FFFFFF; padding: 0.5rem;">placeholder0</ul>' +
         '</div>' +
         '</div>' +
         '</div>' +
         '</div>';
       for (var j in my_cross_idx) {
-        val1s += '<li class="list-group-item" id="' + (1000 + parseInt(my_cross_idx[j], 10)) + '" style="cursor: move; border: none">' + my_cross[my_cross_idx[j]]['name'] + '</li>';
+        val1s += '<li class="list-group-item" id="' + (1000 + parseInt(my_cross_idx[j], 10)) + '" style="cursor: move; border: none; background: #FFFFFF; padding: 0.625rem 0.875rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #1A1A1A; transition: all 0.2s ease; border: 1px solid #E5E7EB;" onmouseover="this.style.background=\'rgba(156,39,176,0.08)\'; this.style.borderColor=\'#9C27B0\'; this.style.transform=\'translateX(4px)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateX(0)\';">' + my_cross[my_cross_idx[j]]['name'] + '</li>';
       }
       var fieldlist = {};
       for (var j in my_cross) {
@@ -854,13 +860,15 @@ var grid = {
         fieldlist[my_cross[j]['name']] = parseInt(j, 10);
       }
       for (var j of Object.keys(fieldlist).sort())
-        val1a += '<li class="list-group-item" id="' + (1000 + fieldlist[j]) + '" style="cursor: move; border: none">' + j + '</li>';
+        val1a += '<li class="list-group-item" id="' + (1000 + fieldlist[j]) + '" style="cursor: move; border: none; background: #FFFFFF; padding: 0.625rem 0.875rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #1A1A1A; transition: all 0.2s ease; border: 1px solid #E5E7EB;" onmouseover="this.style.background=\'rgba(156,39,176,0.08)\'; this.style.borderColor=\'#9C27B0\'; this.style.transform=\'translateX(4px)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateX(0)\';">' + j + '</li>';
     }
     else {
       // Add selection of number of frozen columns
-      row2 = '<div class="row mt-3"><div class="col">' +
+      row2 = '<div class="row mt-3"><div class="col" style="background: linear-gradient(135deg, rgba(156,39,176,0.08) 0%, rgba(123,45,142,0.05) 100%); padding: 1.25rem; border-radius: 10px; border: 1px solid rgba(156,39,176,0.2); box-shadow: 0 2px 8px rgba(123,45,142,0.08);">' +
+        '<label style="color: #2D004D; font-weight: 700; font-size: 0.875rem; margin-right: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">' +
         gettext("Frozen columns") +
-        '&nbsp;&nbsp;<select id="frozen" class="form-select w-auto d-inline">';
+        '</label>' +
+        '<select id="frozen" class="form-select w-auto d-inline" style="border: 1px solid rgba(156,39,176,0.3); border-radius: 6px; padding: 0.5rem 2.5rem 0.5rem 0.875rem; font-size: 0.875rem; font-weight: 500; color: #2D004D; background-color: #FFFFFF; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(123,45,142,0.1);" onmouseover="this.style.borderColor=\'#9C27B0\'; this.style.boxShadow=\'0 0 0 3px rgba(156,39,176,0.15)\';" onmouseout="this.style.borderColor=\'rgba(156,39,176,0.3)\'; this.style.boxShadow=\'0 2px 6px rgba(123,45,142,0.1)\';">';
       var maxfreeze = Math.min(colModel.length, 5);
       for (var i = 0; i <= maxfreeze; i++) {
         if (i == maxfrozen)
@@ -878,12 +886,12 @@ var grid = {
         collapsibleOption = o.split(' - ')[0];
         if (!collapsibleSet.has(collapsibleOption)) {
           collapsibleSet.add(collapsibleOption);
-          let collapseIcon = '<i class="fa fa-chevron-right pt-1 float-end" style="cursor: pointer; z-index: 3000; position: relative"></i>';
-          availableoptions += '<li id="' + collapsibleSet.size * 1000 + '" class="list-group-item do-not-drag" style="cursor: pointer; border: none" onclick="grid.toggleCollapseSubOptions(\'' + collapsibleOption + '\',' + collapsibleSet.size * 1000 + ')">' + collapsibleOption + ' attributes' + collapseIcon + '</li>';
+          let collapseIcon = '<i class="fa fa-chevron-right pt-1 float-end" style="cursor: pointer; z-index: 3000; position: relative; color: #FFFFFF; transition: transform 0.2s ease;"></i>';
+          availableoptions += '<li id="' + collapsibleSet.size * 1000 + '" class="list-group-item do-not-drag" style="cursor: pointer; border: none; background: linear-gradient(135deg, rgba(123,45,142,0.85) 0%, rgba(156,39,176,0.85) 100%); padding: 0.625rem 0.875rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #FFFFFF; font-weight: 600; transition: all 0.2s ease; border: 1px solid rgba(156,39,176,0.3); box-shadow: 0 2px 6px rgba(123,45,142,0.12);" onmouseover="this.style.background=\'linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%)\'; this.style.transform=\'translateX(4px)\'; this.style.boxShadow=\'0 4px 12px rgba(123,45,142,0.25)\';" onmouseout="this.style.background=\'linear-gradient(135deg, rgba(123,45,142,0.85) 0%, rgba(156,39,176,0.85) 100%)\'; this.style.transform=\'translateX(0)\'; this.style.boxShadow=\'0 2px 6px rgba(123,45,142,0.12)\';" onclick="grid.toggleCollapseSubOptions(\'' + collapsibleOption + '\',' + collapsibleSet.size * 1000 + ')">' + collapsibleOption + ' attributes' + collapseIcon + '</li>';
         }
-        availableoptions += '<li id="' + val0a[o] + '" type="' + collapsibleOption + '" class="list-group-item ps-4 d-none" style="cursor: move; border: none">' + o + '</li>';
+        availableoptions += '<li id="' + val0a[o] + '" type="' + collapsibleOption + '" class="list-group-item ps-4 d-none" style="cursor: move; border: none; background: #FFFFFF; padding: 0.625rem 0.875rem 0.625rem 1.5rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #1A1A1A; transition: all 0.2s ease; border: 1px solid #E5E7EB; border-left: 3px solid #9C27B0;" onmouseover="this.style.background=\'rgba(156,39,176,0.08)\'; this.style.borderColor=\'#9C27B0\'; this.style.transform=\'translateX(4px)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.borderLeftColor=\'#9C27B0\'; this.style.transform=\'translateX(0)\';">' + o + '</li>';
       } else {
-        availableoptions += '<li id="' + val0a[o] + '" class="list-group-item" style="cursor: move; border: none">' + o + '</li>';
+        availableoptions += '<li id="' + val0a[o] + '" class="list-group-item" style="cursor: move; border: none; background: #FFFFFF; padding: 0.625rem 0.875rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #1A1A1A; transition: all 0.2s ease; border: 1px solid #E5E7EB;" onmouseover="this.style.background=\'rgba(156,39,176,0.08)\'; this.style.borderColor=\'#9C27B0\'; this.style.transform=\'translateX(4px)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateX(0)\';">' + o + '</li>';
       }
     }
     row0 = row0.replace('placeholder1', availableoptions);
@@ -893,22 +901,22 @@ var grid = {
     }
 
     $('#popup').html('' +
-      '<div class="modal-dialog modal-lg">' +
-      '<div class="modal-content">' +
-      '<div class="modal-header">' +
-      '<h5 class="modal-title">' + gettext("Customize") + '</h5>' +
-      '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label=' + gettext("Close") + '></button>' +
+      '<div class="modal-dialog modal-lg" style="max-width: 900px;">' +
+      '<div class="modal-content" style="border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(45, 0, 77, 0.15);">' +
+      '<div class="modal-header" style="background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); border-bottom: none; padding: 1.5rem 2rem;">' +
+      '<h5 class="modal-title" style="color: #FFFFFF; font-weight: 800; font-size: 1.5rem; letter-spacing: 0.02em; font-family: \'Inter\', sans-serif; text-shadow: 0 2px 8px rgba(0,0,0,0.2);">' + gettext("Customize") + '</h5>' +
+      '<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label=' + gettext("Close") + ' style="filter: brightness(0) invert(1); opacity: 0.8; transition: all 0.2s ease;" onmouseover="this.style.opacity=\'1\'; this.style.transform=\'scale(1.1)\';" onmouseout="this.style.opacity=\'0.8\'; this.style.transform=\'scale(1)\';"></button>' +
       '</div>' +
-      '<div class="modal-body">' +
+      '<div class="modal-body" style="padding: 2rem; background: #FAFAFE;">' +
       row0 +
       row1 +
       row2 +
       (typeof extra_customize_html !== 'undefined' ? extra_customize_html : '') +  // Not very clean to use a global variable here
       '</div>' +
-      '<div class="modal-footer justify-content-between">' +
-      '<input type="submit" id="cancelCustbutton" role="button" class="btn btn-gray" data-bs-dismiss="modal" value="' + gettext('Cancel') + '">' +
-      '<input type="submit" id="resetCustbutton" role="button" class="btn btn-gray" value="' + gettext('Reset') + '">' +
-      '<input type="submit" id="okCustbutton" role="button" class="btn btn-primary" value="' + gettext("OK") + '">' +
+      '<div class="modal-footer justify-content-between" style="background: #F8F4FC; border-top: 1px solid #E5E7EB; padding: 1.25rem 2rem;">' +
+      '<input type="submit" id="cancelCustbutton" role="button" class="btn btn-gray" data-bs-dismiss="modal" value="' + gettext('Cancel') + '" style="background: #FFFFFF; color: #6B7280; border: 1px solid #E5E7EB; border-radius: 8px; padding: 0.625rem 1.5rem; font-weight: 600; font-size: 0.875rem; transition: all 0.2s ease; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05);" onmouseover="this.style.background=\'#F3F4F6\'; this.style.borderColor=\'#D1D5DB\'; this.style.transform=\'translateY(-1px)\'; this.style.boxShadow=\'0 2px 6px rgba(0,0,0,0.08)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateY(0)\'; this.style.boxShadow=\'0 1px 3px rgba(0,0,0,0.05)\';">' +
+      '<input type="submit" id="resetCustbutton" role="button" class="btn btn-gray" value="' + gettext('Reset') + '" style="background: #FFFFFF; color: #6B7280; border: 1px solid #E5E7EB; border-radius: 8px; padding: 0.625rem 1.5rem; font-weight: 600; font-size: 0.875rem; transition: all 0.2s ease; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05);" onmouseover="this.style.background=\'#F3F4F6\'; this.style.borderColor=\'#D1D5DB\'; this.style.transform=\'translateY(-1px)\'; this.style.boxShadow=\'0 2px 6px rgba(0,0,0,0.08)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateY(0)\'; this.style.boxShadow=\'0 1px 3px rgba(0,0,0,0.05)\';">' +
+      '<input type="submit" id="okCustbutton" role="button" class="btn btn-primary" value="' + gettext("OK") + '" style="background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%); color: #FFFFFF; border: none; border-radius: 8px; padding: 0.625rem 2rem; font-weight: 700; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; box-shadow: 0 4px 12px rgba(123, 45, 142, 0.25);" onmouseover="this.style.background=\'linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%)\'; this.style.transform=\'translateY(-2px)\'; this.style.boxShadow=\'0 8px 20px rgba(123, 45, 142, 0.35)\';" onmouseout="this.style.background=\'linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%)\'; this.style.transform=\'translateY(0)\'; this.style.boxShadow=\'0 4px 12px rgba(123, 45, 142, 0.25)\';">' +
       '</div>' +
       '</div>' +
       '</div>');
