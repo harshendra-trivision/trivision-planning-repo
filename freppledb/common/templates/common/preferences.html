@@ -1,16 +1,507 @@
 {% extends "admin/base_site_nav.html" %} {% load i18n admin_list %} {% block extrahead %}{{block.super}}
 
 <style>
-  #content-main td {
-    padding-bottom: 1em;
+  :root {
+    --primary-purple: #7B2D8E;
+    --deep-purple: #2D004D;
+    --bright-accent: #9C27B0;
+    --soft-purple-bg: rgba(123, 45, 142, 0.04);
+    --background: #F8F9FC;
+    --card-bg: #FFFFFF;
+    --text-primary: #1A1A1A;
+    --text-secondary: #6B7280;
+    --border-color: #E5E7EB;
+    --border-radius: 12px;
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   }
 
-  #content-main th {
-    line-height: 2em;
+  /* Page Layout - Only target preferences page content */
+  .preferences-page #content {
+    background: var(--background);
+    padding: 2rem 1rem;
   }
 
-  #content-main .col-form-label {
+  .preferences-page #content-main {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-lg);
+    padding: 2.5rem;
+    border: 1px solid var(--border-color);
+  }
+
+  /* Modern Page Header */
+  .preferences-page .preferences-header {
+    background: linear-gradient(135deg, var(--deep-purple) 0%, var(--primary-purple) 100%);
+    border-radius: var(--border-radius);
+    padding: 2rem 2.5rem;
+    margin: -2.5rem -2.5rem 2.5rem -2.5rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .preferences-page .preferences-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(30%, -30%);
+  }
+
+  .preferences-page .preferences-header h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .preferences-page .preferences-header .header-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    font-size: 1.5rem;
+  }
+
+  .preferences-page .preferences-header .btn-primary {
+    background: white !important;
+    color: var(--primary-purple) !important;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 1;
+  }
+
+  .preferences-page .preferences-header .btn-primary:hover {
+    background: rgba(255, 255, 255, 0.95) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  .preferences-page .preferences-header .fa-question {
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    position: relative;
+    z-index: 1;
+  }
+
+  .preferences-page .preferences-header .fa-question:hover {
+    transform: scale(1.1);
+  }
+
+  /* Form Sections */
+  .preferences-page .form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+  }
+
+  .preferences-page .form-section:last-of-type {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .preferences-page .form-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .preferences-page .form-section-header::before {
+    content: '';
+    width: 4px;
+    height: 1.5rem;
+    background: linear-gradient(to bottom, var(--primary-purple), var(--bright-accent));
+    border-radius: 2px;
+  }
+
+  .preferences-page .form-section-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--deep-purple);
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  /* Form Rows */
+  .preferences-page .row.pb-3 {
+    display: flex;
+    align-items: start;
+    margin-bottom: 1.75rem !important;
+    gap: 1.5rem;
+  }
+
+  .preferences-page .row.pb-3:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* Labels */
+  .preferences-page .col-form-label {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.9375rem;
     white-space: nowrap;
+    text-align: right;
+    padding-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+  }
+
+  .preferences-page .fa-question-circle {
+    color: var(--primary-purple);
+    font-size: 0.875rem;
+    cursor: help;
+    transition: color 0.2s ease;
+  }
+
+  .preferences-page .fa-question-circle:hover {
+    color: var(--bright-accent);
+  }
+
+  /* Input Fields */
+  .preferences-page input[type="text"],
+  .preferences-page input[type="email"],
+  .preferences-page input[type="password"],
+  .preferences-page input[type="number"],
+  .preferences-page input[type="file"],
+  .preferences-page select,
+  .preferences-page .form-control {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0.75rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.9375rem;
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+    background: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .preferences-page input[type="text"]:focus,
+  .preferences-page input[type="email"]:focus,
+  .preferences-page input[type="password"]:focus,
+  .preferences-page input[type="number"]:focus,
+  .preferences-page input[type="file"]:focus,
+  .preferences-page select:focus,
+  .preferences-page .form-control:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 0 3px rgba(123, 45, 142, 0.1), 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+
+  .preferences-page input[type="text"]:hover,
+  .preferences-page input[type="email"]:hover,
+  .preferences-page input[type="password"]:hover,
+  .preferences-page input[type="number"]:hover,
+  .preferences-page input[type="file"]:hover,
+  .preferences-page select:hover,
+  .preferences-page .form-control:hover:not(:focus) {
+    border-color: var(--primary-purple);
+  }
+
+  /* Dropdown Buttons */
+  .preferences-page .dropdown-toggle {
+    background: white !important;
+    border: 2px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+    text-align: left;
+    padding: 0.75rem 1rem !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .preferences-page .dropdown-toggle:hover {
+    border-color: var(--primary-purple) !important;
+  }
+
+  .preferences-page .dropdown-toggle:focus,
+  .preferences-page .dropdown-toggle.show {
+    border-color: var(--primary-purple) !important;
+    box-shadow: 0 0 0 3px rgba(123, 45, 142, 0.1) !important;
+  }
+
+  .preferences-page .dropdown-menu {
+    border: 2px solid var(--primary-purple);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    padding: 0.5rem;
+    margin-top: 0.5rem !important;
+    width: 100% !important;
+  }
+
+  .preferences-page .dropdown-item {
+    padding: 0.625rem 1rem;
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    transition: all 0.15s ease;
+  }
+
+  .preferences-page .dropdown-item:hover {
+    background: var(--soft-purple-bg);
+    color: var(--primary-purple);
+  }
+
+  .preferences-page .dropdown-item:active {
+    background: var(--primary-purple);
+    color: white;
+  }
+
+  /* Avatar Section */
+  .preferences-page .avatar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .preferences-page .avatar-preview {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid var(--primary-purple);
+    box-shadow: 0 8px 16px rgba(123, 45, 142, 0.2);
+    object-fit: cover;
+    transition: all 0.3s ease;
+  }
+
+  .preferences-page .avatar-preview:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(123, 45, 142, 0.3);
+  }
+
+  .preferences-page .avatar-icon {
+    font-size: 7rem;
+    color: var(--primary-purple);
+    opacity: 0.3;
+    transition: all 0.3s ease;
+  }
+
+  .preferences-page .avatar-icon:hover {
+    opacity: 0.5;
+    transform: scale(1.05);
+  }
+
+  /* File Upload Styling */
+  .preferences-page input[type="file"]::file-selector-button {
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--bright-accent) 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-right: 1rem;
+    transition: all 0.2s ease;
+  }
+
+  .preferences-page input[type="file"]::file-selector-button:hover {
+    background: linear-gradient(135deg, var(--deep-purple) 0%, var(--primary-purple) 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(123, 45, 142, 0.3);
+  }
+
+  /* Password Fields */
+  .preferences-page .password-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .preferences-page .password-fields input {
+    margin-bottom: 0 !important;
+  }
+
+  /* Password Help Text */
+  .preferences-page .password-help {
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+    border: 2px solid #3B82F6;
+    border-left: 4px solid #2563EB;
+    border-radius: 8px;
+    padding: 1rem;
+    font-size: 0.8125rem;
+    color: #1E3A8A;
+    line-height: 1.6;
+  }
+
+  .preferences-page .password-help ul {
+    margin: 0.5rem 0 0 0;
+    padding-left: 1.25rem;
+  }
+
+  .preferences-page .password-help li {
+    margin-bottom: 0.25rem;
+  }
+
+  /* Info Banner */
+  .preferences-page .info-banner {
+    background: linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%);
+    border: 2px solid var(--primary-purple);
+    border-left: 4px solid var(--deep-purple);
+    border-radius: var(--border-radius);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .preferences-page .info-banner .banner-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--primary-purple);
+    color: white;
+    border-radius: 8px;
+    font-size: 1.125rem;
+    flex-shrink: 0;
+  }
+
+  .preferences-page .info-banner .banner-content {
+    flex: 1;
+  }
+
+  .preferences-page .info-banner .banner-content h4 {
+    color: var(--deep-purple);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .preferences-page .info-banner .banner-content p {
+    color: #581C87;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Alert Styling */
+  .preferences-page .alert-danger {
+    background: #FEE2E2;
+    border: 2px solid #EF4444;
+    border-left: 4px solid #DC2626;
+    border-radius: var(--border-radius);
+    color: #991B1B;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: start;
+    gap: 0.75rem;
+  }
+
+  .preferences-page .alert-danger::before {
+    content: '\f06a';
+    font-family: 'FontAwesome';
+    font-size: 1.125rem;
+    color: #EF4444;
+  }
+
+  /* Theme Override Warning */
+  .preferences-page .override-warning {
+    background: #FEF3C7;
+    border: 2px solid #F59E0B;
+    border-left: 4px solid #D97706;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    color: #92400E;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .preferences-page .override-warning::before {
+    content: '\f071';
+    font-family: 'FontAwesome';
+    color: #F59E0B;
+  }
+
+  /* Column Sizing */
+  .preferences-page .col-3[style*="max-width:200px"] {
+    max-width: 200px !important;
+    min-width: 200px;
+  }
+
+  .preferences-page .col-9[style*="max-width:260px"] {
+    max-width: 100% !important;
+    flex: 1;
+  }
+
+  .preferences-page .col-9[style*="max-width:400px"] {
+    max-width: 100% !important;
+    flex: 1;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .preferences-page #content-main {
+      padding: 1.5rem;
+    }
+
+    .preferences-page .preferences-header {
+      padding: 1.5rem;
+      margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: center;
+    }
+
+    .preferences-page .preferences-header h1 {
+      font-size: 1.5rem;
+      flex-direction: column;
+    }
+
+    .preferences-page .row.pb-3 {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .preferences-page .col-form-label {
+      text-align: left;
+      justify-content: flex-start;
+    }
+
+    .preferences-page .col-3[style*="max-width:200px"] {
+      max-width: 100% !important;
+      min-width: auto;
+    }
   }
 </style>
 
@@ -37,42 +528,58 @@
 
 {% endblock %} {% block content_title %}
   <form action="." method="post" class="form" enctype="multipart/form-data">
-<div class="row mt-3">
-  <div class="col">
-    {% if title %}
-    <h1>{{ title }}&nbsp;&nbsp;
-    <input type="submit" value="{% trans "Save" %}" class="btn btn-primary">
-    </h1>
-    {% endif %}
-  </div>
-  <div class="col-auto">
-    <h1>
-      <a href="{% setting "DOCUMENTATION_URL" %}/docs/{% version_short %}/user-interface/getting-around/user-preferences.html"
-      data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'help'|capfirst|force_escape %}"
-      target="_blank">
-        <span class="fa fa-question"></span>
-      </a>
-    </h1>
-  </div>
-</div>
 {% endblock %} {% block content %}
 
+<div class="preferences-page">
 <div id="content-main">
+
+    <!-- Modern Header -->
+    <div class="preferences-header">
+      <h1>
+        <span class="header-icon">
+          <i class="fa fa-user-circle"></i>
+        </span>
+        {{ title }}
+      </h1>
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <input type="submit" value="{% trans 'Save' %}" class="btn btn-primary">
+        <a href="{% setting "DOCUMENTATION_URL" %}/docs/{% version_short %}/user-interface/getting-around/user-preferences.html"
+          data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{% trans 'help'|capfirst|force_escape %}"
+          target="_blank">
+          <span class="fa fa-question"></span>
+        </a>
+      </div>
+    </div>
 
     <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
     <input type="hidden" name="language" id="language" value="{{ request.user.language }}">
     <input type="hidden" name="theme" id="theme" value="{{ request.user.theme }}">
     <input type="hidden" name="default_scenario" id="default_scenario" value="{{ request.user.default_scenario }}">
     <input type="hidden" name="personalization" id="personalization" value="">
+    
     {% if form.non_field_errors %}
-    <div  style="max-width: 500px" class="alert alert-danger">{{ form.non_field_errors }}</div>
+    <div class="alert alert-danger">{{ form.non_field_errors }}</div>
     {% endif %}
 
-    <div class="row pb-3">
-      <div class="col-3" style="max-width:200px; text-align: right">
-
+    <!-- Info Banner -->
+    <div class="info-banner">
+      <div class="banner-icon">
+        <i class="fa fa-info"></i>
+      </div>
+      <div class="banner-content">
+        <h4>{% trans "Personalize Your Experience" %}</h4>
+        <p>{% trans "Customize your preferences to tailor the application to your needs. Changes are saved to your profile and will persist across sessions." %}</p>
       </div>
     </div>
+
+    <!-- General Settings Section -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <h3 class="form-section-title">
+          <i class="fa fa-cog me-2" style="color: var(--primary-purple);"></i>
+          {% trans "General Settings" %}
+        </h3>
+      </div>
 
     {% if request.user.languageList|length > 2 %}
     <div class="row pb-3">
@@ -132,14 +639,12 @@
         </ul>
         </div>
       </div>
+    </div>
       {% if theme_is_overriden %}
-      <div class="col-3 col">
-        <div>
+      <div class="override-warning" style="margin-left: 216px; max-width: 400px;">
         This choice has been overridden in this scenario.
-        </div>
       </div>
       {% endif %}
-    </div>
     {% endif %}
 
     {% if SCENARIOS|length > 1 %}
@@ -166,6 +671,17 @@
     </div>
     {% endif %}
 
+    </div>
+
+    <!-- Profile Section -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <h3 class="form-section-title">
+          <i class="fa fa-user me-2" style="color: var(--primary-purple);"></i>
+          {% trans "Profile" %}
+        </h3>
+      </div>
+
     <div class="row pb-3">
       <div class="col-3" style="max-width:200px; text-align: right">
         <label class="col-form-label" for="id_avatar" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
@@ -175,16 +691,28 @@
         </label>
       </div>
       <div class="col-9" style="max-width:260px">
-        <div class="text-center">
+        <div class="avatar-container">
         {% if request.user.avatar %}
-        <img style="margin-bottom: 1rem; border-radius: 50%; width:100px; height:100px" src="{{request.user.avatar.url}}">
-        {% else %}<i style="margin-bottom: 1rem; font-size: 8em" class="fa fa-user-circle-o"></i>
+        <img class="avatar-preview" src="{{request.user.avatar.url}}" alt="User avatar">
+        {% else %}
+        <i class="fa fa-user-circle-o avatar-icon"></i>
         {% endif %}
-        </div>
         <input data-bs-toggle="tooltip" data-bs-html="true" class="form-control" type="file" name="avatar" accept="image/*" id="id_avatar"
           data-bs-title="{% trans "Upload a square picture of yourself.<br>Accepted formats are jpeg, png and gif.<br>Max file size is 100kB." %}">
+        </div>
       </div>
     </div>
+
+    </div>
+
+    <!-- Security Section -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <h3 class="form-section-title">
+          <i class="fa fa-lock me-2" style="color: var(--primary-purple);"></i>
+          {% trans "Security" %}
+        </h3>
+      </div>
 
     <div class="row pb-3">
       <div class="col-3" style="max-width:200px; text-align: right">
@@ -194,19 +722,30 @@
           <span class="fa fa-question-circle"></span>
         </label>
       </div>
-      <div class="col-9" style="max-width:260px">
-        <input class="form-control" id="id_cur_password" name="cur_password" type="password" autocomplete="off" placeholder=" {% trans "Old password"|escape %} " style="margin-bottom: 10px">
-        <input class="form-control" id="id_new_password1" name="new_password1" type="password" autocomplete="off" placeholder=" {% trans "New password"|escape %} " style="margin-bottom: 10px">
-        <input class="form-control" id="id_new_password2" name="new_password2" type="password" autocomplete="off" placeholder=" {% trans "New password confirmation"|escape %} " style="margin-bottom: 10px">
-      </div>
-      <div class="col-3 col">
+      <div class="col-9" style="max-width:400px">
+        <div class="password-fields">
+          <input class="form-control" id="id_cur_password" name="cur_password" type="password" autocomplete="off" placeholder="{% trans "Old password"|escape %}">
+          <input class="form-control" id="id_new_password1" name="new_password1" type="password" autocomplete="off" placeholder="{% trans "New password"|escape %}">
+          <input class="form-control" id="id_new_password2" name="new_password2" type="password" autocomplete="off" placeholder="{% trans "New password confirmation"|escape %}">
+        </div>
         {% if form.new_password1.help_text %}
-        <div>
+        <div class="password-help">
           {% autoescape off %}{{ form.new_password1.help_text }}{% endautoescape %}
         </div>
         {% endif %}
       </div>
     </div>
+
+    </div>
+
+    <!-- Personalization Section -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <h3 class="form-section-title">
+          <i class="fa fa-wrench me-2" style="color: var(--primary-purple);"></i>
+          {% trans "Personalization" %}
+        </h3>
+      </div>
 
     <div class="row pb-3">
       <div class="col-3" style="max-width:200px; text-align: right">
@@ -233,7 +772,10 @@
       </div>
     </div>
 
+    </div>
+
   </div>
+</div>
 </form>
 
 {% endblock %}
