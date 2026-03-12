@@ -11,6 +11,12 @@
         --soft-purple-bg: rgba(123, 45, 142, 0.04);
         --border-color: #E5E7EB;
         --card-bg: #FFFFFF;
+        --table-shell: #FCFAFF;
+        --row-alt: #FBF9FD;
+        --row-hover: rgba(123, 45, 142, 0.06);
+        --row-selected: rgba(123, 45, 142, 0.10);
+        --text-primary: #2B2138;
+        --text-secondary: #6F6480;
         --success-green: #10B981;
         --error-red: #EF4444;
         --warning-orange: #F59E0B;
@@ -23,12 +29,114 @@
 
     /* Grid container modernization */
     #content-main {
+        position: relative;
         background: var(--card-bg);
-        border-radius: 16px;
-        box-shadow: 0 10px 25px rgba(45, 0, 77, 0.05);
-        border: 1px solid var(--border-color);
-        padding: 1.5rem;
+        border-radius: 20px;
+        box-shadow: 0 18px 45px rgba(45, 0, 77, 0.08);
+        border: 1px solid rgba(123, 45, 142, 0.10);
+        padding: 1.35rem;
         margin-top: 1rem !important;
+        overflow: hidden;
+    }
+
+    #content-main::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 4px;
+        background: linear-gradient(90deg, #7B2D8E 0%, #9C27B0 55%, #C084FC 100%);
+    }
+
+    #gbox_grid,
+    .ui-jqgrid {
+        width: 100% !important;
+        border: 1px solid rgba(123, 45, 142, 0.10) !important;
+        border-radius: 16px !important;
+        background: var(--table-shell) !important;
+        box-shadow: 0 14px 30px rgba(45, 0, 77, 0.06) !important;
+        overflow: hidden !important;
+    }
+
+    .modern-header-container {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 244, 252, 0.95) 100%);
+        border: 1px solid rgba(123, 45, 142, 0.08);
+        border-radius: 18px;
+        padding: 1rem 1.15rem;
+        box-shadow: 0 10px 25px rgba(45, 0, 77, 0.04);
+    }
+
+    .modern-header-container h2 {
+        font-size: 1.7rem;
+    }
+
+    #filterform {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.55rem 0.7rem;
+        background: linear-gradient(135deg, #FCFAFF 0%, #F6EFFB 100%) !important;
+        border: 1px solid rgba(123, 45, 142, 0.10) !important;
+        border-radius: 14px !important;
+        box-shadow: 0 6px 18px rgba(45, 0, 77, 0.04);
+    }
+
+    #filterform .input-group {
+        background: #FFFFFF;
+        border: 1px solid rgba(123, 45, 142, 0.10);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    #filterform input[type="text"] {
+        border: none !important;
+        background: transparent !important;
+        color: var(--text-primary) !important;
+        padding: 0.55rem 0.8rem !important;
+        min-width: 8rem;
+        box-shadow: none !important;
+    }
+
+    #filterform input[type="text"]::placeholder {
+        color: #9A8CAB !important;
+    }
+
+    #filterform input[type="text"]:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    #filterform .input-group-text {
+        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+        border: none !important;
+        color: #FFFFFF !important;
+        padding: 0.55rem 0.8rem !important;
+    }
+
+    #filterform .input-group-text:hover {
+        filter: brightness(0.98);
+    }
+
+    #resetfilter {
+        color: var(--primary-purple) !important;
+        cursor: pointer !important;
+        padding: 0.45rem !important;
+        border-radius: 10px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    #resetfilter:hover {
+        background: rgba(123, 45, 142, 0.08) !important;
+        color: var(--bright-accent) !important;
+        transform: scale(1.05) !important;
+    }
+
+    .ui-jqgrid-view,
+    .ui-jqgrid-hbox,
+    .ui-jqgrid-bdiv,
+    .ui-jqgrid-htable,
+    .ui-jqgrid-btable {
+        background: #FFFFFF !important;
     }
 
     /* Modernized status indicators */
@@ -44,31 +152,95 @@
 
     /* Detailed styling for the grid header */
     .ui-jqgrid .ui-jqgrid-hdiv {
-        background: linear-gradient(to bottom, #F8F4FC, #FFFFFF) !important;
-        border-bottom: 2px solid var(--primary-purple) !important;
+        background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
+        border-bottom: 1px solid rgba(123, 45, 142, 0.12) !important;
     }
 
-    .ui-jqgrid .ui-jqgrid-htable th {
+    .ui-jqgrid .ui-jqgrid-htable th,
+    .ui-jqgrid .ui-jqgrid-htable .ui-th-column {
+        background: transparent !important;
         color: var(--deep-purple) !important;
         font-weight: 700 !important;
-        padding: 15px 10px !important;
+        padding: 0.95rem 0.75rem !important;
         text-transform: uppercase;
-        font-size: 0.7rem;
-        letter-spacing: 0.08em;
+        font-size: 0.68rem;
+        letter-spacing: 0.10em;
+        border-right: 1px solid rgba(123, 45, 142, 0.06) !important;
+        border-bottom: none !important;
+        box-shadow: inset 0 -1px 0 rgba(123, 45, 142, 0.08);
+    }
+
+    .ui-jqgrid .ui-jqgrid-htable th:last-child,
+    .ui-jqgrid .ui-jqgrid-htable .ui-th-column:last-child {
+        border-right: none !important;
     }
 
     /* Row styling */
     .ui-jqgrid tr.ui-row-ltr td {
-        border-bottom: 1px solid #F3F4F6 !important;
-        padding: 12px 10px !important;
+        color: var(--text-primary) !important;
+        border-bottom: 1px solid #F3F1F7 !important;
+        border-right: 1px solid #F7F3FB !important;
+        padding: 0.8rem 0.75rem !important;
         font-size: 0.85rem;
+        vertical-align: middle !important;
+        background: #FFFFFF !important;
+    }
+
+    .ui-jqgrid tr.jqgrow:nth-child(even) td {
+        background: var(--row-alt) !important;
+    }
+
+    .ui-jqgrid tr.jqgrow:hover td,
+    .ui-jqgrid tr.ui-state-hover td {
+        background: var(--row-hover) !important;
+    }
+
+    .ui-jqgrid tr.ui-state-highlight td,
+    .ui-jqgrid tr.ui-priority-secondary td.ui-state-highlight,
+    .ui-jqgrid td.ui-state-highlight {
+        background: var(--row-selected) !important;
+        color: var(--text-primary) !important;
+        box-shadow: inset 0 0 0 1px rgba(123, 45, 142, 0.06);
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td a {
+        color: var(--deep-purple) !important;
+        font-weight: 500 !important;
+        text-decoration: none !important;
+        transition: color 0.18s ease;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td a:hover {
+        color: var(--bright-accent) !important;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby$="_name"] a {
+        font-weight: 600 !important;
+        color: #3D2256 !important;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby$="_status"] {
+        color: var(--primary-purple) !important;
+        font-weight: 600 !important;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby$="_customer"],
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby$="_item"],
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby$="_location"] {
+        color: var(--text-secondary) !important;
+    }
+
+    .ui-jqgrid .ui-jqgrid-btable tr td:first-child,
+    .ui-jqgrid .ui-jqgrid-htable tr th:first-child {
+        border-left: none !important;
     }
 
     /* Fix for checkbox column alignment */
     .ui-jqgrid tr.ui-row-ltr td.td_cbox, 
     .ui-jqgrid tr.ui-row-ltr td[aria-describedby="grid_cb"],
     .ui-jqgrid .ui-jqgrid-htable th#grid_cb {
-        padding: 12px 0px !important;
+        background: transparent !important;
+        padding: 0.8rem 0 !important;
         text-align: center;
         width: 45px !important;
         position: relative;
@@ -99,15 +271,135 @@
 
     /* Save/Undo buttons */
     #save, #undo {
-        padding: 0.6rem 2rem !important;
+        background: var(--primary-purple) !important;
+        border: none !important;
         border-radius: 8px !important;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 600 !important;
         font-size: 0.8rem;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
+        color: white !important;
     }
 
-    #save {
-        background: linear-gradient(135deg, var(--primary-purple) 0%, var(--bright-accent) 100%) !important;
+    #save:hover:not(:disabled),
+    #undo:hover:not(:disabled) {
+        background: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(123, 45, 142, 0.2) !important;
+    }
+
+    #undo.btn-danger,
+    #undo.btn-primary,
+    #save.btn-danger,
+    #save.btn-primary {
+        background: var(--primary-purple) !important;
+        color: white !important;
+        border: none !important;
+    }
+
+    #undo:disabled {
+        background: var(--primary-purple) !important;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
+        opacity: 0.65 !important;
+        cursor: not-allowed;
+    }
+
+    #save:disabled {
+        background: var(--primary-purple) !important;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
+        opacity: 0.65 !important;
+        cursor: not-allowed;
+    }
+
+    #actions1 {
+        border: 1px solid rgba(123, 45, 142, 0.12) !important;
+        border-radius: 12px !important;
+        background: linear-gradient(135deg, #FFFFFF 0%, #F7F1FC 100%) !important;
+        color: var(--deep-purple) !important;
+        box-shadow: 0 6px 16px rgba(45, 0, 77, 0.05) !important;
+        min-height: 2.4rem;
+        font-size: 0.8rem !important;
+    }
+
+    #actions1:disabled {
+        opacity: 0.8 !important;
+        color: #8D7C9F !important;
+    }
+
+    #actions1:hover:not(:disabled) {
+        background: linear-gradient(135deg, #F9F2FD 0%, #F2E5FB 100%) !important;
+        color: var(--primary-purple) !important;
+    }
+
+    #actionsul {
+        border: 1px solid rgba(123, 45, 142, 0.10) !important;
+        border-radius: 14px !important;
+        padding: 0.45rem !important;
+        box-shadow: 0 18px 30px rgba(45, 0, 77, 0.10) !important;
+    }
+
+    #actionsul .dropdown-item {
+        border-radius: 10px !important;
+        padding: 0.55rem 0.8rem !important;
+        color: var(--text-primary) !important;
+        font-weight: 500 !important;
+    }
+
+    #actionsul .dropdown-item:hover {
+        background: rgba(123, 45, 142, 0.08) !important;
+        color: var(--primary-purple) !important;
+    }
+
+    #gridpager {
+        background: linear-gradient(180deg, #FDFCFF 0%, #F7F1FC 100%) !important;
+        border: none !important;
+        border-top: 1px solid rgba(123, 45, 142, 0.10) !important;
+        padding: 0.7rem 0.9rem !important;
+        color: var(--text-secondary) !important;
+    }
+
+    #gridpager .ui-pg-table,
+    #gridpager .ui-pager-control,
+    #gridpager td {
+        background: transparent !important;
+        border: none !important;
+        color: var(--text-secondary) !important;
+        font-size: 0.8rem !important;
+    }
+
+    #gridpager .ui-pg-button,
+    #gridpager .ui-pg-input,
+    #gridpager .ui-pg-selbox {
+        border-radius: 8px !important;
+    }
+
+    #gridpager .ui-pg-button:hover {
+        background: rgba(123, 45, 142, 0.10) !important;
+        color: var(--primary-purple) !important;
+    }
+
+    .frozen-div,
+    .frozen-bdiv {
+        background: #FFFFFF !important;
+        border-right: 1px solid rgba(123, 45, 142, 0.10) !important;
+    }
+
+    @media (max-width: 992px) {
+        .modern-header-container {
+            padding: 0.9rem 1rem;
+        }
+
+        .modern-header-container .row {
+            gap: 0.75rem;
+        }
+
+        #filterform {
+            flex-wrap: wrap;
+            width: 100%;
+        }
     }
 </style>
 <script>
@@ -168,11 +460,7 @@ function delayfmt(cellvalue, options, rowdata) {
 }
 
 function plannedquantitycellattr(cellvalue, options, rowdata) {
-  var tmp = parseFloat(rowdata.plannedquantity);
-  if ((isNaN(tmp) || parseFloat(rowdata.quantity) - tmp > 0) && rowdata.status != 'closed' && rowdata.status != 'canceled')
-    return `<div class="invStatus" style="background-color: var(--error-red)">${grid.formatNumber(cellvalue)}</div>`;
-  else
-    return grid.formatNumber(cellvalue);
+  return grid.formatNumber(cellvalue);
 }
 
 </script>
