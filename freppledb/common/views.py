@@ -1387,7 +1387,7 @@ class APIKeyList(GridReport):
         """
         <div class="grid-empty-message">
         <h3>Secure API access to frePPLe</h3>
-        <p>API Keys are used to connect to frePPLe from external applications.</p>
+        <p>API Keys are used to connect to Trivision from external applications.</p>
         <p>They replace passwords and facilitate managing access to the application.</p>
         <a href="{{request.prefix}}/data/common/apikey/add/" class="add-apikey-btn">
         <i class="fa fa-plus"></i> Add API key

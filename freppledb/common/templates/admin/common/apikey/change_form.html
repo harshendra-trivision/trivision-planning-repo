@@ -1,10 +1,325 @@
 {% extends "admin/change_form.html" %}
 {% load i18n %}
 
+{% block extrastyle %}
+{{ block.super }}
+<style>
+    :root {
+        --primary-purple: #B07AC8;
+        --deep-purple: #8F5EAE;
+        --bright-accent: #C79BDA;
+        --soft-purple-bg: rgba(176, 122, 200, 0.08);
+        --border-color: rgba(123, 45, 142, 0.12);
+        --card-bg: #FFFFFF;
+        --text-primary: #2B2138;
+        --text-secondary: #6F6480;
+        --row-alt: #FBF9FD;
+    }
+
+    #content > h1 {
+        display: none !important;
+    }
+
+    #content-main {
+        background: transparent !important;
+        margin-top: 1rem !important;
+    }
+
+    #content-main > .col-md-12 {
+        padding: 0 !important;
+    }
+
+    .apikey-form-hero {
+        position: relative;
+        margin-bottom: 1rem;
+        padding: 1.15rem 1.25rem;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.99) 0%, rgba(250, 247, 253, 0.96) 100%);
+        border: 1px solid rgba(123, 45, 142, 0.07);
+        border-radius: 20px;
+        box-shadow: 0 14px 28px rgba(45, 0, 77, 0.05);
+        overflow: hidden;
+    }
+
+    .apikey-form-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 4px;
+        background: linear-gradient(90deg, #B07AC8 0%, #C79BDA 55%, #E7D5F1 100%);
+    }
+
+    .apikey-form-hero .eyebrow {
+        color: #8D7EA1;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        font-size: 0.72rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .apikey-form-hero h2 {
+        color: #3D2256;
+        font-size: 1.85rem;
+        line-height: 1.1;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0;
+    }
+
+    .apikey-form-hero .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        margin-top: 0.85rem;
+        padding: 0.5rem 0.95rem;
+        border-radius: 999px;
+        background: rgba(176, 122, 200, 0.08);
+        border: 1px solid rgba(176, 122, 200, 0.14);
+        color: #8F5EAE;
+        font-size: 0.78rem;
+        font-weight: 600;
+    }
+
+    #content-main form {
+        display: block;
+    }
+
+    .submit-row {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 0.55rem !important;
+        padding: 0.55rem 0.65rem !important;
+        margin: 0 0 0.9rem !important;
+        background: linear-gradient(135deg, #FFFFFF 0%, #F9F3FD 100%) !important;
+        border: 1px solid rgba(176, 122, 200, 0.10) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 10px 22px rgba(45, 0, 77, 0.04) !important;
+        justify-content: flex-start !important;
+    }
+
+    .submit-row input[type="submit"],
+    .submit-row a,
+    .btn.btn-primary {
+        border-radius: 10px !important;
+        padding: 0.52rem 1rem !important;
+        font-weight: 600 !important;
+        text-transform: none !important;
+        transition: all 0.2s ease !important;
+        margin: 0 !important;
+        border: none !important;
+        font-size: 0.78rem !important;
+        line-height: 1.2 !important;
+        background: var(--primary-purple) !important;
+        color: white !important;
+        box-shadow: 0 6px 14px rgba(176, 122, 200, 0.18) !important;
+    }
+
+    .submit-row input[type="submit"]:hover:not(:disabled),
+    .btn.btn-primary:hover:not(:disabled) {
+        background: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(176, 122, 200, 0.22) !important;
+    }
+
+    .submit-row input[type="submit"]:disabled,
+    .btn.btn-primary:disabled {
+        background: var(--primary-purple) !important;
+        color: white !important;
+        opacity: 0.65 !important;
+        box-shadow: 0 2px 4px rgba(176, 122, 200, 0.10) !important;
+        cursor: not-allowed;
+    }
+
+    #content-main .row {
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    #content-main .card {
+        width: 100%;
+        background: var(--card-bg) !important;
+        border-radius: 20px !important;
+        border: 1px solid var(--border-color) !important;
+        box-shadow: 0 18px 45px rgba(45, 0, 77, 0.08) !important;
+        overflow: hidden;
+    }
+
+    #content-main .card-header {
+        background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
+        border-bottom: 1px solid rgba(123, 45, 142, 0.12) !important;
+        padding: 1rem 1.2rem !important;
+    }
+
+    #content-main .card-title {
+        color: #3D2256 !important;
+        font-weight: 700 !important;
+        font-size: 0.78rem !important;
+        letter-spacing: 0.10em !important;
+        text-transform: uppercase !important;
+        margin: 0 !important;
+    }
+
+    #content-main .card-body {
+        padding: 1.15rem 1.2rem 1.25rem !important;
+        background: linear-gradient(180deg, #FFFFFF 0%, #FCFAFF 100%) !important;
+    }
+
+    fieldset.module {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    fieldset h2 {
+        display: none !important;
+    }
+
+    fieldset.module > .row {
+        row-gap: 0.8rem;
+    }
+
+    .control-group {
+        padding: 0 !important;
+    }
+
+    .field-box,
+    .row.mb-3 {
+        margin-bottom: 0 !important;
+    }
+
+    .control-group > .row {
+        min-height: 100%;
+        align-items: stretch !important;
+        margin: 0 !important;
+        padding: 0.85rem 0.95rem !important;
+        background: #FFFFFF !important;
+        border: 1px solid rgba(123, 45, 142, 0.08) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 8px 18px rgba(45, 0, 77, 0.04) !important;
+    }
+
+    .control-group:nth-child(even) > .row {
+        background: var(--row-alt) !important;
+    }
+
+    .control-group > .row > div:first-child {
+        justify-content: flex-end !important;
+        padding-right: 1rem !important;
+    }
+
+    .control-group > .row > .controls {
+        display: flex;
+        align-items: center;
+        min-height: 100%;
+    }
+
+    .col-form-label,
+    label {
+        color: var(--text-primary) !important;
+        font-weight: 600 !important;
+        font-size: 0.9rem !important;
+        margin-bottom: 0 !important;
+    }
+
+    .text-end label,
+    .text-end {
+        width: 100%;
+    }
+
+    .fa-question-circle {
+        color: var(--bright-accent);
+        margin-left: 0.25rem;
+    }
+
+    .form-control,
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+        width: 100% !important;
+        border-radius: 12px !important;
+        border: 1px solid rgba(123, 45, 142, 0.14) !important;
+        padding: 0.72rem 0.95rem !important;
+        background-color: #FFFFFF !important;
+        transition: all 0.18s ease !important;
+        font-size: 0.9rem !important;
+        color: var(--text-primary) !important;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    .form-control:focus,
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    select:focus,
+    textarea:focus {
+        border-color: var(--primary-purple) !important;
+        box-shadow: 0 0 0 4px rgba(176, 122, 200, 0.12) !important;
+        outline: none !important;
+    }
+
+    .vDateField,
+    .row .vTimeField {
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    .help,
+    .helptext {
+        color: var(--text-secondary) !important;
+        font-size: 0.78rem !important;
+        margin-top: 0.35rem !important;
+    }
+
+    @media (max-width: 991px) {
+        .apikey-form-hero {
+            padding: 1rem;
+        }
+
+        .apikey-form-hero h2 {
+            font-size: 1.55rem;
+        }
+
+        .control-group > .row > div:first-child,
+        .control-group > .row > .controls {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+
+        .control-group > .row {
+            padding: 0.9rem !important;
+        }
+
+        .submit-row {
+            width: 100%;
+            flex-wrap: wrap;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block submit_buttons_bottom %}
 {% endblock %}
 
 {% block tools %}
+{% endblock %}
+
+{% block form_top %}
+<div class="apikey-form-hero">
+    <div class="eyebrow">{% trans "Admin" %}</div>
+    <h2>
+        {% if change %}
+            {% trans "API key" %}: {{ original }}
+        {% else %}
+            {% trans "Add API key" %}
+        {% endif %}
+    </h2>
+    <div class="hero-badge">
+        <i class="fa fa-key"></i>
+        {% trans "Create and manage secure application access keys" %}
+    </div>
+</div>
 {% endblock %}
 
 {% block submit_buttons_top %}
