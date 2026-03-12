@@ -1641,13 +1641,31 @@ class InventoryByLocationWidget(Widget):
          ] );
       if (l > invmax) invmax = l;
       });
+    var chart = d3.select("#invByLoc");
     var svgrectangle = document.getElementById("invByLoc").getBoundingClientRect();
     var x_width = (svgrectangle['width']-margin) / data.length;
     var y = d3.scale.linear().domain([0, invmax]).range([svgrectangle['height'] - 20, 0]);
     var y_zero = y(0);
 
+    chart.append("defs")
+      .append("linearGradient")
+      .attr("id", "invByLocGradient")
+      .attr("x1", "0%")
+      .attr("y1", "0%")
+      .attr("x2", "0%")
+      .attr("y2", "100%")
+      .selectAll("stop")
+      .data([
+        {offset: "0%", color: "#A855F7"},
+        {offset: "100%", color: "#7B2D8E"}
+      ])
+      .enter()
+      .append("stop")
+      .attr("offset", function(d) { return d.offset; })
+      .attr("stop-color", function(d) { return d.color; });
+
     // Draw the chart
-    var bar = d3.select("#invByLoc")
+    var bar = chart
      .selectAll("g")
      .data(data)
      .enter()
@@ -1657,9 +1675,12 @@ class InventoryByLocationWidget(Widget):
     bar.append("rect")
       .attr("y", function(d) {return y(d[1]) + 10;})
       .attr("height", function(d) {return y_zero - y(d[1]);})
-      .attr("rx","3")
+      .attr("rx","8")
+      .attr("ry","8")
       .attr("width", x_width - 2)
-      .style("fill", "#828915");
+      .style("fill", "url(#invByLocGradient)")
+      .style("stroke", "#5B1D79")
+      .style("stroke-width", "1");
 
     // Location label
     bar.append("text")
@@ -1667,6 +1688,9 @@ class InventoryByLocationWidget(Widget):
       .attr("x", x_width/2)
       .text(function(d,i) { return d[0]; })
       .style("text-anchor", "end")
+      .style("fill", "#4B2A67")
+      .style("font-size", "11px")
+      .style("font-weight", "600")
       .attr("transform","rotate(90 " + (x_width/2) + " " + y_zero + ")  ");
 
     // Draw the Y-axis
@@ -1675,11 +1699,18 @@ class InventoryByLocationWidget(Widget):
       .ticks(Math.min(Math.floor((svgrectangle['height'] - 20) / 20), 8))
       .orient("left")
       .tickFormat(d3.format("s"));
-    d3.select("#invByLoc")
+    var yAxisGroup = chart
       .append("g")
       .attr("transform", "translate(" + margin + ", 10 )")
       .attr("class", "y axis")
       .call(yAxis);
+    yAxisGroup.selectAll("path, line")
+      .style("fill", "none")
+      .style("stroke", "#D8C8E8")
+      .style("shape-rendering", "crispEdges");
+    yAxisGroup.selectAll("text")
+      .style("fill", "#6F5A84")
+      .style("font-size", "11px");
     """
 
     query = """select location_id, coalesce(sum(buffer.onhand * item.cost),0)
