@@ -665,6 +665,8 @@ class DistributionOrderList(OperationPlanMixin, GridReport):
 
     @classmethod
     def extra_context(reportclass, request, *args, **kwargs):
+        if reportclass.template == "input/operationplanreport.html":
+            reportclass.template = "input/distributionorder.html"
         groupingcfg = OrderedDict()
         groupingcfg["destination"] = force_str(_("destination"))
         groupingcfg["origin"] = force_str(_("origin"))
