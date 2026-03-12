@@ -2,16 +2,16 @@
 {% load i18n %}
 
 {% block title %}{% if title %}{{title|capfirst}} - {% endif %}{% setting 'BRANDING' %}{% endblock %}
-{% block branding %}<img class="img-fluid" style="max-height: 5.5rem; height: auto; width: auto; max-width: 15rem" src="{{STATIC_URL}}img/Y3-logo.jpeg" alt="Trivision">{% endblock %}
+{% block branding %}<img class="img-fluid" style="max-height: 5.5rem; height: auto; width: auto; max-width: 15rem" src="{{STATIC_URL}}img/Y3-logo.svg" alt="Trivision">{% endblock %}
 {% block extrastyle %}{{block.super}}
 <link rel="stylesheet" href="{{STATIC_URL}}css/font-awesome.min.css" />
 <link rel="stylesheet" href="{{STATIC_URL}}css/{{request.theme}}/fonts.css" />
 <link rel="stylesheet" href="{{STATIC_URL}}css/ui.jqgrid.min.css" />
 <link rel="stylesheet" href="{{STATIC_URL}}css/{{request.theme}}/bootstrap.min.css" />
 
-<link rel="shortcut icon" href="{{STATIC_URL}}img/Y3-logo.jpeg"/>
-<link rel="icon" type="image/jpeg" href="{{STATIC_URL}}img/Y3-logo.jpeg"/>
-<link rel="apple-touch-icon" href="{{STATIC_URL}}img/Y3-logo.jpeg"/>
+<link rel="shortcut icon" href="{{STATIC_URL}}img/Y3-logo.svg"/>
+<link rel="icon" type="image/jpeg" href="{{STATIC_URL}}img/Y3-logo.svg"/>
+<link rel="apple-touch-icon" href="{{STATIC_URL}}img/Y3-logo.svg"/>
 <link rel="manifest" href="{{STATIC_URL}}manifest.json">
 {% endblock %}
 {% block extrahead %}{{block.super}}
