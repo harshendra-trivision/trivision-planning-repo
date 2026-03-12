@@ -33,6 +33,7 @@ from freppledb.common.menus import Menu
 menu = Menu()
 
 # Add our default topics.
+menu.addGroup("y-ai", label=_("Y-AI"), index=50)
 menu.addGroup("sales", label=_("sales"), index=100)
 menu.addGroup("inventory", label=_("inventory"), index=200)
 menu.addGroup("capacity", label=_("capacity"), index=300)
@@ -40,6 +41,7 @@ menu.addGroup("purchasing", label=_("purchasing"), index=400)
 menu.addGroup("distribution", label=_("distribution"), index=500)
 menu.addGroup("manufacturing", label=_("manufacturing"), index=600)
 menu.addGroup("admin", label=_("admin"), index=700)
+menu.addItem("y-ai", "yai", url="/yai/", label=_("Y-AI Control Centre"), index=100)
 menu.addItem("sales", "data", separator=True, index=1000)
 menu.addItem("inventory", "data", separator=True, index=1000)
 menu.addItem("capacity", "data", separator=True, index=1000)

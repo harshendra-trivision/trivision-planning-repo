@@ -1,0 +1,850 @@
+{% extends "admin/base_site_nav.html" %}
+{% load i18n %}
+
+{% block content_title %}{% endblock %}
+{% block extrahead %}{{block.super}}
+<style>
+  :root {
+    --primary-purple: #7B2D8E;
+    --deep-purple: #2D004D;
+    --bright-accent: #9C27B0;
+    --soft-purple-bg: rgba(123, 45, 142, 0.04);
+    --border-color: #E5E7EB;
+    --card-bg: #FFFFFF;
+    --table-shell: #FCFAFF;
+    --row-alt: #FBF9FD;
+    --row-hover: rgba(123, 45, 142, 0.06);
+    --text-primary: #2B2138;
+    --text-secondary: #6F6480;
+  }
+
+  #content > h1 { display: none; }
+
+  /* Main shell - matches Execute SQL / Distribution Order */
+  .yai-shell {
+    position: relative;
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: 0 18px 45px rgba(45, 0, 77, 0.08);
+    border: 1px solid rgba(123, 45, 142, 0.10);
+    padding: 1.35rem;
+    margin-top: 1rem;
+    overflow: hidden;
+  }
+
+  .yai-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: linear-gradient(90deg, #7B2D8E 0%, #9C27B0 55%, #C084FC 100%);
+  }
+
+  /* Page header */
+  .yai-header {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.99) 0%, rgba(250, 247, 253, 0.96) 100%);
+    border: 1px solid rgba(123, 45, 142, 0.07);
+    border-radius: 20px;
+    padding: 1.1rem 1.2rem;
+    box-shadow: 0 14px 28px rgba(45, 0, 77, 0.05);
+    margin-bottom: 1.5rem;
+  }
+
+  .yai-header h1 {
+    font-size: 1.85rem;
+    line-height: 1.1;
+    color: var(--deep-purple);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.35rem 0;
+  }
+
+  .yai-header .text-muted {
+    color: #8D7EA1 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    font-size: 0.72rem !important;
+  }
+
+  .yai-header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .yai-header-badge {
+    background: rgba(123, 45, 142, 0.06);
+    border: 1px solid rgba(123, 45, 142, 0.10);
+    border-radius: 999px;
+    color: var(--primary-purple) !important;
+    font-weight: 600;
+    padding: 0.5rem 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+  }
+
+  /* Section cards */
+  .yai-section {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FCFAFF 100%);
+    border: 1px solid rgba(123, 45, 142, 0.10);
+    border-radius: 16px;
+    box-shadow: 0 14px 30px rgba(45, 0, 77, 0.06);
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+  }
+
+  .yai-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%);
+    border-bottom: 1px solid rgba(123, 45, 142, 0.12);
+  }
+
+  .yai-section-header h2 {
+    margin: 0;
+    color: var(--deep-purple);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .yai-section-header h3 {
+    margin: 0;
+    color: var(--deep-purple);
+    font-weight: 600;
+    font-size: 0.88rem;
+  }
+
+  .yai-section-body {
+    padding: 1.1rem 1.2rem 1.2rem;
+  }
+
+  .yai-section-body p {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+  }
+
+  .yai-section-body p:last-child { margin-bottom: 0; }
+
+  /* Tables - Trivision style */
+  .yai-table-wrap {
+    border: 1px solid rgba(123, 45, 142, 0.10);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--table-shell);
+    margin-top: 0.75rem;
+  }
+
+  .yai-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  .yai-table th {
+    background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
+    color: var(--deep-purple) !important;
+    font-weight: 700 !important;
+    padding: 0.75rem 1rem !important;
+    text-align: left;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    border-bottom: 1px solid rgba(123, 45, 142, 0.12);
+  }
+
+  .yai-table td {
+    padding: 0.7rem 1rem;
+    color: var(--text-primary);
+    border-bottom: 1px solid #F3F1F7;
+    vertical-align: middle;
+  }
+
+  .yai-table tbody tr:nth-child(even) td {
+    background: var(--row-alt);
+  }
+
+  .yai-table tbody tr:hover td {
+    background: var(--row-hover);
+  }
+
+  .yai-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  /* Badges */
+  .yai-badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .yai-badge-pass {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+  }
+
+  .yai-badge-warn {
+    background: rgba(245, 158, 11, 0.12);
+    color: #D97706;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+  }
+
+  .yai-badge-fail {
+    background: rgba(239, 68, 68, 0.12);
+    color: #DC2626;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+  }
+
+  /* Buttons */
+  .yai-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+    margin-top: 0.5rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .yai-btn-primary {
+    background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+    color: white;
+    box-shadow: 0 6px 14px rgba(123, 45, 142, 0.25);
+  }
+
+  .yai-btn-primary:hover {
+    background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(123, 45, 142, 0.3);
+  }
+
+  .yai-btn-secondary {
+    background: #FFFFFF;
+    color: var(--primary-purple);
+    border: 1px solid rgba(123, 45, 142, 0.25);
+    box-shadow: 0 2px 6px rgba(123, 45, 142, 0.08);
+  }
+
+  .yai-btn-secondary:hover {
+    background: var(--soft-purple-bg);
+    border-color: var(--primary-purple);
+    color: var(--deep-purple);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(123, 45, 142, 0.12);
+  }
+
+  /* Code & pre */
+  .yai-code {
+    font-size: 0.8rem;
+    background: rgba(123, 45, 142, 0.06);
+    padding: 0.2rem 0.4rem;
+    border-radius: 6px;
+    color: var(--primary-purple);
+    border: 1px solid rgba(123, 45, 142, 0.1);
+  }
+
+  .yai-pre {
+    background: linear-gradient(135deg, #1a0a2e 0%, #2D004D 100%);
+    color: #E9D5FF;
+    padding: 1rem 1.2rem;
+    border-radius: 12px;
+    overflow: auto;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    border: 1px solid rgba(123, 45, 142, 0.2);
+    margin-top: 0.75rem;
+  }
+
+  /* Two-column layout */
+  .yai-two-col {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .yai-two-col > div {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+
+  /* KPI text */
+  .yai-kpi {
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    margin-top: 0.75rem;
+  }
+
+  .yai-kpi strong {
+    font-size: 1rem;
+    color: var(--deep-purple);
+  }
+
+  /* Section title with accent */
+  .yai-section-title {
+    color: var(--deep-purple);
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin: 1.5rem 0 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .yai-section-title::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(135deg, var(--primary-purple) 0%, var(--bright-accent) 100%);
+    border-radius: 2px;
+  }
+
+  .yai-section-title:first-of-type { margin-top: 0; }
+
+  @media (max-width: 768px) {
+    .yai-two-col > div { flex: 1 1 100%; }
+    .yai-shell { padding: 1rem; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="content" class="row">
+  <div class="col-12">
+
+    <div class="yai-shell">
+      <!-- Page header -->
+      <div class="yai-header">
+        <div class="row align-items-center">
+          <div class="col">
+            <p class="text-muted small mb-1">{% trans "Y-AI" %}</p>
+            <h1>Y3 AI Agent Control Centre (Mock Demo)</h1>
+            <p>This page demonstrates how the Ingestion, Analyst, Demand, Supply, and S&amp;OP agents work together on Y3 data using mock records only.</p>
+          </div>
+          <div class="col-auto">
+            <span class="yai-header-badge">
+              <i class="fa fa-cogs"></i>
+              {% trans "Multi-Agent S&OP" %}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agent Scope & KPI Overview -->
+      <h2 class="yai-section-title">Agent Scope & KPI Overview</h2>
+      <div class="yai-section">
+        <div class="yai-section-body">
+          <div class="yai-table-wrap">
+            <table class="yai-table">
+              <thead>
+                <tr>
+                  <th>Agent</th>
+                  <th>Primary Data Focus</th>
+                  <th>Key KPI</th>
+                  <th>Current Mock Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Data Ingestion &amp; Validation</td>
+                  <td>Schema, constraints, referential integrity</td>
+                  <td>Data Accuracy %</td>
+                  <td class="yai-kpi"><strong>98.7%</strong> valid records this load</td>
+                </tr>
+                <tr>
+                  <td>Data Analyst</td>
+                  <td>Trends, ABC/XYZ, volatility</td>
+                  <td>Data Readiness</td>
+                  <td class="yai-kpi"><strong>84%</strong> of SKUs EDA‑ready (no critical gaps)</td>
+                </tr>
+                <tr>
+                  <td>Demand Agent</td>
+                  <td>demand, forecast</td>
+                  <td>MAPE / Bias</td>
+                  <td class="yai-kpi"><strong>MAPE 11.4%</strong>, Bias +2.1%</td>
+                </tr>
+                <tr>
+                  <td>Supply Agent</td>
+                  <td>purchase_order, buffer, operationplan</td>
+                  <td>On‑Time Delivery (OTD)</td>
+                  <td class="yai-kpi"><strong>OTD 96.2%</strong> (post‑solver)</td>
+                </tr>
+                <tr>
+                  <td>S&amp;OP Agent</td>
+                  <td>Financials, capacity, margin</td>
+                  <td>Plan Adherence / Margin</td>
+                  <td class="yai-kpi"><strong>Plan Adherence 93%</strong>, Gross Margin 28.4%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. Data Ingestion & Validation Agent -->
+      <h2 class="yai-section-title">1. Data Ingestion &amp; Validation Agent</h2>
+      <div class="yai-section">
+        <div class="yai-section-body">
+          <p><strong>Objective:</strong> Ensure incoming CSV/Excel/API streams match the Y3 schema and maintain referential integrity.</p>
+          <p><strong>System Prompt (excerpt):</strong> "You are the <em>Guardian of Integrity</em>… Your output should be a structured log of <code class="yai-code">Pass</code>, <code class="yai-code">Warning</code> or <code class="yai-code">Fail</code>."</p>
+
+          <div class="yai-two-col">
+            <div>
+              <h3 class="mb-2 mt-3">Schema &amp; Integrity Checks (Mock)</h3>
+              <div class="yai-table-wrap">
+                <table class="yai-table">
+                  <thead>
+                    <tr>
+                      <th>Check</th>
+                      <th>Status</th>
+                      <th>Detail</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Mandatory fields (item_id, location_id, quantity)</td>
+                      <td><span class="yai-badge yai-badge-pass">Pass</span></td>
+                      <td>99,850 / 100,000 records complete</td>
+                    </tr>
+                    <tr>
+                      <td>Orphan sales records</td>
+                      <td><span class="yai-badge yai-badge-fail">Fail</span></td>
+                      <td>150 sales lines for non‑existent items</td>
+                    </tr>
+                    <tr>
+                      <td>Negative lead times</td>
+                      <td><span class="yai-badge yai-badge-warn">Warning</span></td>
+                      <td>12 item‑location pairs with lead_time &lt; 0</td>
+                    </tr>
+                    <tr>
+                      <td>Zero cost anomalies</td>
+                      <td><span class="yai-badge yai-badge-warn">Warning</span></td>
+                      <td>37 POs where unit_cost = 0</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <h3 class="mb-2 mt-3">Sample Validation Log</h3>
+              <pre class="yai-pre">{
+  "record_type": "purchase_order",
+  "record_id": "PO-2026-00123",
+  "status": "Fail",
+  "issues": [
+    "Missing supplier_id: no match in supplier table",
+    "unit_cost = 0: violates cost policy"
+  ]
+}
+{
+  "record_type": "sales_order",
+  "record_id": "SO-2026-00987",
+  "status": "Warning",
+  "issues": [
+    "Missing customer_segment (non-essential metadata)"
+  ]
+}</pre>
+              <button class="yai-btn yai-btn-primary">Re-run Validation on Latest File</button>
+              <button class="yai-btn yai-btn-secondary">Download Error Report (CSV)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Data Analyst Agent -->
+      <h2 class="yai-section-title">2. Data Analyst Agent</h2>
+      <div class="yai-section">
+        <div class="yai-section-body">
+          <p><strong>Objective:</strong> Transform raw data into actionable insights and identify trends before the planning run.</p>
+          <p><strong>System Prompt (excerpt):</strong> "You are the Supply Chain Quantitative Analyst… Look for seasonality and 'Lumpy' demand. Highlight items with missing lead times or low stock but high revenue contribution."</p>
+
+          <div class="yai-two-col">
+            <div>
+              <h3 class="mb-2 mt-3">Volatility &amp; ABC/XYZ (Mock)</h3>
+              <div class="yai-table-wrap">
+                <table class="yai-table">
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Revenue Class</th>
+                      <th>Demand Pattern</th>
+                      <th>Coeff. of Variation</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>SKU‑A100</td>
+                      <td>A (Top 20% revenue)</td>
+                      <td>X (Stable)</td>
+                      <td>0.18</td>
+                    </tr>
+                    <tr>
+                      <td>SKU‑B230</td>
+                      <td>B</td>
+                      <td>Y (Seasonal)</td>
+                      <td>0.45</td>
+                    </tr>
+                    <tr>
+                      <td>SKU‑C990</td>
+                      <td>A</td>
+                      <td>Z (Lumpy)</td>
+                      <td>1.35</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="yai-kpi"><strong>Result:</strong> 37 SKUs classified as "Lumpy" (AZ or BZ) flagged for special forecast methods.</p>
+            </div>
+            <div>
+              <h3 class="mb-2 mt-3">Master Data Health Snapshot</h3>
+              <div class="yai-table-wrap">
+                <table class="yai-table">
+                  <thead>
+                    <tr>
+                      <th>Issue</th>
+                      <th>Count</th>
+                      <th>Impact</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Items with missing lead times</td>
+                      <td>22</td>
+                      <td>Planner must fill before solver run</td>
+                    </tr>
+                    <tr>
+                      <td>Top‑revenue items with low stock (&lt; 0.5x monthly demand)</td>
+                      <td>9</td>
+                      <td>High risk of stockout on A‑items</td>
+                    </tr>
+                    <tr>
+                      <td>Buffers above max safety stock</td>
+                      <td>15</td>
+                      <td>Potential working capital reduction</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <button class="yai-btn yai-btn-primary">Generate EDA Report</button>
+              <button class="yai-btn yai-btn-secondary">Export ABC/XYZ Tags to Y3</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Demand Agent -->
+      <h2 class="yai-section-title">3. Demand Agent</h2>
+      <div class="yai-section">
+        <div class="yai-section-body">
+          <p><strong>Objective:</strong> Manage forecasting and demand sensing, including what‑if scenarios and promotion overlays.</p>
+          <p><strong>System Prompt (excerpt):</strong> "You are the Demand Planner… Use historical sales to project future requirements and adjust the demand table when users ask 'What‑if?' scenarios. Minimise MAPE."</p>
+
+          <div class="yai-two-col">
+            <div>
+              <h3 class="mb-2 mt-3">Forecast Performance (Mock)</h3>
+              <div class="yai-table-wrap">
+                <table class="yai-table">
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Period</th>
+                      <th>MAPE</th>
+                      <th>Bias</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>SKU‑A100</td>
+                      <td>Last 6M</td>
+                      <td>7.8%</td>
+                      <td>+1.5%</td>
+                    </tr>
+                    <tr>
+                      <td>SKU‑B230</td>
+                      <td>Last 6M</td>
+                      <td>13.4%</td>
+                      <td>-3.2%</td>
+                    </tr>
+                    <tr>
+                      <td>SKU‑C990</td>
+                      <td>Last 6M</td>
+                      <td>24.9%</td>
+                      <td>+5.0%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="yai-kpi"><strong>Overall:</strong> Portfolio MAPE 11.4%, Bias +2.1%.</p>
+            </div>
+            <div>
+              <h3 class="mb-2 mt-3">What‑If Scenario (Promotion Overlay)</h3>
+              <p>User asks: "What if we run a 20% price promotion on SKU‑B230 in July?"</p>
+              <div class="yai-table-wrap">
+                <table class="yai-table">
+                  <thead>
+                    <tr>
+                      <th>Entity</th>
+                      <th>Baseline</th>
+                      <th>What‑If</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>July demand qty</td>
+                      <td>10,000 units</td>
+                      <td>12,500 units (+25% uplift)</td>
+                    </tr>
+                    <tr>
+                      <td>Expected revenue</td>
+                      <td>$250,000</td>
+                      <td>$300,000 (after discount)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="yai-kpi"><strong>Agent Action:</strong> Writes adjusted quantities into the <code class="yai-code">demand</code> table as a separate "Promo_July" scenario for Y3.</p>
+              <button class="yai-btn yai-btn-primary">Apply Promo Scenario</button>
+              <button class="yai-btn yai-btn-secondary">Revert to Baseline</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Supply Agent -->
+      <h2 class="yai-section-title">4. Supply Agent</h2>
+      <div class="yai-section">
+        <div class="yai-section-body">
+          <p><strong>Objective:</strong> Optimise procurement, production, and distribution while respecting capacity, MOQs and buffers.</p>
+          <p><strong>System Prompt (excerpt):</strong> "You are the Supply &amp; Logistics Coordinator… Ensure planned orders satisfy demand without exceeding capacity. If a resource is overloaded, suggest shifts or flag bottlenecks."</p>
+
+          <div class="yai-two-col">
+            <div>
+              <h3 class="mb-2 mt-3">Bottleneck Detection (Mock)</h3>
+              <p class="yai-kpi">SQL used: <code class="yai-code">SELECT resource_id, startdate, enddate, load FROM resource_report WHERE load &gt; 1.0</code></p>
+              <div class="yai-table-wrap">
+                <table class="yai-table">
+                  <thead>
+                    <tr>
+                      <th>Resource</th>
+                      <th>Week</th>
+                      <th>Load</th>
+                      <th>Issue</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Assembly_Line_01</td>
+                      <td>Wk 14</td>
+                      <td>120%</td>
+                      <td>Delaying 5 high-priority orders</td>
+                    </tr>
+                    <tr>
+                      <td>Packaging_Cell_B</td>
+                      <td>Wk 15</td>
+                      <td>108%</td>
+                      <td>At risk if promo scenario is accepted</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="yai-kpi"><strong>Agent Reasoning (example):</strong><br>"Assembly_Line_01 at 120% in Wk 14. I will shift 20 units of SKU‑99‑Alpha to Line C (+5% cost) or escalate to S&amp;OP for lead-time extension."</p>
+            </div>
+            <div>
+              <h3 class="mb-2 mt-3">Supply Agent Output (Mock)</h3>
+              <div class="yai-table-wrap">
+                <table class="yai-table">
+                  <thead>
+                    <tr>
+                      <th>Constraint Type</th>
+                      <th>Affected Item</th>
+                      <th>Root Cause</th>
+                      <th>Recommendation</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Capacity</td>
+                      <td>SKU‑99‑Alpha</td>
+                      <td>Assembly Line B @ 115%</td>
+                      <td>Shift 20 units to Line C (extra cost 5%)</td>
+                    </tr>
+                    <tr>
+                      <td>Material</td>
+                      <td>Raw‑Steel‑X</td>
+                      <td>Supplier lead time +10 days</td>
+                      <td>Expedite shipping or pull from safety stock</td>
+                    </tr>
+                    <tr>
+                      <td>Inventory</td>
+                      <td>Retail‑Bundle‑1</td>
+                      <td>Below safety stock</td>
+                      <td>Trigger PO for 500 units to hit MOQ</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <button class="yai-btn yai-btn-primary">Push Planned Orders to Y3</button>
+              <button class="yai-btn yai-btn-secondary">Download Supply Gap Report</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. S&OP Agent -->
+      <h2 class="yai-section-title">5. S&amp;OP (Sales &amp; Operations Planning) Agent</h2>
+      <div class="yai-section">
+        <div class="yai-section-body">
+          <p><strong>Objective:</strong> Orchestrate demand and supply, reconcile conflicts, and present a margin‑aware consensus plan.</p>
+          <p><strong>System Prompt (excerpt):</strong> "You are the S&amp;OP Executive Strategist… When Demand wants 100 and Supply can only provide 80, analyse margin impact and prioritise high‑value customers."</p>
+
+          <div class="yai-two-col">
+            <div>
+              <h3 class="mb-2 mt-3">Unconstrained vs Constrained View (Mock)</h3>
+              <div class="yai-table-wrap">
+                <table class="yai-table">
+                  <thead>
+                    <tr>
+                      <th>Metric</th>
+                      <th>Unconstrained</th>
+                      <th>Constrained</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Total units (Q3)</td>
+                      <td>1,000,000</td>
+                      <td>940,000</td>
+                    </tr>
+                    <tr>
+                      <td>Revenue</td>
+                      <td>$25.0M</td>
+                      <td>$23.4M</td>
+                    </tr>
+                    <tr>
+                      <td>Gross margin</td>
+                      <td>29.5%</td>
+                      <td>28.4%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="yai-kpi"><strong>Gap:</strong> $1.6M revenue at risk due to capacity/material constraints.</p>
+            </div>
+            <div>
+              <h3 class="mb-2 mt-3">Margin-First Resolution (Mock)</h3>
+              <div class="yai-table-wrap">
+                <table class="yai-table">
+                  <thead>
+                    <tr>
+                      <th>Customer</th>
+                      <th>Tier</th>
+                      <th>Requested Qty</th>
+                      <th>Allocated Qty</th>
+                      <th>Decision</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Airline X</td>
+                      <td>Gold</td>
+                      <td>50,000</td>
+                      <td>50,000</td>
+                      <td>Fully served (high margin)</td>
+                    </tr>
+                    <tr>
+                      <td>Retailer Y</td>
+                      <td>Silver</td>
+                      <td>30,000</td>
+                      <td>24,000</td>
+                      <td>Partial shipment, 2-week delay</td>
+                    </tr>
+                    <tr>
+                      <td>Distributor Z</td>
+                      <td>Tier B</td>
+                      <td>20,000</td>
+                      <td>12,000</td>
+                      <td>Constrained, communicated delay</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="yai-kpi"><strong>Draft Sales Notification (auto-generated):</strong><br>"Due to a capacity constraint on Assembly_Line_01, Tier B customers will experience a 2‑week delay on SKU‑99‑Alpha. Gold/Strategic customers remain fully covered."</p>
+              <button class="yai-btn yai-btn-primary">Publish Consensus Plan</button>
+              <button class="yai-btn yai-btn-secondary">Email S&amp;OP Pack</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Orchestrator Flow -->
+      <h2 class="yai-section-title">6. Orchestrator Flow (Conceptual)</h2>
+      <div class="yai-section">
+        <div class="yai-section-body">
+          <p>This represents the Python "main loop" you outlined, but shown as a simple status/history panel for demo purposes.</p>
+          <div class="yai-table-wrap">
+            <table class="yai-table">
+              <thead>
+                <tr>
+                  <th>Step</th>
+                  <th>Agent</th>
+                  <th>Description</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Ingestion</td>
+                  <td>Validate raw CSVs and JSON payloads against Y3 schema.</td>
+                  <td><span class="yai-badge yai-badge-pass">Completed (2 warnings, 1 fail)</span></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Analyst</td>
+                  <td>Run volatility, ABC/XYZ and master data health checks.</td>
+                  <td><span class="yai-badge yai-badge-pass">Completed</span></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Demand</td>
+                  <td>Generate baseline forecast and What‑If scenarios.</td>
+                  <td><span class="yai-badge yai-badge-pass">Completed</span></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>Supply</td>
+                  <td>Resolve capacity/material constraints and propose actions.</td>
+                  <td><span class="yai-badge yai-badge-warn">Completed with constraints</span></td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>S&amp;OP</td>
+                  <td>Apply margin‑first resolution and publish consensus plan.</td>
+                  <td><span class="yai-badge yai-badge-pass">Consensus Plan Generated</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

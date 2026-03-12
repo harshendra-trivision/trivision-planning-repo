@@ -363,6 +363,11 @@ def cockpit(request):
     )
 
 
+@staff_member_required
+def yai(request):
+    return render(request, "common/yai.html", context={"title": _("Y-AI Control Centre")})
+
+
 def handler404(request, exception):
     """
     Custom error handler which redirects to the main page rather than displaying the 404 page.

@@ -22,6 +22,80 @@
         --warning-orange: #F59E0B;
     }
 
+    /* Override Bootstrap btn-primary globally for this page */
+    #workarea .btn-primary,
+    #workarea #save,
+    #workarea #undo,
+    #workarea #save_undo .btn,
+    #workarea #save_undo button,
+    #workarea #toolicons .btn,
+    #workarea #toolicons button.btn-primary,
+    #workarea #actions1 {
+        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+        border: none !important;
+        border-radius: 10px !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.25) !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    #workarea .btn-primary:hover:not(:disabled),
+    #workarea #save:hover:not(:disabled),
+    #workarea #undo:hover:not(:disabled),
+    #workarea #save_undo .btn:hover:not(:disabled),
+    #workarea #toolicons .btn:hover:not(:disabled),
+    #workarea #toolicons button.btn-primary:hover:not(:disabled) {
+        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(123, 45, 142, 0.35) !important;
+    }
+
+    #workarea #undo {
+        background: #FFFFFF !important;
+        color: var(--primary-purple) !important;
+        border: 1px solid rgba(123, 45, 142, 0.3) !important;
+        box-shadow: 0 2px 8px rgba(123, 45, 142, 0.1) !important;
+    }
+
+    #workarea #undo:hover:not(:disabled) {
+        background: var(--soft-purple-bg) !important;
+        color: var(--deep-purple) !important;
+        border-color: var(--primary-purple) !important;
+    }
+
+    #workarea #save:disabled,
+    #workarea #undo:disabled,
+    #workarea #save_undo .btn:disabled,
+    #workarea #toolicons .btn:disabled {
+        opacity: 0.65 !important;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
+    #workarea #undo:disabled {
+        background: #F9F3FD !important;
+        color: #9A8CAB !important;
+        border-color: rgba(123, 45, 142, 0.15) !important;
+    }
+
+    /* Select action dropdown - purple outline when not disabled */
+    #workarea #actions1:disabled {
+        background: #F3F1F7 !important;
+        color: #9A8CAB !important;
+        border: 1px solid rgba(123, 45, 142, 0.15) !important;
+    }
+
+    #workarea #actions1:not(:disabled) {
+        background: linear-gradient(135deg, #FFFFFF 0%, #F7F1FC 100%) !important;
+        color: var(--deep-purple) !important;
+        border: 1px solid rgba(123, 45, 142, 0.25) !important;
+    }
+
+    #workarea #actions1:hover:not(:disabled) {
+        background: linear-gradient(135deg, #F9F2FD 0%, #F2E5FB 100%) !important;
+        color: var(--primary-purple) !important;
+    }
+
     /* Modernizing the page header */
     #content > h1 {
         display: none;
@@ -78,41 +152,104 @@
         font-size: 0.72rem !important;
     }
 
-    /* Toolbar buttons modernization */
-    .btn-primary, #save, #undo, #toolicons .btn, #gridmode, #kanbanmode, #calendarmode, #ganttmode {
-        background: var(--primary-purple) !important;
+    /* Save button - solid purple (primary action) */
+    #save {
+        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
         border: none !important;
         border-radius: 10px !important;
         padding: 0.52rem 1rem !important;
         font-weight: 600 !important;
         font-size: 0.78rem !important;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 6px 14px rgba(123, 45, 142, 0.16) !important;
+        box-shadow: 0 6px 14px rgba(123, 45, 142, 0.25) !important;
         color: white !important;
     }
 
-    .btn-primary:hover, #save:hover, #undo:hover, #toolicons .btn:hover, #gridmode:hover, #kanbanmode:hover, #calendarmode:hover, #ganttmode:hover {
-        background: var(--deep-purple) !important;
+    #save:hover:not(:disabled) {
+        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(123, 45, 142, 0.2) !important;
+        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.3) !important;
     }
 
-    .btn-primary.active, #gridmode.active, #kanbanmode.active, #calendarmode.active, #ganttmode.active {
-        background: var(--deep-purple) !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.2) !important;
-    }
-
-    #save:disabled,
-    #undo:disabled,
-    #gridmode:disabled,
-    #kanbanmode:disabled,
-    #calendarmode:disabled,
-    #ganttmode:disabled {
-        background: var(--primary-purple) !important;
-        color: white !important;
-        opacity: 0.65 !important;
-        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
+    #save:disabled {
+        background: linear-gradient(135deg, #9A7BA8 0%, #B39FC0 100%) !important;
+        opacity: 0.7 !important;
         cursor: not-allowed;
+    }
+
+    /* Undo button - lighter purple/outline style (secondary action) */
+    #undo {
+        background: #FFFFFF !important;
+        border: 1px solid rgba(123, 45, 142, 0.25) !important;
+        border-radius: 10px !important;
+        padding: 0.52rem 1rem !important;
+        font-weight: 600 !important;
+        font-size: 0.78rem !important;
+        color: var(--primary-purple) !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 2px 6px rgba(123, 45, 142, 0.08) !important;
+    }
+
+    #undo:hover:not(:disabled) {
+        background: var(--soft-purple-bg) !important;
+        border-color: var(--primary-purple) !important;
+        color: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 10px rgba(123, 45, 142, 0.12) !important;
+    }
+
+    #undo:disabled {
+        background: #F9F3FD !important;
+        border-color: rgba(123, 45, 142, 0.15) !important;
+        color: #9A8CAB !important;
+        opacity: 0.8 !important;
+        cursor: not-allowed;
+    }
+
+    /* Toolbar mode buttons (grid, kanban, calendar, gantt) - purple */
+    #gridmode,
+    #kanbanmode,
+    #calendarmode,
+    #ganttmode {
+        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+        border: none !important;
+        border-radius: 10px !important;
+        color: white !important;
+    }
+
+    #gridmode:hover:not(:disabled),
+    #kanbanmode:hover:not(:disabled),
+    #calendarmode:hover:not(:disabled),
+    #ganttmode:hover:not(:disabled) {
+        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+    }
+
+    .btn-primary.active,
+    #gridmode.active,
+    #kanbanmode.active,
+    #calendarmode.active,
+    #ganttmode.active {
+        background: linear-gradient(135deg, #2D004D 0%, #5C197B 100%) !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    /* All toolbar icon buttons - purple */
+    #toolicons .btn,
+    #toolicons .btn-primary,
+    #toolicons button {
+        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+        border: none !important;
+        color: white !important;
+        border-radius: 10px !important;
+        box-shadow: 0 4px 10px rgba(123, 45, 142, 0.2) !important;
+    }
+
+    #toolicons .btn:hover:not(:disabled),
+    #toolicons .btn-primary:hover:not(:disabled),
+    #toolicons button:hover:not(:disabled) {
+        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 14px rgba(123, 45, 142, 0.3) !important;
     }
 
     /* Dropdown specialization */
@@ -177,6 +314,38 @@
         box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
     }
 
+    #filterform input[type="text"],
+    #addsearch {
+        border: none !important;
+        background: transparent !important;
+        color: var(--text-primary) !important;
+        padding: 0.55rem 0.8rem !important;
+        min-width: 8rem;
+        box-shadow: none !important;
+    }
+
+    #filterform input[type="text"]::placeholder,
+    #addsearch::placeholder {
+        color: #9A8CAB !important;
+    }
+
+    #filterform input[type="text"]:focus,
+    #addsearch:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    #filterform .input-group-text {
+        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+        border: none !important;
+        color: #FFFFFF !important;
+        padding: 0.55rem 0.8rem !important;
+    }
+
+    #filterform .input-group-text:hover {
+        filter: brightness(0.98);
+    }
+
     #resetfilter {
         color: var(--primary-purple) !important;
         cursor: pointer !important;
@@ -234,24 +403,23 @@
         background: #FFFFFF !important;
     }
 
-    /* Grid styling */
+    /* Modern table - dark purple gradient header */
     .ui-jqgrid .ui-jqgrid-hdiv {
-        background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
-        border-bottom: 1px solid rgba(123, 45, 142, 0.12) !important;
+        background: linear-gradient(135deg, #2D004D 0%, #5C197B 50%, #7B2D8E 100%) !important;
+        border-bottom: none !important;
     }
 
     .ui-jqgrid .ui-jqgrid-htable th,
     .ui-jqgrid .ui-jqgrid-htable .ui-th-column {
         background: transparent !important;
-        color: var(--deep-purple) !important;
+        color: #FFFFFF !important;
         font-weight: 700 !important;
         padding: 0.95rem 0.75rem !important;
         text-transform: uppercase;
         font-size: 0.68rem;
         letter-spacing: 0.10em;
-        border-right: 1px solid rgba(123, 45, 142, 0.06) !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
         border-bottom: none !important;
-        box-shadow: inset 0 -1px 0 rgba(123, 45, 142, 0.08);
     }
 
     .ui-jqgrid .ui-jqgrid-htable th:last-child,
@@ -259,11 +427,12 @@
         border-right: none !important;
     }
 
+    /* Table body - modern clean rows */
     .ui-jqgrid tr.ui-row-ltr td {
         color: var(--text-primary) !important;
         border-bottom: 1px solid #F3F1F7 !important;
         border-right: 1px solid #F7F3FB !important;
-        padding: 0.8rem 0.75rem !important;
+        padding: 0.85rem 0.75rem !important;
         font-size: 0.85rem;
         vertical-align: middle !important;
         background: #FFFFFF !important;
@@ -283,7 +452,7 @@
     .ui-jqgrid td.ui-state-highlight {
         background: var(--row-selected) !important;
         color: var(--text-primary) !important;
-        box-shadow: inset 0 0 0 1px rgba(123, 45, 142, 0.06);
+        box-shadow: inset 0 0 0 1px rgba(123, 45, 142, 0.08);
     }
 
     .ui-jqgrid tr.ui-row-ltr td a {
@@ -333,57 +502,14 @@
         transform: scale(1.1);
     }
 
-    /* Search box styling */
-    #addsearch {
-        border: none !important;
-        background: transparent !important;
-        color: var(--text-primary) !important;
-        padding: 0.55rem 0.8rem !important;
-        min-width: 8rem;
-        box-shadow: none !important;
-    }
-
-    #addsearch::placeholder {
-        color: #9A8CAB !important;
-    }
-
-    #addsearch:focus {
-        outline: none !important;
-        box-shadow: none !important;
-    }
-
-    .input-group-text {
-        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
-        border: none !important;
-        color: #FFFFFF !important;
-        padding: 0.55rem 0.8rem !important;
-    }
-
-    #toolicons .btn-primary {
-        background: white !important;
-        color: var(--primary-purple) !important;
-        border: 1px solid rgba(123, 45, 142, 0.2) !important;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
-        border-radius: 10px !important;
-        width: 2rem;
-        height: 2rem;
-        padding: 0 !important;
-    }
-
-    #toolicons .btn-primary:hover {
-        background: var(--primary-purple) !important;
-        color: white !important;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.15) !important;
-    }
-
-    /* Pager styling */
+    /* Pager - modern purple accent */
     #gridpager {
         background: linear-gradient(180deg, #FDFCFF 0%, #F7F1FC 100%) !important;
         border: none !important;
         border-top: 1px solid rgba(123, 45, 142, 0.10) !important;
-        padding: 0.7rem 0.9rem !important;
+        padding: 0.75rem 1rem !important;
         color: var(--text-secondary) !important;
+        font-size: 0.82rem !important;
     }
 
     #gridpager .ui-pg-table,
@@ -392,18 +518,19 @@
         background: transparent !important;
         border: none !important;
         color: var(--text-secondary) !important;
-        font-size: 0.8rem !important;
     }
 
     #gridpager .ui-pg-button,
     #gridpager .ui-pg-input,
     #gridpager .ui-pg-selbox {
         border-radius: 8px !important;
+        border: 1px solid rgba(123, 45, 142, 0.12) !important;
     }
 
     #gridpager .ui-pg-button:hover {
         background: rgba(123, 45, 142, 0.10) !important;
         color: var(--primary-purple) !important;
+        border-color: rgba(123, 45, 142, 0.2) !important;
     }
 
     /* Status badges for Orders */
@@ -413,20 +540,60 @@
     .status-completed { background-color: var(--success-green) !important; }
     .status-closed { background-color: var(--text-secondary) !important; }
 
-    /* Custom Header Styles */
-    .header-badge {
-        background: var(--soft-purple-bg);
-        border: 1px solid rgba(123, 45, 142, 0.1);
-        border-radius: 20px;
+    /* Contextual badge - matching Sales orders */
+    .header-badge,
+    .distribution-badge {
+        background: var(--soft-purple-bg) !important;
+        border: 1px solid rgba(123, 45, 142, 0.1) !important;
+        border-radius: 20px !important;
         color: var(--primary-purple) !important;
-        font-weight: 600;
-        padding: 0.5rem 1rem;
+        font-weight: 600 !important;
+        padding: 0.5rem 1rem !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.78rem !important;
+    }
+
+    #actionsul {
+        border: 1px solid rgba(123, 45, 142, 0.10) !important;
+        border-radius: 14px !important;
+        padding: 0.45rem !important;
+        box-shadow: 0 18px 30px rgba(45, 0, 77, 0.10) !important;
+    }
+
+    #actionsul .dropdown-item {
+        border-radius: 10px !important;
+        padding: 0.55rem 0.8rem !important;
+        color: var(--text-primary) !important;
+        font-weight: 500 !important;
+    }
+
+    #actionsul .dropdown-item:hover {
+        background: rgba(123, 45, 142, 0.08) !important;
+        color: var(--primary-purple) !important;
     }
 
     .frozen-div,
     .frozen-bdiv {
         background: #FFFFFF !important;
         border-right: 1px solid rgba(123, 45, 142, 0.10) !important;
+    }
+
+    /* Frozen column header - match dark purple gradient */
+    .frozen-div .ui-jqgrid-hdiv {
+        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+    }
+
+    .frozen-div .ui-jqgrid-htable th {
+        color: #FFFFFF !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+
+    /* Empty state message */
+    .ui-jqgrid .jqgfirstrow,
+    .ui-jqgrid-overlay + div {
+        color: var(--text-secondary) !important;
     }
 
     @media (max-width: 992px) {
@@ -453,20 +620,42 @@
 </style>
 {% endblock %}
 
-{% block before_table %}
-<div class="modern-header-container mb-4">
-    <div class="row align-items-center">
+{% block content_title %}
+{% if title %}
+<div class="row mt-3">
+  <div class="col">
+    <div class="modern-header-container mb-3">
+      <div class="row align-items-center g-3">
         <div class="col">
-            <p class="text-muted small mb-1">{% trans "Inventory" %}</p>
-            <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
-                {% trans "Distribution orders" %}
-            </h2>
+          <p class="text-muted small mb-1">{% trans "Inventory" %}</p>
+          <h1 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em; font-size: 1.85rem;">
+            {% trans "Distribution orders" %}
+          </h1>
         </div>
         <div class="col-auto">
-            <div class="header-badge">
-                <i class="fa fa-truck me-1"></i> {% trans "Inter-warehouse transfers and logistics" %}
-            </div>
+          <div class="header-badge">
+            <i class="fa fa-truck me-1"></i> {% trans "Inter-warehouse transfers and logistics" %}
+          </div>
         </div>
+        <div class="col-12 col-md-auto mt-2 mt-md-0">
+          {% block filter %}{% endblock %}
+        </div>
+      </div>
+      <div class="mt-2"><span id="curerror"></span></div>
     </div>
+  </div>
+  <div class="col-auto d-flex ms-auto align-items-top">
+    {% block tools %}{% endblock %}
+    {% if reportclass.help_url %}<h1>
+      <a class="ms-1" href="{% setting "DOCUMENTATION_URL" %}/docs/{% version_short %}/{{reportclass.help_url}}" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-offset="0,7" data-bs-title="{% trans 'help'|capfirst|force_escape %}">
+        <span class="fa fa-question"/>
+      </a>
+    </h1>{% endif %}
+  </div>
 </div>
+{% block tabs %}{% endblock %}
+{% endif %}
+{% endblock %}
+
+{% block before_table %}
 {% endblock %}
