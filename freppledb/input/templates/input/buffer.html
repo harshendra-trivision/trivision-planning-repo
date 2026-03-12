@@ -69,6 +69,28 @@
         font-size: 0.85rem;
     }
 
+    /* Keep the select-all checkbox and row checkboxes fully visible */
+    .ui-jqgrid tr.ui-row-ltr td.td_cbox,
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby="grid_cb"],
+    .ui-jqgrid .ui-jqgrid-htable th#grid_cb {
+        padding: 12px 0 !important;
+        text-align: center;
+        width: 45px !important;
+        min-width: 45px !important;
+        overflow: visible !important;
+        position: relative;
+        z-index: 10;
+        background: #FFFFFF !important;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td.td_cbox input,
+    #grid_cb input {
+        margin: 0 !important;
+        accent-color: var(--primary-purple);
+        transform: scale(1.1);
+        vertical-align: middle;
+    }
+
     .ui-jqgrid tr.ui-state-hover td {
         background-color: var(--soft-purple-bg) !important;
     }
