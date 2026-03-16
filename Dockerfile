@@ -115,21 +115,27 @@
 
 FROM ubuntu:22.04
 
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
-    python3.11 python3.11-venv python3.11-dev python3-pip \
+    python3.11 python3.11-dev python3.11-venv python3-pip \
     cmake g++ git nodejs npm \
-    libxerces-c-dev libpq-dev postgresql-client
+    libxerces-c-dev libpq-dev postgresql-client \
+    curl ca-certificates
 
 WORKDIR /app
 
 COPY . .
 
 RUN python3.11 -m venv venv
+RUN . venv/bin/activate && pip install --upgrade pip
 RUN . venv/bin/activate && pip install -r requirements.txt
 
 ENV PATH="/app/venv/bin:$PATH"
+ENV PYTHONPATH="/app"
+ENV DJANGO_SETTINGS_MODULE=freppledb.settings
 
 EXPOSE 10000
 
