@@ -22,78 +22,54 @@
         --warning-orange: #F59E0B;
     }
 
-    /* Override Bootstrap btn-primary globally for this page */
-    #workarea .btn-primary,
-    #workarea #save,
-    #workarea #undo,
-    #workarea #save_undo .btn,
-    #workarea #save_undo button,
-    #workarea #toolicons .btn,
-    #workarea #toolicons button.btn-primary,
-    #workarea #actions1 {
-        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+    /* Save & Undo - darker purple, slightly rounded edges only */
+    #save_undo #save,
+    #save_undo #undo {
+        background: #5C197B !important;
         border: none !important;
         border-radius: 10px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 700 !important;
+        font-size: 0.8rem !important;
         color: white !important;
-        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.25) !important;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.05em !important;
+        box-shadow: none !important;
     }
 
-    #workarea .btn-primary:hover:not(:disabled),
-    #workarea #save:hover:not(:disabled),
-    #workarea #undo:hover:not(:disabled),
-    #workarea #save_undo .btn:hover:not(:disabled),
-    #workarea #toolicons .btn:hover:not(:disabled),
-    #workarea #toolicons button.btn-primary:hover:not(:disabled) {
-        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
-        transform: translateY(-1px);
-        box-shadow: 0 6px 16px rgba(123, 45, 142, 0.35) !important;
+    #save_undo #save:hover:not(:disabled),
+    #save_undo #undo:hover:not(:disabled) {
+        background: #4A1263 !important;
+        opacity: 0.95;
     }
 
-    #workarea #undo {
-        background: #FFFFFF !important;
-        color: var(--primary-purple) !important;
-        border: 1px solid rgba(123, 45, 142, 0.3) !important;
-        box-shadow: 0 2px 8px rgba(123, 45, 142, 0.1) !important;
-    }
-
-    #workarea #undo:hover:not(:disabled) {
-        background: var(--soft-purple-bg) !important;
-        color: var(--deep-purple) !important;
-        border-color: var(--primary-purple) !important;
-    }
-
-    #workarea #save:disabled,
-    #workarea #undo:disabled,
-    #workarea #save_undo .btn:disabled,
-    #workarea #toolicons .btn:disabled {
+    #save_undo #save:disabled,
+    #save_undo #undo:disabled {
+        background: #8B6BA0 !important;
         opacity: 0.65 !important;
         cursor: not-allowed;
-        transform: none !important;
     }
 
-    #workarea #undo:disabled {
-        background: #F9F3FD !important;
-        color: #9A8CAB !important;
-        border-color: rgba(123, 45, 142, 0.15) !important;
+    /* Toolbar buttons - darker purple */
+    #workarea #toolicons .btn,
+    #workarea #toolicons button.btn-primary {
+        background: #5C197B !important;
+        border: none !important;
+        color: white !important;
+        border-radius: 10px !important;
     }
 
-    /* Select action dropdown - purple outline when not disabled */
-    #workarea #actions1:disabled {
-        background: #F3F1F7 !important;
-        color: #9A8CAB !important;
-        border: 1px solid rgba(123, 45, 142, 0.15) !important;
+    #workarea #toolicons .btn:hover:not(:disabled),
+    #workarea #toolicons button.btn-primary:hover:not(:disabled) {
+        background: #4A1263 !important;
     }
 
-    #workarea #actions1:not(:disabled) {
-        background: linear-gradient(135deg, #FFFFFF 0%, #F7F1FC 100%) !important;
-        color: var(--deep-purple) !important;
-        border: 1px solid rgba(123, 45, 142, 0.25) !important;
-    }
-
-    #workarea #actions1:hover:not(:disabled) {
-        background: linear-gradient(135deg, #F9F2FD 0%, #F2E5FB 100%) !important;
-        color: var(--primary-purple) !important;
+    /* Select action dropdown */
+    #save_undo #actions1:not(:disabled) {
+        background: #FFFFFF !important;
+        border: 1px solid #E5E7EB !important;
+        border-radius: 10px !important;
+        color: #374151 !important;
     }
 
     /* Modernizing the page header */
@@ -152,66 +128,13 @@
         font-size: 0.72rem !important;
     }
 
-    /* Save button - solid purple (primary action) */
-    #save {
-        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
-        border: none !important;
-        border-radius: 10px !important;
-        padding: 0.52rem 1rem !important;
-        font-weight: 600 !important;
-        font-size: 0.78rem !important;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 6px 14px rgba(123, 45, 142, 0.25) !important;
-        color: white !important;
-    }
-
-    #save:hover:not(:disabled) {
-        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.3) !important;
-    }
-
-    #save:disabled {
-        background: linear-gradient(135deg, #9A7BA8 0%, #B39FC0 100%) !important;
-        opacity: 0.7 !important;
-        cursor: not-allowed;
-    }
-
-    /* Undo button - lighter purple/outline style (secondary action) */
-    #undo {
-        background: #FFFFFF !important;
-        border: 1px solid rgba(123, 45, 142, 0.25) !important;
-        border-radius: 10px !important;
-        padding: 0.52rem 1rem !important;
-        font-weight: 600 !important;
-        font-size: 0.78rem !important;
-        color: var(--primary-purple) !important;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
-        box-shadow: 0 2px 6px rgba(123, 45, 142, 0.08) !important;
-    }
-
-    #undo:hover:not(:disabled) {
-        background: var(--soft-purple-bg) !important;
-        border-color: var(--primary-purple) !important;
-        color: var(--deep-purple) !important;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(123, 45, 142, 0.12) !important;
-    }
-
-    #undo:disabled {
-        background: #F9F3FD !important;
-        border-color: rgba(123, 45, 142, 0.15) !important;
-        color: #9A8CAB !important;
-        opacity: 0.8 !important;
-        cursor: not-allowed;
-    }
-
-    /* Toolbar mode buttons (grid, kanban, calendar, gantt) - purple */
+    /* Toolbar mode buttons (grid, kanban, calendar, gantt) - darker purple */
     #gridmode,
     #kanbanmode,
     #calendarmode,
     #ganttmode {
-        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+        background: #5C197B !important;
+        border-radius: 10px !important;
         border: none !important;
         border-radius: 10px !important;
         color: white !important;
@@ -221,7 +144,7 @@
     #kanbanmode:hover:not(:disabled),
     #calendarmode:hover:not(:disabled),
     #ganttmode:hover:not(:disabled) {
-        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+        background: #4A1263 !important;
     }
 
     .btn-primary.active,
@@ -229,27 +152,24 @@
     #kanbanmode.active,
     #calendarmode.active,
     #ganttmode.active {
-        background: linear-gradient(135deg, #2D004D 0%, #5C197B 100%) !important;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        background: #4A1263 !important;
     }
 
-    /* All toolbar icon buttons - purple */
+    /* All toolbar icon buttons - darker purple, rounded edges */
     #toolicons .btn,
     #toolicons .btn-primary,
     #toolicons button {
-        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+        background: #5C197B !important;
         border: none !important;
         color: white !important;
         border-radius: 10px !important;
-        box-shadow: 0 4px 10px rgba(123, 45, 142, 0.2) !important;
+        box-shadow: none !important;
     }
 
     #toolicons .btn:hover:not(:disabled),
     #toolicons .btn-primary:hover:not(:disabled),
     #toolicons button:hover:not(:disabled) {
-        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
-        transform: translateY(-1px);
-        box-shadow: 0 6px 14px rgba(123, 45, 142, 0.3) !important;
+        background: #4A1263 !important;
     }
 
     /* Dropdown specialization */

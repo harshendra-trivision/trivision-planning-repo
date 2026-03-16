@@ -266,6 +266,51 @@
 }
 {% endif %}
 
+/* Save & Undo buttons - darker purple, slightly rounded edges only */
+#save_undo #save,
+#save_undo #undo {
+  background: #5C197B !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 0.5rem 1.25rem !important;
+  font-weight: 700 !important;
+  font-size: 0.8rem !important;
+  color: white !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  box-shadow: none !important;
+  transition: opacity 0.2s ease !important;
+}
+
+#save_undo #save:hover:not(:disabled),
+#save_undo #undo:hover:not(:disabled) {
+  background: #4A1263 !important;
+  opacity: 0.95;
+}
+
+#save_undo #save:disabled,
+#save_undo #undo:disabled {
+  background: #8B6BA0 !important;
+  opacity: 0.65 !important;
+  cursor: not-allowed;
+}
+
+/* Select action dropdown - match button style */
+#save_undo #actions1:not(:disabled) {
+  background: #FFFFFF !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 10px !important;
+  color: #374151 !important;
+  padding: 0.5rem 1.25rem !important;
+  font-weight: 500 !important;
+  box-shadow: none !important;
+}
+
+#save_undo #actions1:hover:not(:disabled) {
+  border-color: #5C197B !important;
+  background: #F9F5FC !important;
+}
+
 /* Modern Customize Modal Scrollbar Styling */
 #DroppointRows::-webkit-scrollbar,
 #Rows::-webkit-scrollbar,

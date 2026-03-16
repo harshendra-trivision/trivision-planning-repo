@@ -632,7 +632,7 @@ class ItemDistributionList(GridReport):
 
 class DistributionOrderList(OperationPlanMixin, GridReport):
     template = "input/distributionorder.html"
-    title = _("distribution orders")
+    title = _("distribution orders  ")
     default_sort = (1, "desc")
     model = DistributionOrder
     frozenColumns = 1

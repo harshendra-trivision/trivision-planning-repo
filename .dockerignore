@@ -1,0 +1,46 @@
+# Git
+.git
+.gitignore
+.gitmodules
+
+# Build artifacts
+build
+venv
+*.pyc
+__pycache__
+*.pyo
+.pytest_cache
+.coverage
+htmlcov
+
+# IDE and editor
+.vscode
+.idea
+*.swp
+*.swo
+
+# Documentation (not needed for runtime)
+doc
+
+# Test files
+test
+*.test
+tests
+
+# Node (rebuilt in container)
+node_modules
+
+# Logs and local config
+logs
+*.log
+localsettings*.py
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Misc
+*.md
+.env
+.env.*
