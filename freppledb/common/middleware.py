@@ -238,7 +238,7 @@ class MultiDBMiddleware:
                                 if params:
                                     next += f"?{params.urlencode()}"
                                 return HttpResponseRedirect(
-                                    f"/data/login/?{urlencode({"next": next})}"
+                                    f"/data/login/?{urlencode({'next': next})}"
                                 )
                             except jwt.exceptions.InvalidTokenError as e:
                                 pass
