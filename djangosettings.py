@@ -51,7 +51,7 @@ DATABASES = {
     "default" if i == 0 else f"scenario{i}": {
         "ENGINE": "freppledb.common.postgresql",
         # Database name
-        "NAME": f'{os.environ.get('POSTGRES_DBNAME','frepple')}{i}',
+        "NAME": f"{os.environ.get('POSTGRES_DBNAME','frepple')}{i}",
         # Role name when using md5 authentication.
         # Leave as an empty string when using peer or
         # ident authencation.
