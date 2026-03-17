@@ -236,4 +236,4 @@ def vacuumAnalyze(cursor):
         where schemaname = 'public'
         """
     )
-    cursor.execute(f"vacuum analyze {", ".join(t[0] for t in cursor)}")
+    cursor.execute(f'vacuum analyze {", ".join(t[0] for t in cursor)}')
