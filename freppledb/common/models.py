@@ -1947,7 +1947,7 @@ class APIKey(models.Model):
         return super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"'{self.name}' for '{self.user.username if self.user else ""}"
+        return f"'{self.name}' for '{self.user.username if self.user else ''}'"
 
     class Meta:
         verbose_name = _("API key")
