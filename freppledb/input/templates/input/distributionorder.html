@@ -1,6 +1,8 @@
 {% extends "input/operationplanreport.html" %}
 {% load i18n %}
 
+{% block bodyclass %}distribution-order-page {% endblock %}
+
 {% block extrahead %}
 {{ block.super }}
 <style>
@@ -22,54 +24,40 @@
         --warning-orange: #F59E0B;
     }
 
-    /* Save & Undo - darker purple, slightly rounded edges only */
-    #save_undo #save,
-    #save_undo #undo {
-        background: #5C197B !important;
+    /* Save/Undo buttons - match Sales orders style */
+    #save, #undo {
+        background: var(--primary-purple) !important;
         border: none !important;
         border-radius: 10px !important;
-        padding: 0.5rem 1.25rem !important;
-        font-weight: 700 !important;
-        font-size: 0.8rem !important;
+        padding: 0.52rem 1rem !important;
+        font-weight: 600 !important;
+        font-size: 0.78rem;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 6px 14px rgba(123, 45, 142, 0.16) !important;
         color: white !important;
-        text-transform: uppercase !important;
-        letter-spacing: 0.05em !important;
-        box-shadow: none !important;
     }
 
-    #save_undo #save:hover:not(:disabled),
-    #save_undo #undo:hover:not(:disabled) {
-        background: #4A1263 !important;
-        opacity: 0.95;
+    #save:hover:not(:disabled),
+    #undo:hover:not(:disabled) {
+        background: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(123, 45, 142, 0.2) !important;
     }
 
-    #save_undo #save:disabled,
-    #save_undo #undo:disabled {
-        background: #8B6BA0 !important;
+    #undo:disabled {
+        background: var(--primary-purple) !important;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
         opacity: 0.65 !important;
         cursor: not-allowed;
     }
 
-    /* Toolbar buttons - darker purple */
-    #workarea #toolicons .btn,
-    #workarea #toolicons button.btn-primary {
-        background: #5C197B !important;
-        border: none !important;
+    #save:disabled {
+        background: var(--primary-purple) !important;
         color: white !important;
-        border-radius: 10px !important;
-    }
-
-    #workarea #toolicons .btn:hover:not(:disabled),
-    #workarea #toolicons button.btn-primary:hover:not(:disabled) {
-        background: #4A1263 !important;
-    }
-
-    /* Select action dropdown */
-    #save_undo #actions1:not(:disabled) {
-        background: #FFFFFF !important;
-        border: 1px solid #E5E7EB !important;
-        border-radius: 10px !important;
-        color: #374151 !important;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
+        opacity: 0.65 !important;
+        cursor: not-allowed;
     }
 
     /* Modernizing the page header */
@@ -128,7 +116,7 @@
         font-size: 0.72rem !important;
     }
 
-    /* Toolbar mode buttons (grid, kanban, calendar, gantt) - darker purple */
+    /* Toolbar mode buttons (grid, kanban, calendar, gantt) - match Sales orders */
     #gridmode,
     #kanbanmode,
     #calendarmode,
@@ -155,21 +143,23 @@
         background: #4A1263 !important;
     }
 
-    /* All toolbar icon buttons - darker purple, rounded edges */
-    #toolicons .btn,
-    #toolicons .btn-primary,
-    #toolicons button {
-        background: #5C197B !important;
-        border: none !important;
-        color: white !important;
+    /* Toolbar icon buttons - match Sales orders (white with purple border) */
+    #toolicons .btn-primary {
+        background: white !important;
+        color: var(--primary-purple) !important;
+        border: 1px solid rgba(123, 45, 142, 0.2) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
         border-radius: 10px !important;
-        box-shadow: none !important;
+        width: 2rem;
+        height: 2rem;
+        padding: 0 !important;
     }
 
-    #toolicons .btn:hover:not(:disabled),
-    #toolicons .btn-primary:hover:not(:disabled),
-    #toolicons button:hover:not(:disabled) {
-        background: #4A1263 !important;
+    #toolicons .btn-primary:hover {
+        background: var(--primary-purple) !important;
+        color: white !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.15) !important;
     }
 
     /* Dropdown specialization */
@@ -323,23 +313,24 @@
         background: #FFFFFF !important;
     }
 
-    /* Modern table - dark purple gradient header */
+    /* Table header - match Sales orders (light gradient, deep purple text) */
     .ui-jqgrid .ui-jqgrid-hdiv {
-        background: linear-gradient(135deg, #2D004D 0%, #5C197B 50%, #7B2D8E 100%) !important;
-        border-bottom: none !important;
+        background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
+        border-bottom: 1px solid rgba(123, 45, 142, 0.12) !important;
     }
 
     .ui-jqgrid .ui-jqgrid-htable th,
     .ui-jqgrid .ui-jqgrid-htable .ui-th-column {
         background: transparent !important;
-        color: #FFFFFF !important;
+        color: var(--deep-purple) !important;
         font-weight: 700 !important;
         padding: 0.95rem 0.75rem !important;
         text-transform: uppercase;
         font-size: 0.68rem;
         letter-spacing: 0.10em;
-        border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+        border-right: 1px solid rgba(123, 45, 142, 0.06) !important;
         border-bottom: none !important;
+        box-shadow: inset 0 -1px 0 rgba(123, 45, 142, 0.08);
     }
 
     .ui-jqgrid .ui-jqgrid-htable th:last-child,
@@ -347,12 +338,12 @@
         border-right: none !important;
     }
 
-    /* Table body - modern clean rows */
+    /* Table body - match Sales orders clean rows */
     .ui-jqgrid tr.ui-row-ltr td {
         color: var(--text-primary) !important;
         border-bottom: 1px solid #F3F1F7 !important;
         border-right: 1px solid #F7F3FB !important;
-        padding: 0.85rem 0.75rem !important;
+        padding: 0.8rem 0.75rem !important;
         font-size: 0.85rem;
         vertical-align: middle !important;
         background: #FFFFFF !important;
@@ -372,7 +363,7 @@
     .ui-jqgrid td.ui-state-highlight {
         background: var(--row-selected) !important;
         color: var(--text-primary) !important;
-        box-shadow: inset 0 0 0 1px rgba(123, 45, 142, 0.08);
+        box-shadow: inset 0 0 0 1px rgba(123, 45, 142, 0.06);
     }
 
     .ui-jqgrid tr.ui-row-ltr td a {
@@ -422,14 +413,13 @@
         transform: scale(1.1);
     }
 
-    /* Pager - modern purple accent */
+    /* Pager - match Sales orders */
     #gridpager {
         background: linear-gradient(180deg, #FDFCFF 0%, #F7F1FC 100%) !important;
         border: none !important;
         border-top: 1px solid rgba(123, 45, 142, 0.10) !important;
-        padding: 0.75rem 1rem !important;
+        padding: 0.7rem 0.9rem !important;
         color: var(--text-secondary) !important;
-        font-size: 0.82rem !important;
     }
 
     #gridpager .ui-pg-table,
@@ -438,19 +428,18 @@
         background: transparent !important;
         border: none !important;
         color: var(--text-secondary) !important;
+        font-size: 0.8rem !important;
     }
 
     #gridpager .ui-pg-button,
     #gridpager .ui-pg-input,
     #gridpager .ui-pg-selbox {
         border-radius: 8px !important;
-        border: 1px solid rgba(123, 45, 142, 0.12) !important;
     }
 
     #gridpager .ui-pg-button:hover {
         background: rgba(123, 45, 142, 0.10) !important;
         color: var(--primary-purple) !important;
-        border-color: rgba(123, 45, 142, 0.2) !important;
     }
 
     /* Status badges for Orders */
@@ -500,14 +489,14 @@
         border-right: 1px solid rgba(123, 45, 142, 0.10) !important;
     }
 
-    /* Frozen column header - match dark purple gradient */
+    /* Frozen column header - match Sales orders (light gradient) */
     .frozen-div .ui-jqgrid-hdiv {
-        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+        background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
     }
 
     .frozen-div .ui-jqgrid-htable th {
-        color: #FFFFFF !important;
-        border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: var(--deep-purple) !important;
+        border-right: 1px solid rgba(123, 45, 142, 0.06) !important;
     }
 
     /* Empty state message */
@@ -548,12 +537,12 @@
       <div class="row align-items-center g-3">
         <div class="col">
           <p class="text-muted small mb-1">{% trans "Inventory" %}</p>
-          <h1 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em; font-size: 1.85rem;">
+          <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
             {% trans "Distribution orders" %}
-          </h1>
+          </h2>
         </div>
         <div class="col-auto">
-          <div class="header-badge">
+          <div class="badge bg-soft-purple text-primary p-2 px-3" style="background: var(--soft-purple-bg); border: 1px solid rgba(123, 45, 142, 0.1); border-radius: 20px; color: var(--primary-purple) !important; font-weight: 600;">
             <i class="fa fa-truck me-1"></i> {% trans "Inter-warehouse transfers and logistics" %}
           </div>
         </div>

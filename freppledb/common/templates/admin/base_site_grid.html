@@ -376,6 +376,70 @@
   box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.15) !important;
 }
 
+{% if 'distributionorder' in request.path or 'operationplanmaterial' in request.path %}
+/* ========== Distribution orders / Inventory detail - Sales orders style UI ========== */
+#workarea #save, #workarea #undo {
+  background: #7B2D8E !important;
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 0.52rem 1rem !important;
+  font-weight: 600 !important;
+  font-size: 0.78rem !important;
+  color: white !important;
+  box-shadow: 0 6px 14px rgba(123, 45, 142, 0.16) !important;
+}
+#workarea #save:hover:not(:disabled), #workarea #undo:hover:not(:disabled) {
+  background: #2D004D !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(123, 45, 142, 0.2) !important;
+}
+#workarea #undo:disabled, #workarea #save:disabled {
+  background: #7B2D8E !important;
+  color: white !important;
+  opacity: 0.65 !important;
+  cursor: not-allowed;
+}
+#workarea #toolicons .btn-primary {
+  background: white !important;
+  color: #7B2D8E !important;
+  border: 1px solid rgba(123, 45, 142, 0.2) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+  border-radius: 10px !important;
+  width: 2rem;
+  height: 2rem;
+  padding: 0 !important;
+}
+#workarea #toolicons .btn-primary:hover {
+  background: #7B2D8E !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(123, 45, 142, 0.15) !important;
+}
+#workarea .ui-jqgrid .ui-jqgrid-hdiv {
+  background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
+  border-bottom: 1px solid rgba(123, 45, 142, 0.12) !important;
+}
+#workarea .ui-jqgrid .ui-jqgrid-htable th,
+#workarea .ui-jqgrid .ui-jqgrid-htable .ui-th-column {
+  background: transparent !important;
+  color: #2D004D !important;
+  font-weight: 700 !important;
+  padding: 0.95rem 0.75rem !important;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  letter-spacing: 0.10em;
+  border-right: 1px solid rgba(123, 45, 142, 0.06) !important;
+  box-shadow: inset 0 -1px 0 rgba(123, 45, 142, 0.08);
+}
+#workarea .frozen-div .ui-jqgrid-hdiv {
+  background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
+}
+#workarea .frozen-div .ui-jqgrid-htable th {
+  color: #2D004D !important;
+  border-right: 1px solid rgba(123, 45, 142, 0.06) !important;
+}
+{% endif %}
+
 </style>
 
 <script>

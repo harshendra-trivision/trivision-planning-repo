@@ -51,22 +51,22 @@ DATABASES = {
     "default" if i == 0 else f"scenario{i}": {
         "ENGINE": "freppledb.common.postgresql",
         # Database name
-        "NAME": f"{os.environ.get("POSTGRES_DBNAME","frepple")}{i}",
+        "NAME": f'{os.environ.get('POSTGRES_DBNAME','frepple')}{i}',
         # Role name when using md5 authentication.
         # Leave as an empty string when using peer or
         # ident authencation.
-        "USER": os.environ.get("POSTGRES_USER", "frepple"),
+        "USER": os.environ.get('POSTGRES_USER', 'frepple'),
         # Role password when using md5 authentication.
         # Leave as an empty string when using peer or
         # ident authencation.
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "frepple"),
+        "PASSWORD": os.environ.get('POSTGRES_PASSWORD', 'frepple'),
         # When using TCP sockets specify the hostname,
         # the ip4 address or the ip6 address here.
         # Leave as an empty string to use Unix domain
         # socket ("local" lines in pg_hba.conf).
-        "HOST": os.environ.get("POSTGRES_HOST", ""),
+        "HOST": os.environ.get('POSTGRES_HOST', ''),
         # Specify the port number when using a TCP socket.
-        "PORT": os.environ.get("POSTGRES_PORT", ""),
+        "PORT": os.environ.get("POSTGRES_PORT", ''),
         "OPTIONS": {
             "options": "-c lock_timeout=300000"  # Timeout (in milliseconds) to acquire a lock
         },
@@ -74,7 +74,7 @@ DATABASES = {
         "CONN_HEALTH_CHECKS": True,
         "TEST": {
             # Database name used when running the test suite.
-            "NAME": (f"{os.environ.get("POSTGRES_DBNAME","frepple")}_test{i}"),
+            "NAME": (f"{os.environ.get('POSTGRES_DBNAME','frepple')}_test{i}"),
             # Port for web service when running the test suite
             "FREPPLE_PORT": f"127.0.0.1:{i+9002}",
         },
@@ -486,7 +486,21 @@ CSRF_COOKIE_SECURE = (
 # CSRF_TRUSTED_ORIGINS = ["https://yourserver", "https://*.yourdomain.com"]
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 CSRF_TRUSTED_ORIGINS = os.environ.get("FREPPLE_CSRF_TRUSTED_ORIGINS", "").split()
-SECURE_PROXY_SSL_HEADER = os.environ.get("FREPPLE_SECURE_PROXY_SSL_HEADER", "").split()
+# Add ngrok domain for local development (set NGROK_DOMAIN=your-subdomain.ngrok-free.app)
+_ngrok = os.environ.get("NGROK_DOMAIN", "").strip()
+if _ngrok:
+    CSRF_TRUSTED_ORIGINS = list(CSRF_TRUSTED_ORIGINS) + [
+        f"https://{_ngrok}",
+        f"http://{_ngrok}",
+    ]
+# When behind ngrok/proxy: Django needs this to trust X-Forwarded-Proto for correct redirect URLs
+_SECURE_PROXY = os.environ.get("FREPPLE_SECURE_PROXY_SSL_HEADER", "").strip()
+if _SECURE_PROXY:
+    SECURE_PROXY_SSL_HEADER = tuple(_SECURE_PROXY.split())
+elif _ngrok:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+else:
+    SECURE_PROXY_SSL_HEADER = None
 
 # Configuration of the ftp/sftp/ftps server where to upload reports
 # Note that for SFTP protocol, the host needs to be defined
