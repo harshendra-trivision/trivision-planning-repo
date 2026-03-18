@@ -1536,7 +1536,7 @@ class PeggingReport(pegging.ReportByDemand):
                 "active_tab": "detail",
                 "title": force_str(Forecast._meta.verbose_name) + " " + args[0],
                 "post_title": mark_safe(
-                    f"{_("plan detail for delivery between")}&nbsp;"
+                    f"{_('plan detail for delivery between')}&nbsp;"
                     f'<input id="fromdate" type="date" class="form-control w-auto d-inline" value="{reportclass.startdate.strftime("%Y-%m-%d")}">'
                     f'&nbsp;{_("and")}&nbsp;'
                     f'<input id="todate" type="date" class="form-control w-auto d-inline" value="{reportclass.enddate.strftime("%Y-%m-%d")}">'
