@@ -1532,14 +1532,18 @@ class PeggingReport(pegging.ReportByDemand):
     def extra_context(reportclass, request, *args, **kwargs):
         if args and args[0]:
             request.session["lasttab"] = "detail"
+            plan_label = _("plan detail for delivery between")
+            and_label = _("and")
+            start_date = reportclass.startdate.strftime("%Y-%m-%d")
+            end_date = reportclass.enddate.strftime("%Y-%m-%d")
             return {
                 "active_tab": "detail",
                 "title": force_str(Forecast._meta.verbose_name) + " " + args[0],
                 "post_title": mark_safe(
-                    f"{_('plan detail for delivery between')}&nbsp;"
-                    f'<input id="fromdate" type="date" class="form-control w-auto d-inline" value="{reportclass.startdate.strftime("%Y-%m-%d")}">'
-                    f'&nbsp;{_("and")}&nbsp;'
-                    f'<input id="todate" type="date" class="form-control w-auto d-inline" value="{reportclass.enddate.strftime("%Y-%m-%d")}">'
+                    f"{plan_label}&nbsp;"
+                    f'<input id="fromdate" type="date" class="form-control w-auto d-inline" value="{start_date}">'
+                    f"&nbsp;{and_label}&nbsp;"
+                    f'<input id="todate" type="date" class="form-control w-auto d-inline" value="{end_date}">'
                 ),
                 "model": Forecast,
             }
