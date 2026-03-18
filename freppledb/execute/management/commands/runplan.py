@@ -282,7 +282,8 @@ class Command(BaseCommand):
                 options.get("odoo_folder", None)
                 and "freppledb.odoo" in settings.INSTALLED_APPS
             ):
-                task.arguments += f" --odoo_folder={options["odoo_folder"]}"
+                odoo_folder = options["odoo_folder"]
+                task.arguments += f" --odoo_folder={odoo_folder}"
 
             # Log task
             # Different from the other tasks the frepple engine will write the processid
