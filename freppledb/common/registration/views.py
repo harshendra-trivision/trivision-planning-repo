@@ -92,8 +92,10 @@ class ResetPasswordRequestView(FormView):
                         "<br>Thanks for using frepple!<br><br>"
                     ),
                     user=user.username,
-                    url=f"{"https" if request.is_secure() else "http"}://"
-                    f"{request.META["HTTP_HOST"]}",
+                    url="{}://{}".format(
+                        "https" if request.is_secure() else "http",
+                        request.META["HTTP_HOST"],
+                    ),
                     uid=urlsafe_base64_encode(force_bytes(user.pk)),
                     token=default_token_generator.make_token(user),
                 )

@@ -94,28 +94,30 @@ class Command(BaseCommand):
         if not os.path.isfile(dumpfile):
             raise CommandError("Dump file not found")
         env = os.environ.copy()
-        if get_databases()[database]["PASSWORD"]:
-            env["PGPASSWORD"] = get_databases()[database]["PASSWORD"]
+        db_conf = get_databases()[database]
+        if db_conf["PASSWORD"]:
+            env["PGPASSWORD"] = db_conf["PASSWORD"]
         commonargs = []
-        if get_databases()[database]["USER"]:
-            commonargs.append(f"--username={get_databases()[database]["USER"]}")
-        if get_databases()[database]["HOST"]:
-            commonargs.append(f"--host={get_databases()[database]["HOST"]}")
-        if get_databases()[database]["PORT"]:
-            commonargs.append(f"--port={get_databases()[database]["PORT"]}")
+        if db_conf["USER"]:
+            commonargs.append(f"--username={db_conf['USER']}")
+        if db_conf["HOST"]:
+            commonargs.append(f"--host={db_conf['HOST']}")
+        if db_conf["PORT"]:
+            commonargs.append(f"--port={db_conf['PORT']}")
+        pg_bin = f"/usr/lib/postgresql/{getPostgresVersion()}/bin"
 
         # Drop existing database
         subprocess.run(
-            [f"/usr/lib/postgresql/{getPostgresVersion()}/bin/dropdb", "--if-exists", "--force"]
+            [f"{pg_bin}/dropdb", "--if-exists", "--force"]
             + commonargs
-            + [get_databases()[database]["NAME"]],
+            + [db_conf["NAME"]],
             env=env,
             check=True,
         )
 
         # Recreate a new database
         subprocess.run(
-            [f"/usr/lib/postgresql/{getPostgresVersion()}/bin/createdb"] + commonargs + [get_databases()[database]["NAME"]],
+            [f"{pg_bin}/createdb"] + commonargs + [db_conf["NAME"]],
             env=env,
             check=True,
         )
@@ -123,15 +125,15 @@ class Command(BaseCommand):
         # Restore the dump
         subprocess.run(
             [
-                f"/usr/lib/postgresql/{getPostgresVersion()}/bin/pg_restore",
+                f"{pg_bin}/pg_restore",
                 "--clean",
                 "--if-exists",
                 "-v",
                 "--no-owner",
-                f"--role={get_databases()[database]["USER"]}",
+                f"--role={db_conf['USER']}",
             ]
             + commonargs
-            + [f"--dbname={get_databases()[database]["NAME"]}", dumpfile],
+            + [f"--dbname={db_conf['NAME']}", dumpfile],
             env=env,
         )
 
