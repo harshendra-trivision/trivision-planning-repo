@@ -29,6 +29,7 @@ import os
 import sys
 import pathlib
 
+import dj_database_url
 from django.utils.translation import gettext_lazy as _
 
 try:
@@ -48,58 +49,9 @@ SECRET_KEY = "%@mzit!i8b*$zc&6oev96=RANDOMSTRING"
 MIN_NUMBER_OF_SCENARIOS = 2
 MAX_NUMBER_OF_SCENARIOS = 30
 DATABASES = {
-    "default" if i == 0 else f"scenario{i}": {
-        "ENGINE": "freppledb.common.postgresql",
-        # Database name
-        "NAME": f"{os.environ.get('POSTGRES_DBNAME','frepple')}{i}",
-        # Role name when using md5 authentication.
-        # Leave as an empty string when using peer or
-        # ident authencation.
-        "USER": os.environ.get('POSTGRES_USER', 'frepple'),
-        # Role password when using md5 authentication.
-        # Leave as an empty string when using peer or
-        # ident authencation.
-        "PASSWORD": os.environ.get('POSTGRES_PASSWORD', 'frepple'),
-        # When using TCP sockets specify the hostname,
-        # the ip4 address or the ip6 address here.
-        # Leave as an empty string to use Unix domain
-        # socket ("local" lines in pg_hba.conf).
-        "HOST": os.environ.get('POSTGRES_HOST', ''),
-        # Specify the port number when using a TCP socket.
-        "PORT": os.environ.get("POSTGRES_PORT", ''),
-        "OPTIONS": {
-            "options": "-c lock_timeout=300000"  # Timeout (in milliseconds) to acquire a lock
-        },
-        "CONN_MAX_AGE": None,
-        "CONN_HEALTH_CHECKS": True,
-        "TEST": {
-            # Database name used when running the test suite.
-            "NAME": (f"{os.environ.get('POSTGRES_DBNAME','frepple')}_test{i}"),
-            # Port for web service when running the test suite
-            "FREPPLE_PORT": f"127.0.0.1:{i+9002}",
-        },
-        # The FILEUPLOADFOLDER setting is used by the "import data files" task.
-        # By default all scenario databases use the same data folder on the server.
-        # By configuring this setting you can configure a dedicated data folder for each
-        # scenario database.
-        "FILEUPLOADFOLDER": os.path.normpath(
-            os.path.join(
-                FREPPLE_LOGDIR, "data", "default" if i == 0 else f"scenario{i}"
-            )
-        ),
-        # Role name for executing custom reports and processing sql data files.
-        # Make sure this role has properly restricted permissions!
-        # When left unspecified, SQL statements run with the full read-write
-        # permissions of the user specified above. Which can be handy, but is not secure.
-        "SQL_ROLE": "report_role",
-        "SECRET_WEBTOKEN_KEY": SECRET_KEY,
-        # Port for the frepple web service
-        "FREPPLE_PORT": f"127.0.0.1:{i+8002}",
-    }
-    # Adjust the range to include extra scenarios in the list.
-    # When changing this, your apache configuration file also needs a matching adjustment.
-    # THE NEXT LINE IS AUTOMATICALLY UPDATED IN SCENARIO MANAGEMENT WIDGET!
-    for i in range(3)
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL")
+    )
 }
 
 # Google analytics code to report usage statistics to.
