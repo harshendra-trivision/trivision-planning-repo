@@ -27,6 +27,474 @@
 {% if args.0 or mode == 'graph' %}
 <script src="{{STATIC_URL}}js/d3.min.js"></script>
 {% endif %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ---- Grid Container ---- */
+.ui-jqgrid {
+    border: 1px solid #E8E0F0 !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 12px rgba(45, 0, 77, 0.06) !important;
+}
+
+/* ---- Grid Header ---- */
+.ui-jqgrid .ui-jqgrid-htable th {
+    background: linear-gradient(135deg, #F8F5FC 0%, #F3E8FF 100%) !important;
+    border-bottom: 2px solid #7B2D8E !important;
+    border-right: 1px solid #E8E0F0 !important;
+    color: #2D004D !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    font-family: 'Inter', sans-serif;
+    padding: 0.6rem 0.5rem !important;
+    letter-spacing: 0.3px;
+}
+
+.ui-jqgrid .ui-jqgrid-htable th.ui-th-column:hover {
+    background: linear-gradient(135deg, #F3E8FF 0%, #EDE0F8 100%) !important;
+}
+
+/* ---- Grid Rows ---- */
+.ui-jqgrid .ui-jqgrid-btable td {
+    padding: 0.45rem 0.5rem !important;
+    font-size: 0.82rem !important;
+    font-family: 'Inter', sans-serif;
+    border-bottom: 1px solid #F5F3F7 !important;
+    border-right: 1px solid #F5F3F7 !important;
+    color: #1A1A1A;
+    vertical-align: middle !important;
+}
+
+.ui-jqgrid .ui-jqgrid-btable tr:hover td {
+    background: rgba(123, 45, 142, 0.03) !important;
+}
+
+.ui-jqgrid .ui-jqgrid-btable tr:nth-child(even) td {
+    background: #FDFBFF !important;
+}
+
+.ui-jqgrid .ui-jqgrid-btable tr:nth-child(even):hover td {
+    background: rgba(123, 45, 142, 0.04) !important;
+}
+
+/* ---- Grid Links ---- */
+.ui-jqgrid .ui-jqgrid-btable td a {
+    color: #7B2D8E !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    transition: color 0.15s ease !important;
+}
+
+.ui-jqgrid .ui-jqgrid-btable td a:hover {
+    color: #A855F7 !important;
+}
+
+/* ---- Frozen Columns ---- */
+.ui-jqgrid .frozen-div {
+    border-right: 2px solid #E8E0F0 !important;
+}
+
+/* ---- Pager ---- */
+.ui-jqgrid .ui-jqgrid-pager {
+    background: linear-gradient(180deg, #FDFBFF 0%, #F8F5FC 100%) !important;
+    border-top: 1px solid #E8E0F0 !important;
+    padding: 0.4rem 0.75rem !important;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+}
+
+.ui-jqgrid .ui-jqgrid-pager .ui-pg-button:hover {
+    background: rgba(123, 45, 142, 0.08) !important;
+    border-radius: 6px;
+}
+
+.ui-jqgrid .ui-jqgrid-pager select {
+    border: 1px solid #E8E0F0 !important;
+    border-radius: 6px !important;
+    font-size: 0.8rem !important;
+    padding: 0.2rem 0.4rem !important;
+}
+
+.ui-jqgrid .ui-jqgrid-pager select:focus {
+    border-color: #A855F7 !important;
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15) !important;
+    outline: none;
+}
+
+.ui-jqgrid .ui-jqgrid-pager input {
+    border: 1px solid #E8E0F0 !important;
+    border-radius: 6px !important;
+    font-size: 0.8rem !important;
+    padding: 0.2rem 0.4rem !important;
+}
+
+.ui-jqgrid .ui-jqgrid-pager input:focus {
+    border-color: #A855F7 !important;
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15) !important;
+    outline: none;
+}
+
+/* ---- Toolbar Buttons ---- */
+#toolicons .btn-sm.btn-primary {
+    background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 0.4rem 0.65rem !important;
+    font-weight: 600 !important;
+    font-size: 0.82rem !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 1px 4px rgba(123, 45, 142, 0.18) !important;
+}
+
+#toolicons .btn-sm.btn-primary:hover {
+    background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 3px 10px rgba(123, 45, 142, 0.25) !important;
+}
+
+#toolicons .btn-sm.btn-primary.active {
+    background: linear-gradient(135deg, #2D004D 0%, #5A1B6B 100%) !important;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15) !important;
+}
+
+#toolicons .btn-group {
+    box-shadow: 0 1px 4px rgba(123, 45, 142, 0.12);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#toolicons .btn-group .btn {
+    border-radius: 0 !important;
+}
+
+#toolicons .btn-group .btn:first-child {
+    border-radius: 8px 0 0 8px !important;
+}
+
+#toolicons .btn-group .btn:last-child {
+    border-radius: 0 8px 8px 0 !important;
+}
+
+/* ---- Save/Undo Buttons ---- */
+#save_undo .btn {
+    background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 0.5rem 1.25rem !important;
+    font-weight: 600 !important;
+    font-size: 0.82rem !important;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s ease !important;
+    color: white !important;
+    margin-right: 0.4rem !important;
+    letter-spacing: 0.2px;
+}
+
+#save_undo .btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 3px 10px rgba(123, 45, 142, 0.25) !important;
+}
+
+#save_undo .btn:disabled {
+    background: #E5E7EB !important;
+    color: #9CA3AF !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* ---- Filter Bar ---- */
+#filterform .form-control {
+    border: 1px solid #E8E0F0 !important;
+    border-radius: 8px 0 0 8px !important;
+    font-size: 0.82rem !important;
+    font-family: 'Inter', sans-serif;
+    padding: 0.35rem 0.75rem !important;
+    transition: all 0.2s ease !important;
+}
+
+#filterform .form-control:focus {
+    border-color: #A855F7 !important;
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.12) !important;
+}
+
+#filterform .input-group-text {
+    background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+    border: none !important;
+    color: #FFFFFF !important;
+    border-radius: 0 8px 8px 0 !important;
+    padding: 0.35rem 0.65rem !important;
+    cursor: pointer;
+    transition: all 0.2s ease !important;
+}
+
+#filterform .input-group-text:hover {
+    background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+}
+
+#resetfilter {
+    color: #C4B5D0 !important;
+    cursor: pointer;
+    transition: color 0.2s ease !important;
+    padding: 0.25rem !important;
+}
+
+#resetfilter:hover {
+    color: #7B2D8E !important;
+}
+
+/* ---- Error Display ---- */
+#curerror:not(:empty) {
+    background: linear-gradient(135deg, #FFF5F5 0%, #FEF2F2 100%);
+    border: 1px solid #FECACA;
+    border-left: 4px solid #EF4444;
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    color: #991B1B;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin: 0.5rem 0;
+    display: inline-block;
+}
+
+/* ---- Page Title ---- */
+h1 {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 700 !important;
+    color: #2D004D !important;
+    font-size: 1.15rem !important;
+    letter-spacing: 0.2px;
+}
+
+h1 small {
+    font-size: 0.82rem !important;
+    font-weight: 400 !important;
+    vertical-align: middle;
+}
+
+/* ---- Cross/Context Links ---- */
+.cross.fa-caret-right {
+    color: #7B2D8E;
+    transition: transform 0.15s ease;
+}
+
+a:hover .cross.fa-caret-right {
+    color: #A855F7;
+    transform: translateX(2px);
+}
+
+/* ---- Graph Area ---- */
+.graphcell {
+    font-family: 'Inter', sans-serif;
+}
+
+.graphcell .miniaxis text {
+    fill: #6B7280;
+    font-size: 0.7rem;
+}
+
+.graphcell .miniaxis path,
+.graphcell .miniaxis line {
+    stroke: #D1C4E9;
+}
+
+/* ---- Pivot Column Labels ---- */
+.pivotgrid .graph {
+    background: #FDFBFF;
+}
+
+/* ---- Content Main ---- */
+#content-main {
+    font-family: 'Inter', sans-serif;
+}
+
+/* ---- Grid Scrollbar ---- */
+.ui-jqgrid .ui-jqgrid-bdiv::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.ui-jqgrid .ui-jqgrid-bdiv::-webkit-scrollbar-track {
+    background: rgba(123, 45, 142, 0.03);
+}
+
+.ui-jqgrid .ui-jqgrid-bdiv::-webkit-scrollbar-thumb {
+    background: rgba(123, 45, 142, 0.18);
+    border-radius: 3px;
+}
+
+.ui-jqgrid .ui-jqgrid-bdiv::-webkit-scrollbar-thumb:hover {
+    background: rgba(123, 45, 142, 0.3);
+}
+
+/* ---- Tooltip ---- */
+#tooltip {
+    background: rgba(45, 0, 77, 0.92) !important;
+    color: #FFFFFF !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+    font-family: 'Inter', sans-serif;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+    border: none !important;
+}
+
+#tooltip table td {
+    color: #FFFFFF !important;
+    padding: 2px 8px !important;
+    font-size: 0.78rem;
+}
+
+/* ---- Favorites Dropdown ---- */
+#filterform .dropdown-menu {
+    border-radius: 10px !important;
+    box-shadow: 0 8px 30px rgba(45, 0, 77, 0.12) !important;
+    border: 1px solid #E8E0F0 !important;
+}
+
+/* ---- Selection highlight ---- */
+.ui-jqgrid .ui-state-highlight td {
+    background: rgba(123, 45, 142, 0.08) !important;
+}
+
+/* Checkbox/radio styles are inherited from base_site.html */
+
+/* ---- Time Buckets Modal ---- */
+#timebuckets .modal-content {
+    border-radius: 14px !important;
+    border: 1px solid #E8E0F0 !important;
+    box-shadow: 0 20px 60px rgba(45, 0, 77, 0.15) !important;
+    overflow: hidden;
+}
+
+#timebuckets .modal-header {
+    background: linear-gradient(135deg, #7B2D8E 0%, #2D004D 100%);
+    border-bottom: none;
+    padding: 1rem 1.25rem;
+}
+
+#timebuckets .modal-header .modal-title {
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+}
+
+#timebuckets .modal-header .btn-close {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+}
+
+#timebuckets .modal-header .btn-close:hover {
+    opacity: 1;
+}
+
+#timebuckets .modal-body {
+    padding: 1.25rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+}
+
+#timebuckets .modal-body .form-control {
+    border: 1px solid #E8E0F0 !important;
+    border-radius: 8px !important;
+    font-size: 0.82rem !important;
+    transition: border-color 0.2s ease !important;
+}
+
+#timebuckets .modal-body .form-control:focus {
+    border-color: #A855F7 !important;
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.12) !important;
+}
+
+#timebuckets .modal-body .dropdown-menu {
+    border-radius: 10px !important;
+    box-shadow: 0 8px 30px rgba(45, 0, 77, 0.12) !important;
+    border: 1px solid #E8E0F0 !important;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+}
+
+#timebuckets .modal-body .dropdown-item:hover {
+    background: rgba(123, 45, 142, 0.06);
+    color: #7B2D8E;
+}
+
+#timebuckets .modal-footer .btn-primary,
+#timebuckets .modal-body .btn-primary {
+    background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600 !important;
+    font-size: 0.82rem !important;
+    padding: 0.5rem 1.25rem !important;
+    transition: all 0.2s ease !important;
+}
+
+#timebuckets .modal-footer .btn-primary:hover,
+#timebuckets .modal-body .btn-primary:hover {
+    background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 3px 10px rgba(123, 45, 142, 0.25) !important;
+}
+
+/* ---- Customize/Export Modal ---- */
+.modal-content {
+    border-radius: 14px !important;
+    border: 1px solid #E8E0F0 !important;
+    font-family: 'Inter', sans-serif;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #7B2D8E 0%, #2D004D 100%);
+    border-bottom: none;
+    padding: 1rem 1.25rem;
+    border-radius: 14px 14px 0 0 !important;
+}
+
+.modal-header .modal-title {
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+    opacity: 0.8;
+}
+
+.modal-body {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+}
+
+.modal-body .form-control {
+    border: 1px solid #E8E0F0;
+    border-radius: 8px;
+    font-size: 0.82rem;
+}
+
+.modal-body .form-control:focus {
+    border-color: #A855F7;
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.12);
+}
+
+/* ---- Help link ---- */
+h1 a .fa-question {
+    color: #B08CC5 !important;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+h1 a:hover .fa-question {
+    color: #7B2D8E !important;
+}
+</style>
 <script>
 var editrow;
 var editcol;
