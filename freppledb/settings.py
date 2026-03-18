@@ -90,7 +90,7 @@ try:
     DEBUG = "runserver" in sys.argv
 except Exception:
     DEBUG = False
-DEBUG_JS = DEBUG
+DEBUG_JS = False
 
 # A list of strings representing the host/domain names the application can serve.
 # This is a security measure to prevent an attacker from poisoning caches and
@@ -259,7 +259,7 @@ INTERNAL_IPS = ("127.0.0.1",)
 # manually specified.
 DEFAULT_CHARSET = "utf-8"
 
-BRANDING = "Trivision.ai"
+BRANDING = "Y3 Solutions"
 
 # Default characterset for writing and reading CSV files.
 # We are assuming here that the default encoding of clients is the same as the server.

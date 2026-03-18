@@ -35,7 +35,7 @@ try:
     DEBUG = "runserver" in sys.argv
 except Exception:
     DEBUG = False
-DEBUG_JS = DEBUG
+DEBUG_JS = False
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),

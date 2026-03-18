@@ -143,9 +143,12 @@ function changeEdit() {
 </script>
 
 <template>
-  <div class="card">
+  <div class="card edit-form-card">
     <div class="card-header">
-      <h5 class="card-title text-capitalize mb-0"><span class="">{{ttt("edit")}}</span></h5>
+      <h5 class="card-title text-capitalize mb-0">
+        <span class="fa fa-pencil me-1" style="font-size: 0.8rem; opacity: 0.85;"></span>
+        <span class="">{{ttt("edit")}}</span>
+      </h5>
     </div>
     <div class="card-body">
       <table>
@@ -156,9 +159,10 @@ function changeEdit() {
               id="applyedit"
               type="submit"
               @click="applyEdit()"
-              class="btn btn-primary"
+              class="btn btn-primary apply-btn"
               :disabled="!activateApply"
             >
+              <span class="fa fa-check me-1"></span>
               <span class="">{{ ttt('Apply') }}</span>
             </button>
           </td>
@@ -292,3 +296,22 @@ function changeEdit() {
     </div>
   </div>
 </template>
+
+<style scoped>
+.edit-form-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.apply-btn {
+  min-width: 90px;
+  font-weight: 600 !important;
+}
+
+.apply-btn:not(:disabled) {
+  background: linear-gradient(135deg, #7B2D8E, #A855F7) !important;
+}
+
+.apply-btn:not(:disabled):hover {
+  background: linear-gradient(135deg, #2D004D, #7B2D8E) !important;
+}
+</style>

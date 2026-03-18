@@ -392,3 +392,13 @@ onUnmounted(() => {
   </div>
 </template>
 
+<style scoped>
+.forecast-graph-container {
+  border: 1px solid #E8E0F0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 12px rgba(45, 0, 77, 0.06) !important;
+  padding: 0.75rem;
+  background: #FFFFFF !important;
+  overflow: hidden;
+}
+</style>

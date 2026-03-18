@@ -195,8 +195,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div>
-    <div class="row mb-1">
+  <div class="forecast-selection-wrapper">
+    <div class="row mb-1 align-items-center">
       <div class="col-auto">
         <div class="dropdown d-inline w-auto">
           <button id="selectseq" :title="ttt('Select panel sequence')" class="form-control d-inline w-auto dropdown-toggle text-capitalize" name="sequence" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -350,3 +350,39 @@ onUnmounted(() => {
     <CustomizeGrid ref="customizeGridRef" />
   </div>
 </template>
+
+<style scoped>
+.forecast-selection-wrapper {
+  background: linear-gradient(180deg, rgba(123, 45, 142, 0.02) 0%, transparent 100%);
+  border-radius: 12px;
+  padding: 0.5rem 0;
+}
+
+#toolicons .btn {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  border-radius: 8px !important;
+}
+
+#toolicons .btn .fa {
+  font-size: 0.85rem;
+}
+
+#resize-handle {
+  color: #C4B5D0;
+  font-size: 10px;
+  padding: 3px 0 !important;
+  cursor: ns-resize;
+  transition: color 0.2s ease;
+  opacity: 0.5;
+}
+
+#resize-handle:hover {
+  color: #7B2D8E;
+  opacity: 1;
+}
+</style>

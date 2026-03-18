@@ -76,24 +76,27 @@ function toggleRowVisibility(rowIndex) {
 </script>
 
 <template>
-  <div class="card" :style="{'height':  currentHeight - 31 + 'px'}" style="min-height: 100px; max-height: 50vh" :id="modelName + 'panel'">
-    <div class="card-header">
-      <h5 class="card-title text-capitalize mb-0" translate=""><span>{{ ttt(modelName) }}</span></h5>
+  <div class="card selection-card" :style="{'height':  currentHeight - 31 + 'px'}" style="min-height: 100px; max-height: 50vh" :id="modelName + 'panel'">
+    <div class="card-header selection-card-header">
+      <h5 class="card-title text-capitalize mb-0" translate="">
+        <span class="header-icon fa" :class="modelName === 'item' ? 'fa-cube' : modelName === 'location' ? 'fa-map-marker' : 'fa-user'"></span>
+        <span>{{ ttt(modelName) }}</span>
+      </h5>
     </div>
-    <div class="card-body ps-0 pe-0 pt-2 pb-2"  style="overflow: auto">
+    <div class="card-body ps-0 pe-0 pt-2 pb-2" style="overflow: auto">
       <div class="">
         <div :id="modelName + 'table'">
-          <div class="d-flex w-100">
+          <div class="d-flex w-100 bucket-header-row">
             <div class="w-100 d-flex justify-content-end text-start">
-              <span v-for="bucketname in store.treeBuckets" :key="bucketname" class="numbervalues">
+              <span v-for="bucketname in store.treeBuckets" :key="bucketname" class="numbervalues bucket-label">
                 <strong><small>{{ bucketname }}</small></strong>
               </span>
             </div>
           </div>
 
-          <div v-for="(row, index) in data" :key="row[modelName]" :class="(row[modelName] === store[modelName].Name) ? 'bg-light' : ''" class="d-flex evtitemrow" v-on:click="selectILCobject(modelName, index)">
+          <div v-for="(row, index) in data" :key="row[modelName]" :class="(row[modelName] === store[modelName].Name) ? 'bg-light active-row' : ''" class="d-flex evtitemrow tree-row" v-on:click="selectILCobject(modelName, index)">
             <div class="overflow-hidden text-nowrap me-3" :style="'padding-left: ' + row.lvl * 13 + 'px'" data-bs-toggle="tooltip" :data-bs-title="row['description']">
-              &nbsp;<span v-if="row.children && row.visible" class="fa" :class="row.expanded === 1 ? 'fa-caret-down' : 'fa-caret-right'"></span>
+              &nbsp;<span v-if="row.children && row.visible" class="fa tree-toggle" :class="row.expanded === 1 ? 'fa-caret-down' : 'fa-caret-right'"></span>
               {{ row.visible ? row[modelName] : '' }}
               <template v-if="store.showDescription && row['description']">
                 &nbsp;-&nbsp;{{ row["description"] }}
@@ -108,3 +111,50 @@ function toggleRowVisibility(rowIndex) {
     </div>
   </div>
 </template>
+
+<style scoped>
+.selection-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.selection-card-header {
+  display: flex;
+  align-items: center;
+}
+
+.header-icon {
+  margin-right: 6px;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.bucket-header-row {
+  padding: 2px 15px 4px;
+  border-bottom: 1px solid #F3E8FF;
+  margin-bottom: 2px;
+}
+
+.bucket-label strong small {
+  color: #7B2D8E;
+  font-size: 0.72rem;
+  letter-spacing: 0.2px;
+}
+
+.tree-row {
+  padding: 2px 15px 3px !important;
+  border-radius: 4px;
+  margin: 0 4px;
+  font-size: 0.82rem;
+}
+
+.tree-toggle {
+  color: #7B2D8E;
+  font-size: 0.85rem;
+}
+
+.active-row {
+  background-color: rgba(123, 45, 142, 0.08) !important;
+  border-left: 3px solid #7B2D8E;
+  font-weight: 500;
+}
+</style>

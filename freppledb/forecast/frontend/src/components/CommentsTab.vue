@@ -56,17 +56,19 @@ const translateCommentHeaderString = (commentString) => {
 </script>
 
 <template>
-  <div id="commentsdata" class="clear">
+  <div id="commentsdata" class="clear comments-wrapper">
     <div class="row">
       <div class="col">
         <div style="clear: both;">
-          <input type="submit" role="button" id="commentitem" :value="ttt('new item comment')" v-on:click="setCommentType('item')" aria-disabled="false" :class="(store.commentType==='item') ? 'active': 'inactive'" class="btn btn-primary text-capitalize me-1">
-          <input type="submit" role="button" id="commentitemlocation" :value="ttt('new item-location comment')" v-on:click="setCommentType('itemlocation')" aria-disabled="false" :class="(store.commentType==='itemlocation') ? 'active': 'inactive'" class="btn btn-primary text-capitalize me-1">
-          <input type="submit" role="button" id="commentlocation" :value="ttt('new location comment')" v-on:click="setCommentType('location')" aria-disabled="false" :class="(store.commentType==='location') ? 'active': 'inactive'" class="btn btn-primary text-capitalize me-1">
-          <input type="submit" role="button" id="commentcustomer" :value="ttt('new customer comment')" v-on:click="setCommentType('customer')" aria-disabled="false" :class="(store.commentType==='customer') ? 'active': 'inactive'" class="btn btn-primary text-capitalize me-1">
+          <div class="comment-buttons-row">
+            <input type="submit" role="button" id="commentitem" :value="ttt('new item comment')" v-on:click="setCommentType('item')" aria-disabled="false" :class="(store.commentType==='item') ? 'active': 'inactive'" class="btn btn-primary text-capitalize me-1 comment-type-btn">
+            <input type="submit" role="button" id="commentitemlocation" :value="ttt('new item-location comment')" v-on:click="setCommentType('itemlocation')" aria-disabled="false" :class="(store.commentType==='itemlocation') ? 'active': 'inactive'" class="btn btn-primary text-capitalize me-1 comment-type-btn">
+            <input type="submit" role="button" id="commentlocation" :value="ttt('new location comment')" v-on:click="setCommentType('location')" aria-disabled="false" :class="(store.commentType==='location') ? 'active': 'inactive'" class="btn btn-primary text-capitalize me-1 comment-type-btn">
+            <input type="submit" role="button" id="commentcustomer" :value="ttt('new customer comment')" v-on:click="setCommentType('customer')" aria-disabled="false" :class="(store.commentType==='customer') ? 'active': 'inactive'" class="btn btn-primary text-capitalize me-1 comment-type-btn">
+          </div>
 
           <textarea
-            class="form-control mt-2 mb-2"
+            class="form-control mt-2 mb-2 comment-textarea"
             style="resize: vertical; width: 100%;"
             v-show="store.commentType"
             id="newcomment"
@@ -76,12 +78,12 @@ const translateCommentHeaderString = (commentString) => {
             :placeholder="ttt('Enter your comment here...')">
           </textarea><br>
 
-          <div v-if="getComments().length > 0">
-            <div :id="'pastcomments'+index" v-for="(record,index) in getComments()" :key="index">
-              <hr>
-              <h3 class="text-capitalize">{{record.user}}&nbsp;-&nbsp;{{ translateCommentHeaderString(record.type) }}</h3>
-              <span class="float_right">{{dateFormat(record.lastmodified)}} {{timeFormat(record.lastmodified)}}</span>
-              <pre>{{ record.comment }}</pre>
+          <div v-if="getComments().length > 0" class="comments-list">
+            <div :id="'pastcomments'+index" v-for="(record,index) in getComments()" :key="index" class="comment-entry">
+              <hr class="comment-divider">
+              <h3 class="text-capitalize comment-header">{{record.user}}&nbsp;-&nbsp;{{ translateCommentHeaderString(record.type) }}</h3>
+              <span class="float_right comment-date">{{dateFormat(record.lastmodified)}} {{timeFormat(record.lastmodified)}}</span>
+              <pre class="comment-body">{{ record.comment }}</pre>
             </div>
           </div>
         </div>
@@ -89,3 +91,70 @@ const translateCommentHeaderString = (commentString) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.comments-wrapper {
+  padding: 0.5rem 0;
+}
+
+.comment-buttons-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.comment-type-btn {
+  font-size: 0.8rem !important;
+  padding: 0.4rem 0.8rem !important;
+}
+
+.comment-type-btn.inactive {
+  background: #F3E8FF !important;
+  color: #7B2D8E !important;
+  border: 1px solid #E8E0F0 !important;
+  box-shadow: none !important;
+}
+
+.comment-type-btn.inactive:hover {
+  background: #E9D5FF !important;
+  border-color: #A855F7 !important;
+}
+
+.comment-type-btn.active {
+  background: linear-gradient(135deg, #7B2D8E, #A855F7) !important;
+  color: #FFFFFF !important;
+}
+
+.comment-textarea {
+  border-radius: 10px !important;
+  font-size: 0.85rem;
+  padding: 0.75rem 1rem !important;
+}
+
+.comment-divider {
+  border-top-color: #F3E8FF !important;
+  opacity: 0.6;
+}
+
+.comment-header {
+  font-size: 0.95rem !important;
+  font-weight: 600;
+  color: #2D004D;
+}
+
+.comment-date {
+  font-size: 0.78rem;
+  color: #9CA3AF;
+}
+
+.comment-body {
+  background: rgba(123, 45, 142, 0.04);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.82rem;
+  border: 1px solid #F3E8FF;
+  color: #1A1A1A;
+  white-space: pre-wrap;
+  font-family: 'Inter', sans-serif;
+}
+</style>

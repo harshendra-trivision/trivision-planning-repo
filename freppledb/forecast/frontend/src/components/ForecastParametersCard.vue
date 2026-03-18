@@ -40,9 +40,12 @@ let isDirty = computed(() => (detaildata.value.oldForecastmethod !== detaildata.
 </script>
 
 <template>
-  <div class="card">
+  <div class="card parameters-card">
     <div class="card-header">
-      <h5 class="card-title mb-0 text-capitalize" data-translate=""><span>{{ ttt('parameters') }}</span></h5>
+      <h5 class="card-title mb-0 text-capitalize" data-translate="">
+        <span class="fa fa-sliders me-1" style="font-size: 0.8rem; opacity: 0.85;"></span>
+        <span>{{ ttt('parameters') }}</span>
+      </h5>
     </div>
     <div class="card-body">
       <table class="table table-borderless">
@@ -100,3 +103,19 @@ let isDirty = computed(() => (detaildata.value.oldForecastmethod !== detaildata.
   </div>
 </template>
 
+<style scoped>
+.parameters-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.parameters-card :deep(td) {
+  font-size: 0.85rem;
+  color: #374151;
+  padding: 0.4rem 0.6rem !important;
+}
+
+.parameters-card :deep(td:first-child) {
+  font-weight: 500;
+  color: #6B7280;
+}
+</style>

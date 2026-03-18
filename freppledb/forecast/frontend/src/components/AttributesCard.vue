@@ -42,19 +42,22 @@ const modelName = (props.panelid === 'I') ? 'item': (props.panelid === 'L') ? 'l
 </script>
 
 <template>
-  <div class="card">
+  <div class="card attributes-card">
     <div class="card-header">
-      <h5 class="card-title text-capitalize mb-0" translate=""><span class="">{{ ttt(modelName) }}</span></h5>
+      <h5 class="card-title text-capitalize mb-0" translate="">
+        <span class="fa me-1" :class="modelName === 'item' ? 'fa-cube' : modelName === 'location' ? 'fa-map-marker' : 'fa-user'" style="font-size: 0.8rem; opacity: 0.85;"></span>
+        <span class="">{{ ttt(modelName) }}</span>
+      </h5>
     </div>
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-borderless table-sm table-hover">
           <tbody>
             <tr v-for="(value, key) in store[modelName]" :key="key">
-              <td v-if="key === 'Name' && (locale === 'en' || locale === 'de')" style="width: 100px; white-space: nowrap;">{{ key }}:</td>
-              <td v-if="key === 'Name' && (locale === 'en' || locale === 'de')">{{value}}</td>
-              <td v-if="key !== 'Name'" style="width: 100px; white-space: nowrap;">{{ key }}:</td>
-              <td v-if="key !== 'Name'">{{value}}</td>
+              <td v-if="key === 'Name' && (locale === 'en' || locale === 'de')" class="attr-label">{{ key }}:</td>
+              <td v-if="key === 'Name' && (locale === 'en' || locale === 'de')" class="attr-value">{{value}}</td>
+              <td v-if="key !== 'Name'" class="attr-label">{{ key }}:</td>
+              <td v-if="key !== 'Name'" class="attr-value">{{value}}</td>
             </tr>
           </tbody>
         </table>
@@ -62,3 +65,22 @@ const modelName = (props.panelid === 'I') ? 'item': (props.panelid === 'L') ? 'l
     </div>
   </div>
 </template>
+
+<style scoped>
+.attributes-card {
+  transition: box-shadow 0.2s ease;
+}
+
+.attr-label {
+  width: 100px;
+  white-space: nowrap;
+  font-weight: 500 !important;
+  color: #6B7280 !important;
+  font-size: 0.82rem !important;
+}
+
+.attr-value {
+  font-size: 0.82rem !important;
+  color: #1A1A1A !important;
+}
+</style>
