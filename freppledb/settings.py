@@ -533,6 +533,8 @@ CSRF_COOKIE_SAMESITE = "Lax"
 # Keep signed_cookies - frePPLe's INSTALLED_APPS doesn't include django.contrib.sessions
 # SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
+DATABASES['default']['SQL_ROLE'] = os.environ.get('SQL_ROLE', 'report_role')
+
 # duplicate the entries in the DATABASES dict to create the SQL roles entries.
 for i in DATABASES.copy():
     if DATABASES[i].get("SQL_ROLE", "report_role"):
