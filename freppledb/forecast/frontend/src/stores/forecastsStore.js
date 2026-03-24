@@ -55,6 +55,7 @@ import { Item } from '../models/item.js';
 import { Location } from '../models/location.js';
 import { Customer } from '../models/customer.js';
 import { forecastService } from '../services/forecastService.js';
+import { forecastEditorItemSlug } from '../utils/forecastEditorUrl.js';
 import { toRaw } from "vue";
 
 export const useForecastsStore = defineStore('forecasts', {
@@ -143,9 +144,8 @@ export const useForecastsStore = defineStore('forecasts', {
       state.tableRows = window.preferences['rows'] === undefined ? defaultMeasures : window.preferences['rows'];
       state.showDescription = window.preferences['showdescription'] === undefined ? false : window.preferences['showdescription'];
 
-      const rawItemName = window.location.pathname.split('/editor/')[1];
-      if (rawItemName !== "") {
-        state.currentSequence = "ILC"
+      if (forecastEditorItemSlug()) {
+        state.currentSequence = "ILC";
       }
 
       return window.preferences;
@@ -347,9 +347,9 @@ export const useForecastsStore = defineStore('forecasts', {
       this.currentMeasure = measure;
       if (this.currentSequence === null) return;
 
-      const rawItemName = window.location.pathname.split('/editor/')[1];
-      if (rawItemName !== "") {
-        const itemName = decodeURIComponent(window.admin_unescape(rawItemName.replace(/\/$/, "")));
+      const slug = forecastEditorItemSlug();
+      if (slug) {
+        const itemName = decodeURIComponent(window.admin_unescape(slug));
         await this.loadForecasts(itemName, null, null);
         this.itemTree.unshift(this.createFilteredRoot(itemName));
         this.itemTree[0].expanded = 1;
@@ -367,9 +367,9 @@ export const useForecastsStore = defineStore('forecasts', {
       this.currentSequence = sequence;
       if (this.currentMeasure === null) return;
 
-      const rawItemName = window.location.pathname.split('/editor/')[1];
-      if (rawItemName !== "") {
-        const itemName = decodeURIComponent(window.admin_unescape(rawItemName.replace(/\/$/, "")));
+      const slug = forecastEditorItemSlug();
+      if (slug) {
+        const itemName = decodeURIComponent(window.admin_unescape(slug));
         await this.loadForecasts(itemName, null, null);
         this.itemTree.unshift(this.createFilteredRoot(itemName));
         this.itemTree[0].expanded = 1;

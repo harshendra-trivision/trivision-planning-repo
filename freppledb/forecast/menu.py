@@ -41,7 +41,9 @@ menu.addItem(
     report=OverviewReport,
     model=ForecastPlan,
     index=110,
-    dependencies=[Forecast],
+    # Same master data as the Forecast grid: require item/location/customer data,
+    # not rows in `forecast` (empty forecast table hid this menu until forecasts existed).
+    dependencies=[Item, Location, Customer],
 )
 menu.addItem(
     "sales",
@@ -50,7 +52,7 @@ menu.addItem(
     label=_("Forecast editor"),
     index=111,
     permission="auth.view_forecast_report",
-    dependencies=[Forecast],
+    dependencies=[Item, Location, Customer],
 )
 # TODO Not ready
 # menu.addItem(

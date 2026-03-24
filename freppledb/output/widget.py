@@ -72,6 +72,16 @@ class ManufacturingOrderWidget(Widget):
     var svg = d3.select("#mo_chart");
     var svgrectangle = document.getElementById("mo_chart").getBoundingClientRect();
 
+    // Define gradient for bars
+    var defs = svg.append("defs");
+    var gradient = defs.append("linearGradient")
+        .attr("id", "moGradient")
+        .attr("x1", "0%%").attr("y1", "0%%")
+        .attr("x2", "0%%").attr("y2", "100%%");
+    gradient.append("stop").attr("offset", "0%%").attr("stop-color", "#A855F7");
+    gradient.append("stop").attr("offset", "50%%").attr("stop-color", "#9333EA");
+    gradient.append("stop").attr("offset", "100%%").attr("stop-color", "#7B2D8E");
+
     function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");}
 
@@ -105,11 +115,11 @@ class ManufacturingOrderWidget(Widget):
 
     var margin_x = 9*max_length;  // Height allocated for the X-axis depends on x-axis titles
 
-    const dropDownButton = document.querySelector('#mo_selectButton span');
-    const options = document.querySelectorAll('#moul li a');
+    var dropDownButton = document.querySelector('#mo_selectButton span');
+    var options = document.querySelectorAll('#moul li a');
 
-    for (const option of options) {
-      option.addEventListener('click', event => {
+    for (var i = 0; i < options.length; i++) {
+      options[i].addEventListener('click', function(event) {
         dropDownButton.textContent = event.target.textContent;
 
         // recover the option that has been chosen
@@ -151,7 +161,7 @@ class ManufacturingOrderWidget(Widget):
     }
 
     function draw() {
-        const selectButtonValue = document.querySelector('#mo_selectButton span').textContent;
+        var selectButtonValue = document.querySelector('#mo_selectButton span').textContent;
         var y_value = d3.scale.linear()
         .range([svgrectangle['height'] - margin_x - 10, 0])
         .domain([0, (selectButtonValue == "value" ? max_value:max_units) + 5]);
@@ -180,13 +190,21 @@ class ManufacturingOrderWidget(Widget):
         .attr("height", function(d, i) {return y_value(0) -
         (selectButtonValue == "value" ? y_value(d[3]):y_value(d[2]));})
         .attr("width", x.rangeBand())
-        .attr('fill', '#828915')
+        .attr("rx", "4")
+        .attr("ry", "4")
+        .attr("fill", "url(#moGradient)")
+        .attr("stroke", "#7B2D8E")
+        .attr("stroke-width", "1")
         .on("mouseover", function(d) {
+            d3.select(this).attr("stroke-width", "2").attr("stroke", "#5C197B");
             graph.showTooltip(d[0] + '<br>'+ numberWithCommas(d[1]) + " MOs / " + numberWithCommas(d[2]) + ' %s / ' + currency[0] + ' ' + numberWithCommas(d[3]) + currency[1] );
-            $("#tooltip").css('background-color','black').css('color','white');
+            $("#tooltip").css('background-color','#1F2937').css('color','white').css('border-radius','8px');
             })
         .on("mousemove", graph.moveTooltip)
-        .on("mouseout", graph.hideTooltip)
+        .on("mouseout", function(d) {
+            d3.select(this).attr("stroke-width", "1").attr("stroke", "#7B2D8E");
+            graph.hideTooltip();
+            })
         .on("click", function(d) {
                 if (d3.event.defaultPrevented || y_value(d[3]) == 0)
                     return;
@@ -394,6 +412,16 @@ class DistributionOrderWidget(Widget):
     var svg = d3.select("#do_chart");
     var svgrectangle = document.getElementById("do_chart").getBoundingClientRect();
 
+    // Define gradient for bars
+    var defs = svg.append("defs");
+    var gradient = defs.append("linearGradient")
+        .attr("id", "doGradient")
+        .attr("x1", "0%%").attr("y1", "0%%")
+        .attr("x2", "0%%").attr("y2", "100%%");
+    gradient.append("stop").attr("offset", "0%%").attr("stop-color", "#C084FC");
+    gradient.append("stop").attr("offset", "50%%").attr("stop-color", "#A855F7");
+    gradient.append("stop").attr("offset", "100%%").attr("stop-color", "#7B2D8E");
+
     function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");}
 
@@ -428,11 +456,11 @@ class DistributionOrderWidget(Widget):
 
     var margin_x = 9*max_length;  // Height allocated for the X-axis depends on x-axis titles
 
-    const dropDownButton = document.querySelector('#do_selectButton span');
-    const options = document.querySelectorAll('#doul li a');
+    var dropDownButton = document.querySelector('#do_selectButton span');
+    var options = document.querySelectorAll('#doul li a');
 
-    for (const option of options) {
-      option.addEventListener('click', event => {
+    for (var i = 0; i < options.length; i++) {
+      options[i].addEventListener('click', function(event) {
         dropDownButton.textContent = event.target.textContent;
 
         // recover the option that has been chosen
@@ -476,7 +504,7 @@ class DistributionOrderWidget(Widget):
     }
 
     function draw() {
-        const selectButtonValue = document.querySelector('#do_selectButton span').textContent;
+        var selectButtonValue = document.querySelector('#do_selectButton span').textContent;
         var y_value = d3.scale.linear()
          .range([svgrectangle['height'] - margin_x - 10, 0])
          .domain([0,
@@ -509,13 +537,21 @@ class DistributionOrderWidget(Widget):
         (selectButtonValue == "value" ? y_value(d[3]):y_value(d[2]))
         ;})
         .attr("width", x.rangeBand())
-        .attr('fill', '#828915')
+        .attr("rx", "4")
+        .attr("ry", "4")
+        .attr("fill", "url(#doGradient)")
+        .attr("stroke", "#7B2D8E")
+        .attr("stroke-width", "1")
         .on("mouseover", function(d) {
+            d3.select(this).attr("stroke-width", "2").attr("stroke", "#5C197B");
             graph.showTooltip(d[0] + '<br>'+ numberWithCommas(d[1]) + " DOs / " + numberWithCommas(d[2]) + ' %s / ' + currency[0] + ' ' + numberWithCommas(d[3]) + currency[1] );
-            $("#tooltip").css('background-color','black').css('color','white');
+            $("#tooltip").css('background-color','#1F2937').css('color','white').css('border-radius','8px');
             })
         .on("mousemove", graph.moveTooltip)
-        .on("mouseout", graph.hideTooltip)
+        .on("mouseout", function(d) {
+            d3.select(this).attr("stroke-width", "1").attr("stroke", "#7B2D8E");
+            graph.hideTooltip();
+            })
         .on("click", function(d) {
                 if (d3.event.defaultPrevented || y_value(d[3]) == 0)
                     return;
@@ -728,6 +764,16 @@ class PurchaseOrderWidget(Widget):
     var svg = d3.select("#po_chart");
     var svgrectangle = document.getElementById("po_chart").getBoundingClientRect();
 
+    // Define gradient for bars
+    var defs = svg.append("defs");
+    var gradient = defs.append("linearGradient")
+        .attr("id", "poGradient")
+        .attr("x1", "0%%").attr("y1", "0%%")
+        .attr("x2", "0%%").attr("y2", "100%%");
+    gradient.append("stop").attr("offset", "0%%").attr("stop-color", "#C084FC");
+    gradient.append("stop").attr("offset", "50%%").attr("stop-color", "#A855F7");
+    gradient.append("stop").attr("offset", "100%%").attr("stop-color", "#7B2D8E");
+
     function numberWithCommas(x) {
     return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");}
 
@@ -761,11 +807,11 @@ class PurchaseOrderWidget(Widget):
 
     var margin_x = 9*max_length;  // Height allocated for the X-axis depends on x-axis titles
 
-    const dropDownButton = document.querySelector('#po_selectButton span');
-    const options = document.querySelectorAll('#poul li a');
+    var dropDownButton = document.querySelector('#po_selectButton span');
+    var options = document.querySelectorAll('#poul li a');
 
-    for (const option of options) {
-      option.addEventListener('click', event => {
+    for (var i = 0; i < options.length; i++) {
+      options[i].addEventListener('click', function(event) {
         dropDownButton.textContent = event.target.textContent;
 
         // recover the option that has been chosen
@@ -807,7 +853,7 @@ class PurchaseOrderWidget(Widget):
     }
 
     function draw() {
-        const selectButtonValue = document.querySelector('#po_selectButton span').textContent;
+        var selectButtonValue = document.querySelector('#po_selectButton span').textContent;
         var y_value = d3.scale.linear()
         .range([svgrectangle['height'] - margin_x - 10, 0])
         .domain([0, (selectButtonValue == "value" ? max_value:max_units) + 5]);
@@ -838,13 +884,21 @@ class PurchaseOrderWidget(Widget):
         (selectButtonValue == "value" ? y_value(d[3]):y_value(d[2]))
         ;})
         .attr("width", x.rangeBand())
-        .attr('fill', '#828915')
+        .attr("rx", "4")
+        .attr("ry", "4")
+        .attr("fill", "url(#poGradient)")
+        .attr("stroke", "#7B2D8E")
+        .attr("stroke-width", "1")
         .on("mouseover", function(d) {
+            d3.select(this).attr("stroke-width", "2").attr("stroke", "#5C197B");
             graph.showTooltip(d[0] + '<br>'+ numberWithCommas(d[1]) + " POs / " + numberWithCommas(d[2]) + ' %s / ' + currency[0] + ' ' + numberWithCommas(d[3]) + currency[1] );
-            $("#tooltip").css('background-color','black').css('color','white');
+            $("#tooltip").css('background-color','#1F2937').css('color','white').css('border-radius','8px');
             })
         .on("mousemove", graph.moveTooltip)
-        .on("mouseout", graph.hideTooltip)
+        .on("mouseout", function(d) {
+            d3.select(this).attr("stroke-width", "1").attr("stroke", "#7B2D8E");
+            graph.hideTooltip();
+            })
         .on("click", function(d) {
                 if (d3.event.defaultPrevented || y_value(d[3]) == 0)
                     return;
@@ -1542,8 +1596,37 @@ class ResourceLoadWidget(Widget):
     var resload_high = parseFloat($("#resload_high").html());
     var resload_medium = parseFloat($("#resload_medium").html());
 
+    var chart = d3.select("#resLoad");
+
+    // Define gradients for different utilization levels
+    var defs = chart.append("defs");
+
+    // Normal utilization gradient (purple)
+    var normalGrad = defs.append("linearGradient")
+      .attr("id", "resNormalGrad")
+      .attr("x1", "0%").attr("y1", "0%")
+      .attr("x2", "100%").attr("y2", "0%");
+    normalGrad.append("stop").attr("offset", "0%").attr("stop-color", "#A855F7");
+    normalGrad.append("stop").attr("offset", "100%").attr("stop-color", "#7B2D8E");
+
+    // Medium utilization gradient (amber)
+    var mediumGrad = defs.append("linearGradient")
+      .attr("id", "resMediumGrad")
+      .attr("x1", "0%").attr("y1", "0%")
+      .attr("x2", "100%").attr("y2", "0%");
+    mediumGrad.append("stop").attr("offset", "0%").attr("stop-color", "#FCD34D");
+    mediumGrad.append("stop").attr("offset", "100%").attr("stop-color", "#F59E0B");
+
+    // High utilization gradient (red)
+    var highGrad = defs.append("linearGradient")
+      .attr("id", "resHighGrad")
+      .attr("x1", "0%").attr("y1", "0%")
+      .attr("x2", "100%").attr("y2", "0%");
+    highGrad.append("stop").attr("offset", "0%").attr("stop-color", "#FCA5A5");
+    highGrad.append("stop").attr("offset", "100%").attr("stop-color", "#DC2626");
+
     // Draw the chart
-    var bar = d3.select("#resLoad")
+    var bar = chart
      .selectAll("g")
      .data(data)
      .enter()
@@ -1554,24 +1637,38 @@ class ResourceLoadWidget(Widget):
 
     bar.append("rect")
       .attr("width", function(d) {return x(d[2]);})
-      .attr("rx","3")
-      .attr("height", barHeight - 2)
+      .attr("rx","6")
+      .attr("ry","6")
+      .attr("height", barHeight - 4)
       .style("fill", function(d) {
-        if (d[2] > resload_high) return "#DC3912";
-        if (d[2] > resload_medium) return "#FF9900";
-        return "#109618";
-        });
+        if (d[2] > resload_high) return "url(#resHighGrad)";
+        if (d[2] > resload_medium) return "url(#resMediumGrad)";
+        return "url(#resNormalGrad)";
+        })
+      .style("stroke", function(d) {
+        if (d[2] > resload_high) return "#DC2626";
+        if (d[2] > resload_medium) return "#F59E0B";
+        return "#7B2D8E";
+        })
+      .style("stroke-width", "1");
 
     bar.append("text")
-      .attr("x", "2")
+      .attr("x", "8")
       .attr("y", barHeight / 2)
       .attr("dy", ".35em")
       .text(function(d,i) { return d[1]; })
       .style('text-decoration', 'underline')
+      .style('fill', '#1F2937')
+      .style('font-weight', '500')
       .append("tspan")
-      .attr("dx", ".35em")
+      .attr("dx", ".5em")
       .text(function(d,i) { return d[2] + "%"; })
-      .attr("class","bold");
+      .style('font-weight', '700')
+      .style('fill', function(d) {
+        if (d[2] > resload_high) return "#DC2626";
+        if (d[2] > resload_medium) return "#F59E0B";
+        return "#7B2D8E";
+        });
     """
 
     @classmethod

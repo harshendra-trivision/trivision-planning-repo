@@ -2472,7 +2472,8 @@ class ForecastEditor:
         singleRecord = cursor.fetchone()
         minbucketLevel = singleRecord[0] if singleRecord else 4
         bucketlevels = (
-            Bucket.objects.order_by("-level")
+            Bucket.objects.using(request.database)
+            .order_by("-level")
             .filter(level__lte=minbucketLevel)
             .values_list("name", flat=True)
         )
@@ -2487,9 +2488,25 @@ class ForecastEditor:
             request.user.horizonbuckets = bucketlevels[0]
             request.user.save()
         else:
-            return HttpResponseServerError(
-                "No time buckets found. Please generate the forecast first."
-            )
+            # Handle empty bucket case gracefully by showing an informative page
+            # We provide all variables expected by forecast.html to avoid JS syntax errors.
+            ctx = getWebServiceContext(request)
+            from datetime import datetime
+            ctx.update({
+                "bucketnames": [],
+                "bucketsperyear": "[]",
+                "title": _("Forecast editor"),
+                "preferences": request.user.getPreference(
+                    "freppledb.forecast.planning", database=request.database
+                ),
+                "currentbucket": "No bucket",
+                "currentdate": datetime.now().strftime("%Y-%m-%d"),
+                "measures": json.dumps({}),
+                "reportclass": ForecastEditor,
+                "error_message": _("No time buckets found. Please generate the forecast first."),
+                "debug_js": False,  # Fallback to static files to avoid dev server errors when no data
+            })
+            return render(request, "forecast.html", context=ctx)
 
         # Find the current date and current bucket
         currentdate = getCurrentDate(request.database, lastplan=True).date()

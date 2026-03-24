@@ -25,6 +25,7 @@
 import {computed, ref, onUnmounted, toRaw} from "vue";
 import { useI18n } from 'vue-i18n';
 import { useForecastsStore } from '@/stores/forecastsStore';
+import { forecastEditorItemSlug } from '@/utils/forecastEditorUrl.js';
 import ForecastSelectionCard from "@/components/ForecastSelectionCard.vue";
 import CustomizeGrid from "@/components/CustomizeGrid.vue";
 import { useBootstrapTooltips } from '@common/useBootstrapTooltips.js'
@@ -51,8 +52,11 @@ const customizeGridRef = ref(null);
 
 const currentMeasure = computed(() => {
   if (store.currentMeasure === null) {
-    store.setCurrentMeasure(store.preferences.measure || 'nodata', false);
-    return store.preferences.measure || 'nodata'
+    const pref = store.preferences.measure;
+    const name =
+      pref && store.measures[pref] ? pref : "forecasttotal";
+    store.setCurrentMeasure(name, false);
+    return name;
   }
   return store.currentMeasure;
 });
@@ -89,7 +93,7 @@ const sortedMeasureList = computed(() => {
   });
 });
 
-const itemUnlocked = window.location.pathname.split('/editor/')[1] === "";
+const itemUnlocked = !forecastEditorItemSlug();
 
 // Button event handlers
 const showBucket = (event) => window.grid.showBucket();
@@ -253,7 +257,7 @@ onUnmounted(() => {
         &nbsp;&nbsp;
         <div class="dropdown d-inline w-auto ">
           <button id="selectmeasure" :title="ttt('Select panel measure')" class="dropdown-toggle form-control d-inline w-auto text-capitalize" name="measure" :value="measure" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ttt(store.measures[currentMeasure].label) }}&nbsp;&nbsp;<span class="caret"></span>
+            {{ttt((store.measures[currentMeasure] || store.measures.forecasttotal)?.label || currentMeasure) }}&nbsp;&nbsp;<span class="caret"></span>
           </button>
           <ul class="dropdown-menu">
             <li v-for="m in sortedMeasureList" :key="m.name" >
