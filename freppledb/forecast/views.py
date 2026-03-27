@@ -2572,6 +2572,9 @@ class ForecastEditor:
                 "currentbucket": currentbucket,
                 "currentdate": currentdate.strftime("%Y-%m-%d"),
                 "measures": json.dumps(measures),
+                "debug_js": False,  # Force to False to use the built static assets
+                "port": request.get_host() + "/" + request.database,
+                "proxied": False,
                 "reportclass": ForecastEditor,
             }
         )
