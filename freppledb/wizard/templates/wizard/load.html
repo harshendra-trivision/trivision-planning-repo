@@ -94,23 +94,78 @@
     background: white;
 }
 
+/* Enhanced Step Number & Badge Styling */
+.trivision-row-card > div:first-child h3 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.trivision-row-card > div:first-child h3::first-line {
+    font-size: 0;
+}
+
+.step-number-badge {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
+    color: #fff;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 12px rgba(45,0,77,0.3);
+    transition: all 0.25s ease;
+}
+
+.trivision-row-card:hover .step-number-badge {
+    transform: scale(1.08);
+    box-shadow: 0 6px 16px rgba(45,0,77,0.35);
+}
+
 .progress-card {
     position: sticky;
     top: 2rem;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(45,0,77,0.12);
+    border: 1px solid rgba(123,45,142,0.1);
+    transition: all 0.3s ease;
+}
+
+.progress-card:hover {
+    box-shadow: 0 12px 40px rgba(45,0,77,0.18);
+    transform: translateY(-2px);
 }
 
 .progress-header {
-    background: var(--deep-purple);
+    background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
     color: white;
-    padding: 1rem 1.5rem;
+    padding: 1.25rem 1.75rem;
     border-bottom: none;
+    display: flex;
+    align-items: center;
 }
 
 .progress-header h5 {
     margin: 0;
     font-weight: 700;
-    font-size: 1rem;
-    letter-spacing: 0.5px;
+    font-size: 1.05rem;
+    letter-spacing: 0.3px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+}
+
+.progress-header h5 i {
+    font-size: 1.1rem;
+    margin-right: 0.6rem;
+    opacity: 0.9;
 }
 
 .progress-body {
@@ -118,12 +173,23 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: #FFFFFF;
+    background: linear-gradient(180deg, #FAFBFC 0%, #FFFFFF 100%);
+    min-height: 200px;
 }
 
 .progress-body svg {
     max-width: 100%;
     height: auto;
+    filter: drop-shadow(0 2px 8px rgba(45,0,77,0.08));
+}
+
+.progress-body svg text {
+    font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.progress-body svg rect {
+    rx: 8;
+    ry: 8;
 }
 
 /* Customizing the accordion arrow/plus */

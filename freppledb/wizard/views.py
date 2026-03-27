@@ -99,11 +99,11 @@ def getWizardSteps(request, mode):
     context = {
         "docroot": docurl,
         "prefix": request.prefix,
-        "label_data": '<span class="badge bg-primary">Data entry</span>',
-        "label_config": '<span class="badge bg-primary">Configuration</span>',
-        "label_action": '<span class="badge bg-danger">Action</span>',
-        "label_check": '<span class="badge bg-primary">Check</span>',
-        "label_analysis": '<span class="badge bg-success">Analyis</span>',
+        "label_data": '<span class="badge" style="background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%); color: #fff; font-weight: 600; font-size: 0.7rem; padding: 0.4em 0.85em; border-radius: 6px; letter-spacing: 0.3px; box-shadow: 0 2px 6px rgba(123,45,142,0.25); text-transform: uppercase;">Data entry</span>',
+        "label_config": '<span class="badge" style="background: linear-gradient(135deg, #2D004D 0%, #5C4670 100%); color: #fff; font-weight: 600; font-size: 0.7rem; padding: 0.4em 0.85em; border-radius: 6px; letter-spacing: 0.3px; box-shadow: 0 2px 6px rgba(45,0,77,0.25); text-transform: uppercase;">Configuration</span>',
+        "label_action": '<span class="badge" style="background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%); color: #fff; font-weight: 600; font-size: 0.7rem; padding: 0.4em 0.85em; border-radius: 6px; letter-spacing: 0.3px; box-shadow: 0 2px 6px rgba(220,38,38,0.25); text-transform: uppercase;">Action</span>',
+        "label_check": '<span class="badge" style="background: linear-gradient(135deg, #A855F7 0%, #C084FC 100%); color: #fff; font-weight: 600; font-size: 0.7rem; padding: 0.4em 0.85em; border-radius: 6px; letter-spacing: 0.3px; box-shadow: 0 2px 6px rgba(168,85,247,0.25); text-transform: uppercase;">Check</span>',
+        "label_analysis": '<span class="badge" style="background: linear-gradient(135deg, #059669 0%, #10B981 100%); color: #fff; font-weight: 600; font-size: 0.7rem; padding: 0.4em 0.85em; border-radius: 6px; letter-spacing: 0.3px; box-shadow: 0 2px 6px rgba(5,150,105,0.25); text-transform: uppercase;">Analysis</span>',
     }
 
     # Possible icons to display on the right hand side
@@ -131,110 +131,143 @@ def getWizardSteps(request, mode):
                 flex-direction: column;
                 align-items: center;
                 text-align: center;
-                padding: 1rem;
+                padding: 1.5rem;
                 height: 100%%;
+                background: #FFFFFF;
+                border-radius: 16px;
+                border: 1px solid rgba(123,45,142,0.08);
+                box-shadow: 0 4px 20px rgba(123,45,142,0.06);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }}
+            .trivision-wizard-column:hover {{
+                transform: translateY(-4px);
+                box-shadow: 0 12px 32px rgba(123,45,142,0.12);
+                border-color: rgba(168,85,247,0.2);
             }}
             .trivision-icon-container {{
                 position: relative;
                 display: inline-block;
-                margin-bottom: 1.5rem;
+                margin-bottom: 1.25rem;
             }}
             .trivision-icon-circle {{
-                width: 70px;
-                height: 70px;
+                width: 72px;
+                height: 72px;
                 border-radius: 50%%;
-                border: 2px solid #E1BEE7;
+                border: none;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 1.8rem;
-                color: #7B2D8E;
-                background: #FFFFFF;
+                font-size: 1.6rem;
+                color: #FFFFFF;
+                background: linear-gradient(145deg, #7B2D8E 0%%, #A855F7 100%%);
+                box-shadow: 0 6px 20px rgba(123,45,142,0.35);
                 transition: all 0.3s ease;
             }}
             .trivision-icon-letter {{
                 position: absolute;
-                top: -5px;
-                left: -5px;
-                width: 22px;
-                height: 22px;
+                top: -4px;
+                left: -4px;
+                width: 26px;
+                height: 26px;
                 border-radius: 50%%;
-                background: #A855F7;
+                background: linear-gradient(135deg, #2D004D 0%%, #5C4670 100%%);
                 color: #FFFFFF;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 0.75rem;
-                font-weight: bold;
-                box-shadow: 0 2px 4px rgba(168,85,247,0.4);
-                font-family: 'Inter', sans-serif;
+                font-size: 0.7rem;
+                font-weight: 700;
+                box-shadow: 0 3px 8px rgba(45,0,77,0.4);
+                font-family: 'Inter', -apple-system, sans-serif;
+                border: 2px solid #FFFFFF;
             }}
             .trivision-wizard-column:hover .trivision-icon-circle {{
-                transform: scale(1.05);
-                border-color: #A855F7;
-                box-shadow: 0 4px 12px rgba(168,85,247,0.2);
+                transform: scale(1.08) rotate(3deg);
+                box-shadow: 0 8px 28px rgba(168,85,247,0.4);
             }}
             .trivision-btn-primary {{
-                background: #A855F7 !important;
+                background: linear-gradient(135deg, #7B2D8E 0%%, #A855F7 100%%) !important;
                 color: #FFFFFF !important;
                 border: none !important;
-                border-radius: 20px !important;
-                font-weight: 800 !important;
-                padding: 0.5rem 1.5rem !important;
-                transition: all 0.25s ease !important;
-                font-family: 'Inter', sans-serif;
+                border-radius: 25px !important;
+                font-weight: 700 !important;
+                padding: 0.6rem 1.75rem !important;
+                transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                font-family: 'Inter', -apple-system, sans-serif;
+                box-shadow: 0 4px 14px rgba(123,45,142,0.3) !important;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
             }}
             .trivision-btn-primary:hover, .trivision-btn-dropdown:hover {{
-                background: #7B2D8E !important;
-                transform: translateY(-2px) !important;
-                box-shadow: 0 4px 12px rgba(123,45,142,0.2) !important;
+                background: linear-gradient(135deg, #2D004D 0%%, #7B2D8E 100%%) !important;
+                transform: translateY(-3px) !important;
+                box-shadow: 0 8px 24px rgba(123,45,142,0.4) !important;
+            }}
+            .trivision-btn-primary:active {{
+                transform: translateY(-1px) !important;
             }}
             .trivision-dropdown-menu {{
                 background-color: #FFFFFF !important;
-                border-radius: 10px !important;
-                box-shadow: 0 8px 30px rgba(123,45,142,0.12) !important;
-                border: 1px solid rgba(156,39,176,0.15) !important;
-                padding: 0.5rem !important;
-                min-width: 200px;
+                border-radius: 14px !important;
+                box-shadow: 0 12px 40px rgba(123,45,142,0.15) !important;
+                border: 1px solid rgba(156,39,176,0.1) !important;
+                padding: 0.75rem !important;
+                min-width: 180px;
+                margin-top: 0.5rem !important;
             }}
             .trivision-dropdown-item {{
-                color: #7B2D8E !important;
+                color: #2D004D !important;
                 background: transparent !important;
                 border: none !important;
                 text-align: center !important;
                 font-weight: 600 !important;
-                border-radius: 6px !important;
-                padding: 0.5rem 1rem !important;
+                border-radius: 8px !important;
+                padding: 0.65rem 1rem !important;
                 transition: all 0.2s ease !important;
-                margin-bottom: 0.25rem !important;
+                margin-bottom: 0.35rem !important;
                 box-shadow: none !important;
-                font-family: 'Inter', sans-serif;
+                font-family: 'Inter', -apple-system, sans-serif;
+                font-size: 0.8rem !important;
             }}
             .trivision-dropdown-item:hover {{
-                color: #A855F7 !important;
-                background: rgba(168,85,247,0.15) !important;
-                transform: translateY(-1px) !important;
+                color: #FFFFFF !important;
+                background: linear-gradient(135deg, #7B2D8E 0%%, #A855F7 100%%) !important;
+                transform: translateX(4px) !important;
+            }}
+            .trivision-dropdown-item:last-child {{
+                margin-bottom: 0 !important;
             }}
             .trivision-row-card {{
                 display: flex;
                 align-items: center;
                 background: #FFFFFF;
-                border-radius: 12px;
-                padding: 1rem 1.5rem;
+                border-radius: 14px;
+                padding: 1.25rem 1.75rem;
                 margin-bottom: 1rem;
-                box-shadow: 0 4px 12px rgba(123,45,142,0.05);
-                border: 1px solid rgba(156,39,176,0.1);
+                box-shadow: 0 4px 16px rgba(123,45,142,0.06);
+                border: 1px solid rgba(156,39,176,0.08);
                 transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }}
             .trivision-row-card:hover {{
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(123,45,142,0.1);
-                border-color: rgba(156,39,176,0.2);
+                transform: translateY(-3px);
+                box-shadow: 0 8px 28px rgba(123,45,142,0.12);
+                border-color: rgba(168,85,247,0.2);
+            }}
+            .trivision-section-title {{
+                font-family: 'Inter', -apple-system, sans-serif;
+                font-weight: 800;
+                font-size: 1.35rem;
+                color: #2D004D;
+                margin-bottom: 0.5rem;
+                background: linear-gradient(135deg, #2D004D 0%%, #7B2D8E 100%%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
             }}
         </style>
-        <div class="row pt-4 pb-2">
+        <div class="row pt-4 pb-3">
             <div class="col-auto justify-content-center d-flex w-100">
-                <h1 style="font-family: 'Inter', sans-serif; font-weight: 800; font-size: 1.25rem; color: #1A0033;">Three ways to get started quickly</h1>
+                <h1 class="trivision-section-title">Three ways to get started quickly</h1>
             </div>
         </div>
         <div class="row pb-4 gy-4 justify-content-center" id="wizard">
@@ -245,15 +278,15 @@ def getWizardSteps(request, mode):
                         <div class="trivision-icon-circle"><i class="fa fa-hand-pointer-o"></i></div>
                         <div class="trivision-icon-letter">A</div>
                     </div>
-                    <h2 style="font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 800; color: #1A0033; margin-bottom: 0.5rem;">Start with one item</h2>
-                    <p style="font-family: 'Inter', sans-serif; color:#9B8AAE; font-size: 0.8rem; margin-bottom: 1.5rem;">Begin exploring with a single product</p>
+                    <h2 style="font-family: 'Inter', -apple-system, sans-serif; font-size: 1rem; font-weight: 700; color: #2D004D; margin-bottom: 0.5rem;">Start with one item</h2>
+                    <p style="font-family: 'Inter', -apple-system, sans-serif; color:#8B7A9E; font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.5;">Begin exploring with a single product</p>
                     <div class="dropdown-center mt-auto">
-                        <button class="btn btn-primary trivision-btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 140px; font-size: 0.75rem; letter-spacing: 0.5px;">
-                            QUICKSTART <i class="fa fa-angle-down ms-1" style="font-size: 0.9rem;"></i>
+                        <button class="btn btn-primary trivision-btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 150px; font-size: 0.75rem;">
+                            QUICKSTART <i class="fa fa-angle-down ms-2" style="font-size: 0.8rem;"></i>
                         </button>
                         <ul class="dropdown-menu trivision-dropdown-menu">
-                            <li><a href="{prefix}/wizard/quickstart/forecast/" class="btn btn-primary w-100 trivision-dropdown-item">FORECAST</a></li>
-                            <li><a href="{prefix}/wizard/quickstart/production/" class="btn btn-primary w-100 trivision-dropdown-item">PRODUCTION</a></li>
+                            <li><a href="{prefix}/wizard/quickstart/forecast/" class="trivision-dropdown-item">FORECAST</a></li>
+                            <li><a href="{prefix}/wizard/quickstart/production/" class="trivision-dropdown-item">PRODUCTION</a></li>
                         </ul>
                     </div>
                 </div>
@@ -265,15 +298,15 @@ def getWizardSteps(request, mode):
                         <div class="trivision-icon-circle"><i class="fa fa-cloud-upload"></i></div>
                         <div class="trivision-icon-letter">B</div>
                     </div>
-                    <h2 style="font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 800; color: #1A0033; margin-bottom: 0.5rem;">Upload more data</h2>
-                    <p style="font-family: 'Inter', sans-serif; color:#9B8AAE; font-size: 0.8rem; margin-bottom: 1.5rem;">Import your datasets via CSV or Excel</p>
+                    <h2 style="font-family: 'Inter', -apple-system, sans-serif; font-size: 1rem; font-weight: 700; color: #2D004D; margin-bottom: 0.5rem;">Upload more data</h2>
+                    <p style="font-family: 'Inter', -apple-system, sans-serif; color:#8B7A9E; font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.5;">Import your datasets via CSV or Excel</p>
                     <div class="dropdown-center mt-auto">
-                        <button class="btn btn-primary trivision-btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 140px; font-size: 0.75rem; letter-spacing: 0.5px;">
-                            UPLOAD <i class="fa fa-angle-down ms-1" style="font-size: 0.9rem;"></i>
+                        <button class="btn btn-primary trivision-btn-primary" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="min-width: 150px; font-size: 0.75rem;">
+                            UPLOAD <i class="fa fa-angle-down ms-2" style="font-size: 0.8rem;"></i>
                         </button>
                         <ul class="dropdown-menu trivision-dropdown-menu">
-                            <li><a class="btn btn-primary w-100 trivision-dropdown-item" href="{prefix}/wizard/load/forecast/">FORECAST</a></li>
-                            <li><a class="btn btn-primary w-100 trivision-dropdown-item" href="{prefix}/wizard/load/production/">PRODUCTION</a></li>
+                            <li><a class="trivision-dropdown-item" href="{prefix}/wizard/load/forecast/">FORECAST</a></li>
+                            <li><a class="trivision-dropdown-item" href="{prefix}/wizard/load/production/">PRODUCTION</a></li>
                         </ul>
                     </div>
                 </div>
@@ -285,10 +318,10 @@ def getWizardSteps(request, mode):
                         <div class="trivision-icon-circle"><i class="fa fa-link"></i></div>
                         <div class="trivision-icon-letter">C</div>
                     </div>
-                    <h2 style="font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 800; color: #1A0033; margin-bottom: 0.5rem;">Import from Odoo</h2>
-                    <p style="font-family: 'Inter', sans-serif; color:#9B8AAE; font-size: 0.8rem; margin-bottom: 1.5rem;">Sync directly with your ERP system</p>
+                    <h2 style="font-family: 'Inter', -apple-system, sans-serif; font-size: 1rem; font-weight: 700; color: #2D004D; margin-bottom: 0.5rem;">Import from Odoo</h2>
+                    <p style="font-family: 'Inter', -apple-system, sans-serif; color:#8B7A9E; font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.5;">Sync directly with your ERP system</p>
                     <div class="dropdown-center mt-auto">
-                        <a href="{prefix}/data/common/parameter/?noautofilter&name__contains=odoo" class="btn btn-primary trivision-btn-primary" style="min-width: 140px; font-size: 0.75rem; letter-spacing: 0.5px; display: inline-flex; justify-content: center; align-items: center;">
+                        <a href="{prefix}/data/common/parameter/?noautofilter&name__contains=odoo" class="btn btn-primary trivision-btn-primary" style="min-width: 150px; font-size: 0.75rem; display: inline-flex; justify-content: center; align-items: center;">
                             CONNECT
                         </a>
                     </div>
@@ -330,8 +363,8 @@ def getWizardSteps(request, mode):
          
            
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/item/" class="text-decoration-underline" target="_blank">Load item data</a></b>
@@ -345,24 +378,24 @@ def getWizardSteps(request, mode):
              </a>
            </p>
            <p>Load the items you want to forecast. You can do this in various ways:<br>
-           <span class="circle">A</span> Click on the plus sign to add data records one by one in form.<br>
-           <span class="circle">B</span> Edit data directly in the grid.<br>
-           <span class="circle">C</span> Click the up arrow icon to import a data file in Excel or CSV format. Have a look
+           <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">A</span> Click on the plus sign to add data records one by one in form.<br>
+           <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span> Edit data directly in the grid.<br>
+           <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">C</span> Click the up arrow icon to import a data file in Excel or CSV format. Have a look
            at the sample data to see how your data file should look like. You can even drag and drop your data
-           file directly on the grid area <span class="circle">B</span>.<br>
+           file directly on the grid area <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span>.<br>
            <span class="circle">D</span> You can click the down arrow icon to export the existing data as a spreadsheet,
-           make changes to the spreadsheet and then upload it again with the up arrow icon <span class="circle">C</span>.</p>
+           make changes to the spreadsheet and then upload it again with the up arrow icon <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">C</span>.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!--<div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load items')"><img src="/static/wizard/img/item.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
 
            
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">2</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/location/" class="text-decoration-underline" target="_blank">Load location data</a></b>
@@ -379,16 +412,16 @@ def getWizardSteps(request, mode):
            Location can be structured in a hierachical tree which allows intuitive
            navigation through the forecast data at aggregated levels.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load locations')"><img src="/static/wizard/img/location.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
 
            
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">3</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/customer/" class="text-decoration-underline" target="_blank">Load customer data</a></b>
@@ -405,9 +438,9 @@ def getWizardSteps(request, mode):
            In a first model we recommend to keep the customer hierarchy simple: for instance,
            map all sales to a single aggregate customer.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!--<div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load customers')"><img src="/static/wizard/img/customer.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
@@ -441,8 +474,8 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/demand/" class="text-decoration-underline" target="_blank">Load sales order data</a></b>
@@ -461,9 +494,9 @@ def getWizardSteps(request, mode):
            Unless the number of sales orders exceeds 2 million, we recommend to load them
            directly. For larger data volumes you might consider aggregating the data per time bucket.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load sales orders')"><img src="/static/wizard/img/salesorder.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
@@ -502,8 +535,8 @@ def getWizardSteps(request, mode):
 
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_config}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_config}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/common/parameter/?name=forecast.calendar" class="text-decoration-underline" target="_blank">Configure the forecasting time bucket size</a></b>:</p>
@@ -545,8 +578,8 @@ def getWizardSteps(request, mode):
 
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_config}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">2</span>{label_config}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/common/parameter/?name=forecast.Horizon_future" class="text-decoration-underline" target="_blank">Configure the forecasting horizon</a></b>:</p>
@@ -569,8 +602,8 @@ def getWizardSteps(request, mode):
 
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_config}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">3</span>{label_config}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/common/parameter/?name=forecast.currentdate" class="text-decoration-underline" target="_blank">Configure the current date</a></b>:</p>
@@ -597,21 +630,21 @@ def getWizardSteps(request, mode):
 
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">4<br>{label_action}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">4</span>{label_action}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/execute/" class="text-decoration-underline" target="_blank">Generate statistical forecast</a></b>:</p>
          <p>You can now compute the first statistical forecast.</p>
          <p>Open the <a href="{prefix}/execute/">execution screen</a> (available in the "admin" menu) and select
-         the "generate plan" <span class="circle">A</span> task. Make sure the option "generate forecast"
-         <span class="circle">B</span>is checked.</p>
-         <p><span class="circle">C</span> Launch the task and wait for it to complete. <span class="circle">D</span></p>
+         the "generate plan" <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">A</span> task. Make sure the option "generate forecast"
+         <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span>is checked.</p>
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">C</span> Launch the task and wait for it to complete. <span class="circle">D</span></p>
          <p>Whenever you change any of the intput data, you will need to come back here to recompute the forecast.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Generate statistical forecast')"><img src="/static/wizard/img/generate_forecast.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
@@ -653,18 +686,18 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_analysis}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_analysis}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/forecast/editor/" class="text-decoration-underline" target="_blank">Review forecast editor</a></b><br>
          <p>The <a href="{prefix}/forecast/editor/" class="text-decoration-underline" target="_blank">forecast editor</a> (available
          in the "sales" menu) is the main screen for reviewing the results.<p>
-         <p><span class="circle">A</span> Select a combination of item + location + customer in the top pane, and
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">A</span> Select a combination of item + location + customer in the top pane, and
          review the details in the bottom pane.</p>
-         <p><span class="circle">B</span> You can override the forecast proposed by the system. If you edit at a
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span> You can override the forecast proposed by the system. If you edit at a
          higher level the value is distributed automatically to all child levels.</p>
-         <p><span class="circle">C</span> You can adjust the sales history to adjust for exceptional demands.</p>
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">C</span> You can adjust the sales history to adjust for exceptional demands.</p>
          <p><span class="circle">D</span> You can switch from units to monetary value.</p>
          <p><span class="circle">E</span> You can also visualize the report in different time bucket sizes.</p>
          </p>
@@ -676,15 +709,15 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_analysis}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">2</span>{label_analysis}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><a href="{prefix}/forecast/" class="text-decoration-underline" target="_blank"><b>Review forecast report</b></a></p>
          <p>The <a href="{prefix}/forecast/" class="text-decoration-underline" target="_blank">forecast report</a> (available in the "sales" menu)
          is handy for going through a larger list of forecasts.</p>
-         <p><span class="circle">A</span> In this screen you can easily export forecast data as a spreadsheet.<p>
-         <p><span class="circle">B</span> You can also upload an Excel spreadsheet with forecast values from your sales team.</p>
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">A</span> In this screen you can easily export forecast data as a spreadsheet.<p>
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span> You can also upload an Excel spreadsheet with forecast values from your sales team.</p>
             </div>
             <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Forecast report')"><img src="/static/wizard/img/forecast_report.png" style="width: 200px"></a>
@@ -712,8 +745,8 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/videos/demand-forecasting/filter-outliers.html?highlight=outlier" class="text-decoration-underline" target="_blank">Outlier detection</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/videos/demand-forecasting/filter-outliers.html?highlight=outlier" class="text-decoration-underline" target="_blank">Outlier detection</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p>Exceptional one-off sales can seriously impact the accuracy of the forecast.
@@ -726,8 +759,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/forecasting/forecast-method" class="text-decoration-underline" target="_blank">Forecasting methods</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/forecasting/forecast-method" class="text-decoration-underline" target="_blank">Forecasting methods</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p>This example model digs into the forecasting algorithms and their configuration.</p>
@@ -739,8 +772,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/forecasting/middle-out-forecast" class="text-decoration-underline" target="_blank">Middle-out forecasting</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/forecasting/middle-out-forecast" class="text-decoration-underline" target="_blank">Middle-out forecasting</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p>The statistical forecast is computed by default at the lowest level in the
@@ -754,8 +787,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/forecasting/forecast-netting" class="text-decoration-underline" target="_blank">Forecast netting</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/forecasting/forecast-netting" class="text-decoration-underline" target="_blank">Forecast netting</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p>Demand in the near future mostly consists of customer sales orders. Demand far out in the
@@ -793,13 +826,13 @@ def getWizardSteps(request, mode):
                 "content": """
          <p>It won't be a surprise that we start by loading some basic master data: items, locations and customers.</p>
          <p>You can either enter some sample records one by one, or (even better) load an Excel
-         or CSV file you extract from some existing database.</p>
+         or CSV file you extract from some existing database</p>
 
          
            
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/item/" class="text-decoration-underline" target="_blank">Load item data</a></b>
@@ -815,24 +848,24 @@ def getWizardSteps(request, mode):
            <p>Load all items: end items sold to customers, intermediate items in the production process and
            raw materials purchased from suppliers.</p>
            <p> Data can be loaded by:<br>
-           <span class="circle">A</span> Click on the plus sign to add data records one by one in form.<br>
-           <span class="circle">B</span> Edit data directly in the grid.<br>
-           <span class="circle">C</span> Click the up arrow icon to import a data file in Excel or CSV format. Have a look
+           <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">A</span> Click on the plus sign to add data records one by one in form.<br>
+           <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span> Edit data directly in the grid.<br>
+           <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">C</span> Click the up arrow icon to import a data file in Excel or CSV format. Have a look
            at the sample data to see how your data file should look like. You can even drag and drop your data
-           file directly on the grid area <span class="circle">B</span>.<br>
+           file directly on the grid area <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span>.<br>
            <span class="circle">D</span> You can click the down arrow icon to export the existing data as a spreadsheet,
-           make changes to the spreadsheet and then upload it again with the up arrow icon <span class="circle">C</span>.</p>
+           make changes to the spreadsheet and then upload it again with the up arrow icon <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">C</span>.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load items')"><img src="/static/wizard/img/item.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
 
            
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">2</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/location/" class="text-decoration-underline" target="_blank">Load location data</a></b>
@@ -847,16 +880,16 @@ def getWizardSteps(request, mode):
            </p>
            <p>Load all locations from where items are sold to customers or where inventory is stored.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!--<div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load locations')"><img src="/static/wizard/img/location.png" style="width: 200px"></a>
-            </div>
-        </div>
+            </div> -->
+        </div> 
         
 
            
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">3</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/customer/" class="text-decoration-underline" target="_blank">Load customer data</a></b>
@@ -871,9 +904,9 @@ def getWizardSteps(request, mode):
            </p>
            <p>Load all customers to which products are sold.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load customers')"><img src="/static/wizard/img/customer.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
@@ -899,8 +932,8 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/demand/" class="text-decoration-underline" target"_blank">Load sales order data</a></b>
@@ -916,9 +949,9 @@ def getWizardSteps(request, mode):
            For planning we only need the open sales orders, the remaining quantity to ship
            and the delivery date expected by customers.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load sales orders')"><img src="/static/wizard/img/salesorder.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
@@ -967,8 +1000,8 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/operation/" class="text-decoration-underline" target="_blank">Load operation data</a></b>
@@ -992,8 +1025,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">2</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/operationmaterial/" class="text-decoration-underline" target="_blank">Load operation material data</a></b>
@@ -1039,8 +1072,8 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/supplier/" class="text-decoration-underline" target="_blank">Load supplier data</a></b>
@@ -1055,15 +1088,15 @@ def getWizardSteps(request, mode):
            </p>
            <p>Load all the suppliers from which you can purchase items.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load suppliers')"><img src="/static/wizard/img/supplier.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
            
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">2</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/itemsupplier/" class="text-decoration-underline" target="_blank">Load item supplier data</a></b>
@@ -1078,9 +1111,9 @@ def getWizardSteps(request, mode):
            </p>
            <p>In this table you define which item can be purchased from which supplier.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!--<div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load item suppliers')"><img src="/static/wizard/img/itemsupplier.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
@@ -1111,14 +1144,14 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_check}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_check}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b>Review the supply path of some sales orders</b></p>
          <p>Go to the <a href="{prefix}/data/input/demand/" class="text-decoration-underline" target="_blank">sales order list</a>
-         and click the triangle icon <span class="circle">A</span> to investigate some example sales orders.</p>
-         <p>Select the "supply path" tab <span class="circle">B</span>, and study the graph.</p>
+         and click the triangle icon <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">A</span> to investigate some example sales orders.</p>
+         <p>Select the "supply path" tab <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span>, and study the graph.</p>
          <p>On the far right you find the end items, and moving towards the left we move to operations
          deeper in the bill of material. On the far left we find the raw materials
          and their purchasing operations.</p>
@@ -1127,11 +1160,11 @@ def getWizardSteps(request, mode):
          <p>If your paths are broken or contain cycles, you will need to review and correct the operations
          to get the supply path correct.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Sales order drilldown')"><img src="/static/wizard/img/salesorder_drilldown.png" style="width: 200px"></a>
          <br><br>
          <a href="#" onclick="showModalImage(event, 'Sales order supply path')"><img src="/static/wizard/img/supplypath_mfg.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
@@ -1160,8 +1193,8 @@ def getWizardSteps(request, mode):
 
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_config}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_config}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/common/parameter/?name=forecast.populateForecastTable" class="text-decoration-underline" target="_blank">Enable or disable the use of forecast</a></b>:</p>
@@ -1206,28 +1239,28 @@ def getWizardSteps(request, mode):
 
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_action}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">2</span>{label_action}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/execute/" class="text-decoration-underline" target="_blank">Generate an unconstrained plan</a></b></p>
          <p>You can now compute the first plan.</p>
          <p>Open the <a href="{prefix}/execute/">execution screen</a> (available in the "admin" menu) and select
-         the "generate plan" task. Make sure the "generate supply plan" option <span class="circle">A</span>
-         is checked, and make sure to generate an unconstrained plan <span class="circle">B</span>.<p>
-         <p><span class="circle">C</span> Launch the task and wait for it to complete. <span class="circle">D</span></p>
+         the "generate plan" task. Make sure the "generate supply plan" option <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">A</span>
+         is checked, and make sure to generate an unconstrained plan <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span>.<p>
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">C</span> Launch the task and wait for it to complete. <span class="circle">D</span></p>
          <p><b>Whenever you change any of the input data, you will need to come back to this screen to recompute the plan.</b></p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Generate unconstrained plan')"><img src="/static/wizard/img/generate_unconstrained.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
 
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_analysis}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">3</span>{label_analysis}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/manufacturingorder/" class="text-decoration-underline" target="_blank">Load Manufacturing order data</a></b></p>
@@ -1241,16 +1274,16 @@ def getWizardSteps(request, mode):
          of the proposed manufacturing orders is matching your expectations. The result will
          match a textbook <a href="https://en.wikipedia.org/wiki/Material_requirements_planning" class="text-decoration-underline" target="_blank">MRP explosion</a>.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Manufacturing orders')"><img src="/static/wizard/img/manufacturingorder.png" style="width: 200px"></a><br>
-            </div>
+            </div> -->
         </div>
         
 
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">4<br>{label_analysis}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">4</span>{label_analysis}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/purchaseorder/" class="text-decoration-underline" target="_blank">Load purchase order data</a></b></p>
@@ -1263,9 +1296,9 @@ def getWizardSteps(request, mode):
          of the proposed purchase orders is matching your expectations. The result will
          match a classic textbook <a href="https://en.wikipedia.org/wiki/Material_requirements_planning" class="text-decoration-underline" target="_blank">MRP explosion</a>.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Purchase orders')"><img src="/static/wizard/img/purchaseorder.png" style="width: 200px"></a><br>
-            </div>
+            </div> -->
         </div>
         
          """.format(
@@ -1304,8 +1337,8 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/buffer/" class="text-decoration-underline" target="_blank">Load inventory data</a></b>
@@ -1320,15 +1353,15 @@ def getWizardSteps(request, mode):
            </p>
            <p>Load the current stock of all items. If the stock is 0, no record is required.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load on hand inventory')"><img src="/static/wizard/img/buffer.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">2</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/purchaseorder/" class="text-decoration-underline" target="_blank">Load purchase order data</a></b>
@@ -1346,15 +1379,15 @@ def getWizardSteps(request, mode):
            proposed purchase orders that were generated in the previous step.</p>
            <p>This table is thus used both as input and output.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!--<div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load purchase order data')"><img src="/static/wizard/img/purchaseorder.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">3</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/manufacturingorder/" class="text-decoration-underline" target="_blank">Load manufacturing order data</a></b>
@@ -1372,9 +1405,9 @@ def getWizardSteps(request, mode):
            proposed manufacturing orders that were generated in the previous step.</p>
            <p>This table is thus used both as input and output.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load manufacturing order data')"><img src="/static/wizard/img/manufacturingorder.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
@@ -1416,8 +1449,8 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/resource/" class="text-decoration-underline" target="_blank">Load resource data</a></b>
@@ -1434,15 +1467,15 @@ def getWizardSteps(request, mode):
            A resource models a machine, a group of machines, an operator, a group of operators,
            or other capacity constraints.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load resource data')"><img src="/static/wizard/img/resource.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_data}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">2</span>{label_data}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/operationresource/" class="text-decoration-underline" target="_blank">Load operation resource data</a></b>
@@ -1455,9 +1488,9 @@ def getWizardSteps(request, mode):
            </p>
            <p>This table associates each operation with the resources it utilizes.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!--<div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Load operation resource data')"><img src="/static/wizard/img/operationresource.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
@@ -1498,20 +1531,20 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_action}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_action}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/execute/" class="text-decoration-underline" target="_blank">Generate constrained plan</a></b></p>
          <p>Navigate to the <a href="{prefix}/execute/" class="text-decoration-underline">execution screen</a> (available in the "admin"
-         menu) and select the "generate plan" task <span class="circle">A</span>. Make sure the options "generate supply
-         plan" and "constrained plan" <span class="circle">B</span> are both checked.</p>
-         <p><span class="circle">C</span> Launch the task and wait for it to complete. <span class="circle">D</span></p>
+         menu) and select the "generate plan" task <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">A</span>. Make sure the options "generate supply
+         plan" and "constrained plan" <span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span> are both checked.</p>
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">C</span> Launch the task and wait for it to complete. <span class="circle">D</span></p>
          <p><b>Whenever you change any of the input data, you will need to come back here to regenerate the plan.</b></p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Generate constrained plan')"><img src="/static/wizard/img/generate_constrained.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          
@@ -1534,21 +1567,21 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">1<br>{label_analysis}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">1</span>{label_analysis}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/resource/" class="text-decoration-underline" target="_blank">Capacity report</a></b></p>
          <p>This report visualizes the utilization of all resources per time bucket.</p>
-         <p><span class="circle">A</span> The results can be displayed as a graph or as a table. You can click on
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">A</span> The results can be displayed as a graph or as a table. You can click on
          cells in the table or buckets in the graph to get more detailed information.</p>
-         <p><span class="circle">B</span> You can adjust the time buckets and horizon of the report.</p>
-         <p><span class="circle">C</span> The down arrow icon allows to export the results in an
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span> You can adjust the time buckets and horizon of the report.</p>
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">C</span> The down arrow icon allows to export the results in an
          Excel spreadsheet.</p>
          <p><span class="circle">D</span> In all reports you can customize which fields to display and
          their order.</p>
          <td style="text-align: center">
-         <a href="#" onclick="showModalImage(event, 'Capacity report')"><img src="/static/wizard/img/resourcereport.png" style="width: 200px"></a>
+         <!-- <a href="#" onclick="showModalImage(event, 'Capacity report')"><img src="/static/wizard/img/resourcereport.png" style="width: 200px"></a> -->
             </div>
             <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 
@@ -1557,41 +1590,42 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">2<br>{label_analysis}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">2</span>{label_analysis}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/data/input/demand/" class="text-decoration-underline" target="_blank">Sales order</a></b></p>
          <p>At the start of the planning run, you loaded the sales orders in frePPLe. The constrained
          planning run you have just completed has 1) computed the planned delivery date for all sales
          orders and 2) collected the reasons why a certain demand was planned short or late.</p>
-         <p><span class="circle">A</span> Review the list of
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">A</span> Review the list of
          <a href="{prefix}/data/input/demand/" class="text-decoration-underline" target="_blank">sales orders</a> and
          sort on the delay field to find some sales orders that can't be delivered on time.<p>
-         <p><span class="circle">B</span> Click on the triangle icon next to a demand to drill into its details.<p>
-         <p><span class="circle">C</span> The "plan" tab shows all operations planned to deliver the order.<p>
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">B</span> Click on the triangle icon next to a demand to drill into its details.<p>
+         <p><span style="display:inline-flex; align-items:center; justify-content:center; width:1.4em; height:1.4em; border-radius:50%; background:linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); color:#fff; font-size:0.75em; font-weight:700; box-shadow:0 2px 6px rgba(123,45,142,0.3); margin-right:0.3em; vertical-align:middle;">C</span> The "plan" tab shows all operations planned to deliver the order.<p>
          <p><span class="circle">D</span> The "why short or late" tab shows all constraints causing lateness
          in the delivery of the order.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
-                <a href="#" onclick="showModalImage(event, 'Sales order drilldown')"><img src="/static/wizard/img/salesorder_analysis.png" style="width: 200px"></a>
-         <br><br>
-         <a href="#" onclick="showModalImage(event, 'Gantt plan editor')"><img src="/static/wizard/img/salesorder_why_short_or_late.png" style="width: 200px"></a>
-            </div>
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+                <a href="#" onclick="showModalImage(event, 'Sales order drilldown')"><img src="/static/wizard/img/salesorder_analysis.png" style="width: 200px">
+                </a>
+                <br><br>
+                <a href="#" onclick="showModalImage(event, 'Gantt plan editor')"><img src="/static/wizard/img/salesorder_why_short_or_late.png" style="width: 200px"></a>
+            </div> -->
         </div>
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;">3<br>{label_analysis}</h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;">3</span>{label_analysis}
             </div>
             <div style="flex: 1; color:#5C4670;">
                 <p><b><a href="{prefix}/buffer/" class="text-decoration-underline" target="_blank">Inventory report</a></b></p>
          <p>This report visualizes the planned inventory for all item-locations per time bucket.</p>
             </div>
-            <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
+            <!-- <div style="flex: 0 0 220px; text-align: center; padding-left: 15px;">
                 <a href="#" onclick="showModalImage(event, 'Inventory report')"><img src="/static/wizard/img/inventoryreport.png" style="width: 200px"></a>
-            </div>
+            </div> -->
         </div>
         
          <p>Congratulations! You are now able to use the production planning capabilities of frePPLe.</p>
@@ -1615,8 +1649,8 @@ def getWizardSteps(request, mode):
          
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/modeling-wizard/common-modeling-mistakes.html" class="text-decoration-underline" target="_blank">Common mistakes</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/modeling-wizard/common-modeling-mistakes.html" class="text-decoration-underline" target="_blank">Common mistakes</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 Learn about the most common gotchas and mistakes made by first-time users.
@@ -1628,8 +1662,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/calendar/calendar-working-hours.html" class="text-decoration-underline" target="_blank">Working&nbsp;hours</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/calendar/calendar-working-hours.html" class="text-decoration-underline" target="_blank">Working&nbsp;hours</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 Modeling working hours, shifts and holidays is required to get a realistic plan.
@@ -1641,8 +1675,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/operation/operation-type.html" class="text-decoration-underline" target="_blank">Operation&nbsp;types</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/operation/operation-type.html" class="text-decoration-underline" target="_blank">Operation&nbsp;types</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 This example model demonstrates the different operation types.
@@ -1654,8 +1688,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/resource/resource-type.html" class="text-decoration-underline" target="_blank">Resource&nbsp;types</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/resource/resource-type.html" class="text-decoration-underline" target="_blank">Resource&nbsp;types</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 This example model demonstrates the different resource types.
@@ -1667,8 +1701,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/resource/resource-skills.html" class="text-decoration-underline" target="_blank">Resource&nbsp;skills</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/resource/resource-skills.html" class="text-decoration-underline" target="_blank">Resource&nbsp;skills</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 Resources can be assigned skills, which represent certain qualifications.<br>
@@ -1681,8 +1715,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href={docroot}/examples/resource/resource-setup-matrices.html" class="text-decoration-underline" target="_blank">Setup&nbsp;matrices</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href={docroot}/examples/resource/resource-setup-matrices.html" class="text-decoration-underline" target="_blank">Setup&nbsp;matrices</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 Resources can require a setup time to change the configuration between different setups/configurations.
@@ -1696,8 +1730,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/demand/demand-priorities.html" class="text-decoration-underline" target="_blank">Demand&nbsp;priorities</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/demand/demand-priorities.html" class="text-decoration-underline" target="_blank">Demand&nbsp;priorities</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 Demand priorities give you control over the allocation of constrained supply.
@@ -1712,8 +1746,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/demand/demand-policies.html" class="text-decoration-underline" target="_blank">Demand&nbsp;policies</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/demand/demand-policies.html" class="text-decoration-underline" target="_blank">Demand&nbsp;policies</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 This model describes how to model demand policies like "ship all in full", "allow
@@ -1726,8 +1760,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/operation/operation-autofence.html" class="text-decoration-underline" target="_blank">Release&nbsp;fence</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/operation/operation-autofence.html" class="text-decoration-underline" target="_blank">Release&nbsp;fence</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 A release fence can be set to specify a frozen zone in the planning horizon in which
@@ -1742,8 +1776,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/buffer/transfer-batch.html" class="text-decoration-underline" target="_blank">Transfer&nbsp;batching</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/buffer/transfer-batch.html" class="text-decoration-underline" target="_blank">Transfer&nbsp;batching</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 Transfer batching refers to operations that are planned with some overlap. The subsequent
@@ -1756,8 +1790,8 @@ def getWizardSteps(request, mode):
         
          
         <div class="trivision-row-card">
-            <div style="flex: 0 0 100px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px;">
-                <h3 style="color:#2D004D; font-weight:800; font-size:1.5rem; margin-bottom:5px;"><a href="{docroot}/examples/buffer/alternate-materials.html" class="text-decoration-underline" target="_blank">Alternate&nbsp;materials</a></h3>
+            <div style="flex: 0 0 100px; display:flex; flex-direction:column; align-items:center; justify-content:center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 18px; margin-right: 22px; gap:10px;">
+                <span style="width:42px; height:42px; background:linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); color:#fff; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:700; font-size:1.15rem; box-shadow:0 4px 12px rgba(45,0,77,0.28); transition:transform 0.2s ease;"><a href="{docroot}/examples/buffer/alternate-materials.html" class="text-decoration-underline" target="_blank">Alternate&nbsp;materials</a></h3>
             </div>
             <div style="flex: 1; color:#5C4670;">
                 In many industries the bill of materials can contain alternate materials: the same product
@@ -1775,8 +1809,13 @@ def getWizardSteps(request, mode):
         )
         index += 1
 
-    # Feedback step
-    if index > 2:
+    # Feedback step - COMMENTED OUT
+    # if index > 2:
+    #     steps.append(
+    #         {
+    #             "index": index,
+    #             "title": "Give us feedback",
+    if False:  # Disabled: Give us feedback section
         steps.append(
             {
                 "index": index,
@@ -1784,30 +1823,56 @@ def getWizardSteps(request, mode):
                 "icon": None,
                 "content": """
           
-        <div class="trivision-row-card" style="align-items: flex-start;">
-            <div style="flex: 0 0 80px; text-align: center; border-right: 1px solid rgba(156,39,176,0.1); padding-right: 15px; margin-right: 20px; display: flex; flex-direction: column; gap: 15px; margin-top: 10px;">
-                <span id="happy" class="fa fa-smile-o" style="font-size: 40px; color: #4CAF50; cursor: pointer; transition: all 0.2s ease;"></span>
-                <span id="average" class="fa fa-meh-o" style="font-size: 40px; color: #DCDCDC; cursor: pointer; transition: all 0.2s ease;"></span>
-                <span id="nothappy" class="fa fa-frown-o" style="font-size: 40px; color: #DCDCDC; cursor: pointer; transition: all 0.2s ease;"></span>
+        <div class="trivision-row-card" style="align-items: stretch; padding: 1.5rem 2rem;">
+            <div style="flex: 0 0 100px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid rgba(156,39,176,0.12); padding-right: 20px; margin-right: 24px; gap: 12px;">
+                <div class="feedback-emoji" id="happy" style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(145deg, #f0f0f0 0%, #e8e8e8 100%); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <span class="fa fa-smile-o" style="font-size: 28px; color: #10B981;"></span>
+                </div>
+                <div class="feedback-emoji" id="average" style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(145deg, #f0f0f0 0%, #e8e8e8 100%); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <span class="fa fa-meh-o" style="font-size: 28px; color: #9CA3AF;"></span>
+                </div>
+                <div class="feedback-emoji" id="nothappy" style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(145deg, #f0f0f0 0%, #e8e8e8 100%); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
+                    <span class="fa fa-frown-o" style="font-size: 28px; color: #9CA3AF;"></span>
+                </div>
             </div>
             <div style="flex: 1; display: flex; flex-direction: column;">
-                <textarea id='textarea' class="form-control" style="width: 100%; border-radius: 12px; border: 1px solid rgba(156,39,176,0.15); box-shadow: 0 2px 8px rgba(123,45,142,0.05); padding: 1rem; color: #5C4670; font-family: 'Inter', sans-serif; resize: vertical; transition: all 0.3s ease;" rows="8"
-                placeholder="We're eager to hear how well you found your way around.
-
-Choose a smiley and share your comments to help us improve!"></textarea>
+                <label style="font-family: 'Inter', -apple-system, sans-serif; font-weight: 600; color: #2D004D; margin-bottom: 0.75rem; font-size: 0.95rem;">Share your experience</label>
+                <textarea id='textarea' class="form-control" style="width: 100%; border-radius: 14px; border: 2px solid rgba(156,39,176,0.12); box-shadow: 0 4px 12px rgba(123,45,142,0.04); padding: 1.25rem; color: #5C4670; font-family: 'Inter', -apple-system, sans-serif; resize: vertical; transition: all 0.3s ease; font-size: 0.9rem; line-height: 1.6;" rows="6"
+                placeholder="We're eager to hear how well you found your way around. Choose a smiley and share your comments to help us improve!"></textarea>
                 <div class="pt-3 text-end">
-                    <button class="btn btn-primary trivision-btn-primary" disabled id='submit' style="min-width: 160px; pointer-events: auto;">Send us feedback</button>
+                    <button class="btn btn-primary" disabled id='submit' style="min-width: 180px; background: linear-gradient(135deg, #7B2D8E 0%, #A855F7 100%); border: none; border-radius: 25px; font-weight: 700; padding: 0.7rem 1.75rem; font-size: 0.85rem; letter-spacing: 0.3px; box-shadow: 0 4px 14px rgba(123,45,142,0.3); transition: all 0.25s ease; font-family: 'Inter', -apple-system, sans-serif;">Send us feedback</button>
                 </div>
             </div>
         </div>
         <style>
             #textarea:focus {{
-                box-shadow: 0 0 0 3px rgba(168,85,247,0.15);
-                border-color: rgba(168,85,247,0.5);
+                box-shadow: 0 0 0 4px rgba(168,85,247,0.12);
+                border-color: #A855F7;
                 outline: none;
             }}
-            #happy:hover, #average:hover, #nothappy:hover {{
-                transform: scale(1.1);
+            .feedback-emoji:hover {{
+                transform: scale(1.12);
+                box-shadow: 0 4px 16px rgba(123,45,142,0.2);
+            }}
+            #happy.selected {{
+                background: linear-gradient(145deg, #D1FAE5 0%, #A7F3D0 100%) !important;
+                box-shadow: 0 4px 16px rgba(16,185,129,0.3);
+            }}
+            #average.selected {{
+                background: linear-gradient(145deg, #FEF3C7 0%, #FDE68A 100%) !important;
+                box-shadow: 0 4px 16px rgba(245,158,11,0.3);
+            }}
+            #nothappy.selected {{
+                background: linear-gradient(145deg, #FEE2E2 0%, #FECACA 100%) !important;
+                box-shadow: 0 4px 16px rgba(239,68,68,0.3);
+            }}
+            #submit:not(:disabled) {{
+                pointer-events: auto;
+            }}
+            #submit:not(:disabled):hover {{
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(123,45,142,0.4);
+                background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
             }}
         </style>
 
@@ -1823,27 +1888,40 @@ Choose a smiley and share your comments to help us improve!"></textarea>
        var $happy = $('#happy');
        var $average = $('#average');
        var $nothappy = $('#nothappy');
+       var selectedFeeling = 'Average';
 
        // Set the onkeyup events
        $textarea.on('keyup', function() {
          $submit.prop('disabled', $.trim($textarea.val()) === '');
        });
 
-       // Set default value of smiley to happy (let's be optimistic)
+       // Emoji selection handlers
        $happy.click( function() {
-         $happy.css("color", "#4CAF50");
-         $average.css("color", "#DCDCDC");
-         $nothappy.css("color", "#DCDCDC");
+         $happy.addClass('selected');
+         $average.removeClass('selected');
+         $nothappy.removeClass('selected');
+         $happy.find('.fa').css("color", "#10B981");
+         $average.find('.fa').css("color", "#9CA3AF");
+         $nothappy.find('.fa').css("color", "#9CA3AF");
+         selectedFeeling = 'Happy';
          });
        $average.click( function() {
-         $happy.css("color", "#DCDCDC");
-         $average.css("color", "#FF9800");
-         $nothappy.css("color", "#DCDCDC");
+         $happy.removeClass('selected');
+         $average.addClass('selected');
+         $nothappy.removeClass('selected');
+         $happy.find('.fa').css("color", "#9CA3AF");
+         $average.find('.fa').css("color", "#F59E0B");
+         $nothappy.find('.fa').css("color", "#9CA3AF");
+         selectedFeeling = 'Average';
          });
        $nothappy.click( function() {
-         $happy.css("color", "#DCDCDC");
-         $average.css("color", "#DCDCDC");
-         $nothappy.css("color", "#F44336");
+         $happy.removeClass('selected');
+         $average.removeClass('selected');
+         $nothappy.addClass('selected');
+         $happy.find('.fa').css("color", "#9CA3AF");
+         $average.find('.fa').css("color", "#9CA3AF");
+         $nothappy.find('.fa').css("color", "#EF4444");
+         selectedFeeling = 'Not happy';
          });
 
        $('#submit').click(function(e) {
@@ -1851,7 +1929,7 @@ Choose a smiley and share your comments to help us improve!"></textarea>
                type: "POST",
                url: '/wizard/sendsurveymail/',
                data: {
-                 'feeling': $happy.css("color") == "rgb(76, 175, 80)" ? "Happy" : ($nothappy.css("color") == "rgb(244, 67, 54)" ? "Not happy" : "Average"),
+                 'feeling': selectedFeeling,
                  'comments': $textarea.val()
                  },
                success: function() {
