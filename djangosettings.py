@@ -54,6 +54,16 @@ DATABASES = {
     )
 }
 
+# Support multiple scenarios through environment variables
+# Define FREPPLE_SCENARIOS="sats,dist_demo" and DATABASE_URL_SATS, DATABASE_URL_DIST_DEMO
+_scenarios = os.environ.get("FREPPLE_SCENARIOS", "").split(",")
+for _sc in _scenarios:
+    _sc = _sc.strip().lower()
+    if _sc and _sc != "default":
+        _url = os.environ.get(f"DATABASE_URL_{_sc.upper()}")
+        if _url:
+            DATABASES[_sc] = dj_database_url.config(default=_url)
+
 # Google analytics code to report usage statistics to.
 # The value None disables this feature.
 GOOGLE_ANALYTICS = None
@@ -199,6 +209,7 @@ SESSION_LOGOUT_IDLE_TIME = 60 * 24  # minutes
 
 MIDDLEWARE = (
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     # Uncomment the next line to automatically log on as the admin user,
     # which can be useful for development or for demo models.
@@ -336,45 +347,6 @@ if DEFAULT_THEME not in THEMES:
 # The default number of records to pull from the server as a page
 DEFAULT_PAGESIZE = 100
 
-# Configuration of the default dashboard
-DEFAULT_DASHBOARD = [
-    {
-        "rowname": _("default"),
-        "cols": [
-            {
-                "width": 12,
-                "widgets": [
-                    ("execute", {}),
-                    ("executegroup", {}),
-                    ("forecast", {"history": 36, "future": 12}),
-                    # (
-                    #     "analysis_demand_problems",
-                    #     {"top": 20, "orderby": "latedemandvalue"},
-                    # ),
-                    # ("outliers", {"limit": 20}),
-                    # ("demand_alerts", {}),
-                    ("delivery_performance", {"green": 90, "yellow": 80}),
-                    ("forecast_error", {"history": 12}),
-                    # ("archived_demand", {"history": 12}),
-                    ("purchase_orders", {"fence1": 7, "fence2": 30}),
-                    # ("purchase_queue",{"limit":20}),
-                    # ("purchase_order_analysis", {"limit": 20}),
-                    # ("archived_purchase_order", {"history": 12}),
-                    ("inventory_by_location", {"limit": 5}),
-                    # ("inventory_by_item", {"limit": 10}),
-                    ("manufacturing_orders", {"fence1": 7, "fence2": 30}),
-                    # ("resource_queue",{"limit":20}),
-                    # ("capacity_alerts", {}),
-                    ("resource_utilization", {"limit": 5, "medium": 80, "high": 90}),
-                    ("distribution_orders", {"fence1": 7, "fence2": 30}),
-                    # ("shipping_queue",{"limit":20}),
-                    # ("archived_buffer", {"history": 12}),
-                    ("inventory_projection", {"history": 12}),
-                ],
-            },
-        ],
-    },
-]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -476,3 +448,17 @@ FTP_FOLDER = {
 # Browser to test with selenium
 SELENIUM_TESTS = "chrome"
 SELENIUM_HEADLESS = True
+
+# AWS S3 and Production settings
+if os.environ.get("AWS_STORAGE_BUCKET_NAME"):
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "us-east-1")
+    AWS_DEFAULT_ACL = "public-read"
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+
+_allowed_hosts = os.environ.get("ALLOWED_HOSTS")
+if _allowed_hosts:
+    ALLOWED_HOSTS = _allowed_hosts.split(",")
