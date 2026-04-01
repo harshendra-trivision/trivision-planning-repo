@@ -29,6 +29,11 @@ import logging
 import os
 import sys
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "freppledb.settings")
+
+import django
+django.setup()
+
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.db import DEFAULT_DB_ALIAS
@@ -53,7 +58,6 @@ from .urls import svcpatterns
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 os.environ["LC_ALL"] = "en_US.UTF-8"
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "freppledb.settings")
 
 logger = logging.getLogger(__name__)
 
@@ -77,10 +81,9 @@ def registerService(key):
 for app in settings.INSTALLED_APPS:
     try:
         mod = import_module("%s.services" % app)
-    except ModuleNotFoundError as e:
-        # Silently ignore if the missing module is called urls
-        if "services" not in str(e):
-            raise e
+    except ModuleNotFoundError:
+        # Silently ignore missing optional service modules and their dependencies
+        pass
 
 
 # class WebsocketService(WebsocketConsumer):

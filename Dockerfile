@@ -121,9 +121,16 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -y \
     python3.11 python3.11-dev python3.11-venv python3-pip \
-    cmake g++ git nodejs npm \
+    cmake g++ git \
     libxerces-c-dev libpq-dev postgresql-client \
-    curl ca-certificates
+    curl ca-certificates gnupg lsb-release && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g pnpm@latest-10 && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg && \
+    apt-get update && \
+    apt-get install -y postgresql-client-17
 
 WORKDIR /app
 
@@ -133,10 +140,20 @@ RUN python3.11 -m venv venv
 RUN . venv/bin/activate && pip install --upgrade pip
 RUN . venv/bin/activate && pip install -r requirements.txt
 
+# Create necessary directories and build assets
+RUN mkdir -p /app/static /app/logs
+RUN . venv/bin/activate && pnpm install --frozen-lockfile 2>/dev/null || pnpm install
+RUN . venv/bin/activate && pnpm exec grunt 2>/dev/null || true
+RUN . venv/bin/activate && \
+    FREPPLE_STATIC=/app/static \
+    python3.11 frepplectl.py collectstatic --noinput --clear --ignore '*.less' --verbosity=0
+
 ENV PATH="/app/venv/bin:$PATH"
 ENV PYTHONPATH="/app"
 ENV DJANGO_SETTINGS_MODULE=freppledb.settings
+ENV FREPPLE_STATIC=/app/static
+ENV FREPPLE_LOGDIR=/app/logs
 
 EXPOSE 10000
 
-CMD ["sh","-c","python frepplectl.py runserver 0.0.0.0:${PORT:-10000}"]
+CMD ["sh","-c","daphne -b 0.0.0.0 -p ${PORT:-10000} freppledb.asgi_web:application"]

@@ -6,7 +6,7 @@ services:
     build: .
     container_name: frepple-app
     ports:
-      - "8000:8000"
+      - "8000:10000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -16,7 +16,15 @@ services:
       POSTGRES_USER: frepple
       POSTGRES_PASSWORD: frepple
       POSTGRES_DBNAME: frepple
+      # Scenario configuration for dropdown
+      FREPPLE_SCENARIOS: "stas,productiondemo,manufacturingdemo"
+      DATABASE_URL_STAS: "postgres://frepple:frepple@postgres:5432/frepple_stas"
+      DATABASE_URL_PRODUCTIONDEMO: "postgres://frepple:frepple@postgres:5432/frepple_productiondemo"
+      DATABASE_URL_MANUFACTURINGDEMO: "postgres://frepple:frepple@postgres:5432/frepple_manufacturingdemo"
     volumes:
+      - .:/app
+      - /app/venv
+      - /app/node_modules
       - frepple-logs:/app/logs
     networks:
       - frepple-network
@@ -30,6 +38,7 @@ services:
       POSTGRES_DB: frepple
     volumes:
       - frepple-postgres-data:/var/lib/postgresql/data
+      - ./init-scenarios.sql:/docker-entrypoint-initdb.d/init-scenarios.sql
     ports:
       - "5432:5432"
     healthcheck:

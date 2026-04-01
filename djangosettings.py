@@ -48,9 +48,21 @@ SECRET_KEY = "%@mzit!i8b*$zc&6oev96=RANDOMSTRING"
 # Configuration of the frepple database
 MIN_NUMBER_OF_SCENARIOS = 2
 MAX_NUMBER_OF_SCENARIOS = 30
+
+# Use individual env vars if DATABASE_URL is not set
+_db_url = os.environ.get("DATABASE_URL")
+if not _db_url and os.environ.get("POSTGRES_HOST"):
+    _db_url = "postgres://%s:%s@%s:%s/%s" % (
+        os.environ.get("POSTGRES_USER", "frepple"),
+        os.environ.get("POSTGRES_PASSWORD", "frepple"),
+        os.environ.get("POSTGRES_HOST", "localhost"),
+        os.environ.get("POSTGRES_PORT", "5432"),
+        os.environ.get("POSTGRES_DBNAME", "frepple")
+    )
+
 DATABASES = {
     "default": dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
+        default=_db_url
     )
 }
 
@@ -62,7 +74,12 @@ for _sc in _scenarios:
     if _sc and _sc != "default":
         _url = os.environ.get(f"DATABASE_URL_{_sc.upper()}")
         if _url:
-            DATABASES[_sc] = dj_database_url.config(default=_url)
+            _db_config = dj_database_url.config(
+                env=f"DATABASE_URL_{_sc.upper()}", 
+                default=_url
+            )
+            _db_config["SQL_ROLE"] = _db_config.get("USER", "frepple")
+            DATABASES[_sc] = _db_config
 
 # Google analytics code to report usage statistics to.
 # The value None disables this feature.
