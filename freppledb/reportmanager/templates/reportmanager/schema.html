@@ -1,22 +1,124 @@
 {% load i18n %}
+<style>
+.schema-table-card {
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+  background: white;
+}
+
+.schema-table-header {
+  background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #E5E7EB;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.schema-table-header:hover {
+  background: linear-gradient(135deg, #F3E8FF 0%, #EDE7F6 100%);
+}
+
+.schema-table-title {
+  color: #2D004D;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.schema-toggle-icon {
+  color: #7B2D8E;
+  transition: all 0.2s ease;
+}
+
+.schema-table-body {
+  padding: 0;
+  background: #FAFBFC;
+}
+
+.schema-field-table {
+  margin: 0;
+  font-size: 0.8rem;
+}
+
+.schema-field-row {
+  border-bottom: 1px solid #F1F5F9;
+  transition: all 0.15s ease;
+}
+
+.schema-field-row:hover {
+  background: rgba(123, 45, 142, 0.05);
+}
+
+.schema-field-link {
+  color: #374151;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  transition: all 0.15s ease;
+}
+
+.schema-field-link:hover {
+  color: #7B2D8E;
+  text-decoration: none;
+}
+
+.schema-field-code {
+  background: rgba(123, 45, 142, 0.1);
+  color: #7B2D8E;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.schema-field-type {
+  color: #6B7280;
+  font-size: 0.75rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.schema-copy-icon {
+  color: #9CA3AF;
+  font-size: 0.7rem;
+  opacity: 0;
+  transition: all 0.15s ease;
+}
+
+.schema-field-link:hover .schema-copy-icon {
+  opacity: 1;
+  color: #7B2D8E;
+}
+</style>
+
 <div class="col">
 {% for m in schema %}
-<div class="card">
-    <div class="card-header schema-header" role="tab">
-      <span class="fa fa-plus float-end panel-toggle"></span>
-      <h5 class="name card-title" style="display: inline-block">
-         <a role="button">{% trans "table"|capfirst %}&nbsp;{{ m.0 }}</a>
-      </h5>
+<div class="schema-table-card">
+    <div class="schema-table-header schema-header" role="tab">
+      <h6 class="schema-table-title">
+         <i class="fa fa-table me-2"></i>{{ m.0 }}
+      </h6>
+      <span class="fa fa-plus schema-toggle-icon panel-toggle"></span>
     </div>
-    <div class="collapse card-body table-responsive schema-table">
-        <table class="table table-sm table-hover">
-            <thead>
-            </thead>
+    <div class="collapse schema-table-body table-responsive schema-table">
+        <table class="schema-field-table table table-sm">
             <tbody>
                 {% for c in m.1 %}
-                <tr>
-                    <td width="50%"><a href="#" class="schemafield"><code>{{ c.0 }}</code>&nbsp;<span class="fa fa-clipboard"></span></a></td>
-                    <td width="50%" class="text-muted"><small>{{ c.1 }}</small></td>
+                <tr class="schema-field-row">
+                    <td width="60%">
+                      <a href="#" class="schema-field-link schemafield">
+                        <code class="schema-field-code">{{ c.0 }}</code>
+                        <span class="fa fa-clipboard schema-copy-icon"></span>
+                      </a>
+                    </td>
+                    <td width="40%" class="schema-field-type">{{ c.1 }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

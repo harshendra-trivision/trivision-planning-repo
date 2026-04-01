@@ -29,13 +29,14 @@ import os
 import sys
 import pathlib
 
+import dj_database_url
 from django.utils.translation import gettext_lazy as _
 
 try:
     DEBUG = "runserver" in sys.argv
 except Exception:
     DEBUG = False
-DEBUG_JS = DEBUG
+DEBUG_JS = False
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -47,60 +48,38 @@ SECRET_KEY = "%@mzit!i8b*$zc&6oev96=RANDOMSTRING"
 # Configuration of the frepple database
 MIN_NUMBER_OF_SCENARIOS = 2
 MAX_NUMBER_OF_SCENARIOS = 30
+
+# Use individual env vars if DATABASE_URL is not set
+_db_url = os.environ.get("DATABASE_URL")
+if not _db_url and os.environ.get("POSTGRES_HOST"):
+    _db_url = "postgres://%s:%s@%s:%s/%s" % (
+        os.environ.get("POSTGRES_USER", "frepple"),
+        os.environ.get("POSTGRES_PASSWORD", "frepple"),
+        os.environ.get("POSTGRES_HOST", "localhost"),
+        os.environ.get("POSTGRES_PORT", "5432"),
+        os.environ.get("POSTGRES_DBNAME", "frepple")
+    )
+
 DATABASES = {
-    "default" if i == 0 else f"scenario{i}": {
-        "ENGINE": "freppledb.common.postgresql",
-        # Database name
-        "NAME": f"{os.environ.get("POSTGRES_DBNAME","frepple")}{i}",
-        # Role name when using md5 authentication.
-        # Leave as an empty string when using peer or
-        # ident authencation.
-        "USER": os.environ.get("POSTGRES_USER", "frepple"),
-        # Role password when using md5 authentication.
-        # Leave as an empty string when using peer or
-        # ident authencation.
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD", "frepple"),
-        # When using TCP sockets specify the hostname,
-        # the ip4 address or the ip6 address here.
-        # Leave as an empty string to use Unix domain
-        # socket ("local" lines in pg_hba.conf).
-        "HOST": os.environ.get("POSTGRES_HOST", ""),
-        # Specify the port number when using a TCP socket.
-        "PORT": os.environ.get("POSTGRES_PORT", ""),
-        "OPTIONS": {
-            "options": "-c lock_timeout=300000"  # Timeout (in milliseconds) to acquire a lock
-        },
-        "CONN_MAX_AGE": None,
-        "CONN_HEALTH_CHECKS": True,
-        "TEST": {
-            # Database name used when running the test suite.
-            "NAME": (f"{os.environ.get("POSTGRES_DBNAME","frepple")}_test{i}"),
-            # Port for web service when running the test suite
-            "FREPPLE_PORT": f"127.0.0.1:{i+9002}",
-        },
-        # The FILEUPLOADFOLDER setting is used by the "import data files" task.
-        # By default all scenario databases use the same data folder on the server.
-        # By configuring this setting you can configure a dedicated data folder for each
-        # scenario database.
-        "FILEUPLOADFOLDER": os.path.normpath(
-            os.path.join(
-                FREPPLE_LOGDIR, "data", "default" if i == 0 else f"scenario{i}"
-            )
-        ),
-        # Role name for executing custom reports and processing sql data files.
-        # Make sure this role has properly restricted permissions!
-        # When left unspecified, SQL statements run with the full read-write
-        # permissions of the user specified above. Which can be handy, but is not secure.
-        "SQL_ROLE": "report_role",
-        "SECRET_WEBTOKEN_KEY": SECRET_KEY,
-        # Port for the frepple web service
-        "FREPPLE_PORT": f"127.0.0.1:{i+8002}",
-    }
-    # Adjust the range to include extra scenarios in the list.
-    # When changing this, your apache configuration file also needs a matching adjustment.
-    # THE NEXT LINE IS AUTOMATICALLY UPDATED IN SCENARIO MANAGEMENT WIDGET!
-    for i in range(3)
+    "default": dj_database_url.config(
+        default=_db_url
+    )
 }
+
+# Support multiple scenarios through environment variables
+# Define FREPPLE_SCENARIOS="sats,dist_demo" and DATABASE_URL_SATS, DATABASE_URL_DIST_DEMO
+_scenarios = os.environ.get("FREPPLE_SCENARIOS", "").split(",")
+for _sc in _scenarios:
+    _sc = _sc.strip().lower()
+    if _sc and _sc != "default":
+        _url = os.environ.get(f"DATABASE_URL_{_sc.upper()}")
+        if _url:
+            _db_config = dj_database_url.config(
+                env=f"DATABASE_URL_{_sc.upper()}", 
+                default=_url
+            )
+            _db_config["SQL_ROLE"] = _db_config.get("USER", "frepple")
+            DATABASES[_sc] = _db_config
 
 # Google analytics code to report usage statistics to.
 # The value None disables this feature.
@@ -247,6 +226,7 @@ SESSION_LOGOUT_IDLE_TIME = 60 * 24  # minutes
 
 MIDDLEWARE = (
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     # Uncomment the next line to automatically log on as the admin user,
     # which can be useful for development or for demo models.
@@ -384,45 +364,6 @@ if DEFAULT_THEME not in THEMES:
 # The default number of records to pull from the server as a page
 DEFAULT_PAGESIZE = 100
 
-# Configuration of the default dashboard
-DEFAULT_DASHBOARD = [
-    {
-        "rowname": _("default"),
-        "cols": [
-            {
-                "width": 12,
-                "widgets": [
-                    ("execute", {}),
-                    ("executegroup", {}),
-                    ("forecast", {"history": 36, "future": 12}),
-                    # (
-                    #     "analysis_demand_problems",
-                    #     {"top": 20, "orderby": "latedemandvalue"},
-                    # ),
-                    # ("outliers", {"limit": 20}),
-                    # ("demand_alerts", {}),
-                    ("delivery_performance", {"green": 90, "yellow": 80}),
-                    ("forecast_error", {"history": 12}),
-                    # ("archived_demand", {"history": 12}),
-                    ("purchase_orders", {"fence1": 7, "fence2": 30}),
-                    # ("purchase_queue",{"limit":20}),
-                    # ("purchase_order_analysis", {"limit": 20}),
-                    # ("archived_purchase_order", {"history": 12}),
-                    ("inventory_by_location", {"limit": 5}),
-                    # ("inventory_by_item", {"limit": 10}),
-                    ("manufacturing_orders", {"fence1": 7, "fence2": 30}),
-                    # ("resource_queue",{"limit":20}),
-                    # ("capacity_alerts", {}),
-                    ("resource_utilization", {"limit": 5, "medium": 80, "high": 90}),
-                    ("distribution_orders", {"fence1": 7, "fence2": 30}),
-                    # ("shipping_queue",{"limit":20}),
-                    # ("archived_buffer", {"history": 12}),
-                    ("inventory_projection", {"history": 12}),
-                ],
-            },
-        ],
-    },
-]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -486,7 +427,21 @@ CSRF_COOKIE_SECURE = (
 # CSRF_TRUSTED_ORIGINS = ["https://yourserver", "https://*.yourdomain.com"]
 # SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 CSRF_TRUSTED_ORIGINS = os.environ.get("FREPPLE_CSRF_TRUSTED_ORIGINS", "").split()
-SECURE_PROXY_SSL_HEADER = os.environ.get("FREPPLE_SECURE_PROXY_SSL_HEADER", "").split()
+# Add ngrok domain for local development (set NGROK_DOMAIN=your-subdomain.ngrok-free.app)
+_ngrok = os.environ.get("NGROK_DOMAIN", "").strip()
+if _ngrok:
+    CSRF_TRUSTED_ORIGINS = list(CSRF_TRUSTED_ORIGINS) + [
+        f"https://{_ngrok}",
+        f"http://{_ngrok}",
+    ]
+# When behind ngrok/proxy: Django needs this to trust X-Forwarded-Proto for correct redirect URLs
+_SECURE_PROXY = os.environ.get("FREPPLE_SECURE_PROXY_SSL_HEADER", "").strip()
+if _SECURE_PROXY:
+    SECURE_PROXY_SSL_HEADER = tuple(_SECURE_PROXY.split())
+elif _ngrok:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+else:
+    SECURE_PROXY_SSL_HEADER = None
 
 # Configuration of the ftp/sftp/ftps server where to upload reports
 # Note that for SFTP protocol, the host needs to be defined
@@ -510,3 +465,17 @@ FTP_FOLDER = {
 # Browser to test with selenium
 SELENIUM_TESTS = "chrome"
 SELENIUM_HEADLESS = True
+
+# AWS S3 and Production settings
+if os.environ.get("AWS_STORAGE_BUCKET_NAME"):
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+    AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME", "us-east-1")
+    AWS_DEFAULT_ACL = "public-read"
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+
+_allowed_hosts = os.environ.get("ALLOWED_HOSTS")
+if _allowed_hosts:
+    ALLOWED_HOSTS = _allowed_hosts.split(",")

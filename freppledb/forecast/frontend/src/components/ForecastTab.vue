@@ -30,7 +30,7 @@ import ForecastTable from "@/components/ForecastTable.vue";
 </script>
 
 <template>
-  <div>
+  <div class="forecast-tab-wrapper">
     <ForecastGraph />
     <ForecastTable />
     <div class="row mb-3" data-ng-show="showtab=='forecast'">
@@ -44,3 +44,13 @@ import ForecastTable from "@/components/ForecastTable.vue";
   </div>
 </template>
 
+<style scoped>
+.forecast-tab-wrapper {
+  animation: fadeInTab 0.25s ease-out;
+}
+
+@keyframes fadeInTab {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>

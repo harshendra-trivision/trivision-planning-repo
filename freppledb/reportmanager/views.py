@@ -114,16 +114,16 @@ class ReportList(GridReport):
     help_url = "user-interface/report-manager.html"
     message_when_empty = Template(
         """
+        <div class="grid-empty-message">
         <h3>You didn't find the exact report you need? Do not despair!</h3>
-        <br>
-        You can add custom reports by writing a SQL query.<br>
-        <br>
-        Your custom report will show up in the navigation menu.<br>
+        <p>You can add custom reports by writing a SQL query.</p>
+        <p>Your custom report will show up in the navigation menu.<br>
         It will have the same filter, sort and export functionalities as all other reports.<br>
-        You can choose to keep the report private or share it with other users.<br>
-        <br><br>
-        <a href="{{request.prefix}}/data/reportmanager/sqlreport/add/" class="btn btn-primary">Add custom report</a>
-        <br>
+        You can choose to keep the report private or share it with other users.</p>
+        <a href="{{request.prefix}}/data/reportmanager/sqlreport/add/" class="add-report-btn">
+        <i class="fa fa-plus"></i> Add custom report
+        </a>
+        </div>
         """
     )
     frozenColumns = 1
@@ -142,8 +142,8 @@ class ReportList(GridReport):
             editable=False,
         ),
         GridFieldText("description", title=_("description")),
-        GridFieldText("sql", title=_("SQL query")),
-        GridFieldBoolNullable("public", title=_("public")),
+        GridFieldText("sql", title=_("SQL query"), extra="formatter:sqlPreview"),
+        GridFieldBoolNullable("public", title=_("public"), extra="formatter:publicBadge"),
         GridFieldText(
             "user__username",
             title=_("user"),

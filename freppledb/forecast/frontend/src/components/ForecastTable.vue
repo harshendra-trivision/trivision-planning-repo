@@ -228,23 +228,23 @@ const navigateToDrilldown = (event) => {
 <template>
   <div class="row mb-3">
     <div class="col">
-      <div class="panel" id="forecastgrid" style="background-color: transparent;">
+      <div class="panel forecast-grid-panel" id="forecastgrid">
         <div class="forecast-grid-container">
           <!-- Row labels table -->
-          <div class="pull-left" style="border-top-left-radius: 6px; border-bottom-left-radius: 6px;">
+          <div class="pull-left forecast-labels-col">
             <table class="table-sm table-hover" id="forecasttabletags">
               <thead class="thead-default">
               <tr>
-                <th style="background-color: #aaa; border-top-left-radius: 6px">&nbsp;</th>
+                <th class="labels-header">&nbsp;</th>
               </tr>
               </thead>
               <tbody>
               <tr v-for="row in store.tableRows" :key="row">
                 <td v-if="measures[row]['mode_future'] !== 'edit'"
-                    style="white-space: nowrap; text-transform: capitalize;">
+                    class="label-cell">
                   {{ measures[row].label || row }}
                 </td>
-                <td v-else style="white-space: nowrap; text-transform: capitalize;">
+                <td v-else class="label-cell editable-label">
                   {{ measures[row].label || row }}
                   <input style="width: 0" class="invisible">
                 </td>
@@ -257,7 +257,7 @@ const navigateToDrilldown = (event) => {
           <form
               id="forecasttable"
               name="forecasttable"
-              style="overflow-x: scroll; border-top-right-radius: 6px; border-bottom-right-radius: 6px;"
+              class="forecast-data-scroll"
           >
             <table class="table-sm table-hover" id="fforecasttable">
               <thead class="thead-default" id="fforecasttablehead">
@@ -265,8 +265,7 @@ const navigateToDrilldown = (event) => {
                 <th
                     v-for="(bucket, bucketIndex) in visibleBuckets"
                     :key="bucketIndex"
-                    class="text-center text-nowrap"
-                    style="background-color: #aaa"
+                    class="text-center text-nowrap data-header-cell"
                     :title="`${formatDate(bucket.startdate)} - ${formatDate(bucket.enddate)}`"
                 >
                   {{ bucket.bucket }}
@@ -331,3 +330,57 @@ const navigateToDrilldown = (event) => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.forecast-grid-panel {
+  background-color: transparent !important;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.forecast-labels-col {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.labels-header {
+  background: linear-gradient(135deg, #7B2D8E 0%, #5A1B6B 100%) !important;
+  color: #FFFFFF !important;
+  height: 28px;
+  border: none !important;
+  border-top-left-radius: 10px;
+}
+
+.label-cell {
+  white-space: nowrap;
+  text-transform: capitalize;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #374151;
+  border-bottom: 1px solid #F5F3F7 !important;
+  padding: 3px 8px !important;
+}
+
+.editable-label {
+  color: #7B2D8E;
+  font-weight: 600;
+}
+
+.forecast-data-scroll {
+  overflow-x: scroll;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.data-header-cell {
+  background: linear-gradient(135deg, #7B2D8E 0%, #5A1B6B 100%) !important;
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+  font-size: 0.78rem !important;
+  letter-spacing: 0.3px;
+  height: 28px;
+  border: none !important;
+  border-right: 1px solid rgba(255,255,255,0.12) !important;
+  padding: 4px 6px !important;
+}
+</style>

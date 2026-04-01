@@ -40,12 +40,17 @@ if __name__ == "__main__":
             curdir = os.path.dirname(os.path.realpath(__file__))
         except NameError:
             curdir = os.getcwd()
-        for candidate in (
+        candidates = [
             # Development layout
             os.path.join(curdir, "venv"),
             # Linux install layout
             os.path.join(curdir, "..", "share", "frepple", "venv"),
-        ):
+            # Docker / app layout (venv at FREPPLE_APP/venv, e.g. /app/venv)
+            os.path.join(curdir, "..", "..", "venv"),
+        ]
+        if os.environ.get("FREPPLE_APP"):
+            candidates.append(os.path.join(os.environ["FREPPLE_APP"], "venv"))
+        for candidate in candidates:
             if os.path.isfile(
                 os.path.join(candidate, "bin", "python3")
             ) and os.path.isfile(os.path.join(candidate, "bin", "activate")):

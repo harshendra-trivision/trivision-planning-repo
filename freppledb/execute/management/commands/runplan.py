@@ -282,7 +282,8 @@ class Command(BaseCommand):
                 options.get("odoo_folder", None)
                 and "freppledb.odoo" in settings.INSTALLED_APPS
             ):
-                task.arguments += f" --odoo_folder={options["odoo_folder"]}"
+                odoo_folder = options["odoo_folder"]
+                task.arguments += f" --odoo_folder={odoo_folder}"
 
             # Log task
             # Different from the other tasks the frepple engine will write the processid
@@ -340,6 +341,10 @@ class Command(BaseCommand):
             if "DJANGO_SETTINGS_MODULE" not in os.environ:
                 os.environ["DJANGO_SETTINGS_MODULE"] = "freppledb.settings"
             os.environ["PYTHONPATH"] = os.path.normpath(settings.FREPPLE_APP)
+            # Ensure frepple subprocess finds Django (venv at FREPPLE_APP/venv, e.g. Docker)
+            venv_path = os.path.join(settings.FREPPLE_APP, "venv")
+            if os.path.isfile(os.path.join(venv_path, "bin", "python3")):
+                os.environ["VIRTUAL_ENV"] = venv_path
 
             if options["background"] or options["daemon"]:
                 subprocess.Popen(["frepple", cmd], preexec_fn=setlimits)

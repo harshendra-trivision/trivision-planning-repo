@@ -27,7 +27,8 @@ import { usePostBackendData, useGetBackendData, getCsrfToken } from '@common/use
 export const api = {
   async wspost(endpoint, data, options = {}) {
     const defaultHeaders = {
-      'Authorization': 'Bearer ' + window.service_token
+      'Authorization': 'Bearer ' + window.service_token,
+      'X-CSRFToken': getCsrfToken()
     };
 
     const { loading, backendError, responseData } = await usePostBackendData(

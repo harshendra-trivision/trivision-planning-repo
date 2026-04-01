@@ -1,0 +1,281 @@
+{% extends "input/operationplanreport.html" %}
+{% load i18n %}
+
+{% block bodyclass %}inventory-detail-page {% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    :root {
+        --primary-purple: #7B2D8E;
+        --deep-purple: #2D004D;
+        --bright-accent: #9C27B0;
+        --soft-purple-bg: rgba(123, 45, 142, 0.04);
+        --border-color: #E5E7EB;
+        --card-bg: #FFFFFF;
+        --table-shell: #FCFAFF;
+        --row-alt: #FBF9FD;
+        --row-hover: rgba(123, 45, 142, 0.06);
+        --text-primary: #2B2138;
+        --text-secondary: #6F6480;
+    }
+
+    /* Page header - match image */
+    #content > h1 {
+        display: none;
+    }
+
+    /* Grid container - match Sales orders style */
+    #content-main {
+        position: relative;
+        background: var(--card-bg);
+        border-radius: 20px;
+        box-shadow: 0 18px 45px rgba(45, 0, 77, 0.08);
+        border: 1px solid rgba(123, 45, 142, 0.10);
+        padding: 1.35rem;
+        margin-top: 1rem !important;
+        overflow: hidden;
+    }
+
+    #content-main::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 4px;
+        background: linear-gradient(90deg, #7B2D8E 0%, #9C27B0 55%, #C084FC 100%);
+    }
+
+    #gbox_grid, .ui-jqgrid {
+        width: 100% !important;
+        border: 1px solid rgba(123, 45, 142, 0.10) !important;
+        border-radius: 16px !important;
+        background: var(--table-shell) !important;
+        box-shadow: 0 14px 30px rgba(45, 0, 77, 0.06) !important;
+        overflow: hidden !important;
+    }
+
+    .modern-header-container {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.99) 0%, rgba(250, 247, 253, 0.96) 100%);
+        border: 1px solid rgba(123, 45, 142, 0.07);
+        border-radius: 20px;
+        padding: 1.1rem 1.2rem;
+        box-shadow: 0 14px 28px rgba(45, 0, 77, 0.05);
+    }
+
+    .modern-header-container h2 {
+        font-size: 1.85rem;
+        line-height: 1.1;
+    }
+
+    .modern-header-container .text-muted {
+        color: #8D7EA1 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        font-size: 0.72rem !important;
+    }
+
+    /* Save - purple (primary), Undo - gray (secondary) - match image */
+    #save {
+        background: #7B2D8E !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 0.52rem 1rem !important;
+        font-weight: 600 !important;
+        font-size: 0.78rem !important;
+        color: white !important;
+        box-shadow: 0 6px 14px rgba(123, 45, 142, 0.16) !important;
+    }
+
+    #save:hover:not(:disabled) {
+        background: #2D004D !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(123, 45, 142, 0.2) !important;
+    }
+
+    #undo {
+        background: #6B7280 !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 0.52rem 1rem !important;
+        font-weight: 600 !important;
+        font-size: 0.78rem !important;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    #undo:hover:not(:disabled) {
+        background: #4B5563 !important;
+        transform: translateY(-1px);
+    }
+
+    #undo:disabled, #save:disabled {
+        opacity: 0.65 !important;
+        cursor: not-allowed;
+    }
+
+    /* Select action - gray - match image */
+    #actions1, .dropdown-toggle[name="actions1"] {
+        background: #6B7280 !important;
+        border: none !important;
+        border-radius: 10px !important;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+    }
+
+    #actions1:hover:not(:disabled),
+    .dropdown-toggle[name="actions1"]:hover:not(:disabled) {
+        background: #4B5563 !important;
+    }
+
+    #actions1:disabled, .dropdown-toggle[name="actions1"]:disabled {
+        background: #9CA3AF !important;
+        opacity: 0.7;
+    }
+
+    /* Filter form - match image */
+    #filterform {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.55rem 0.7rem;
+        background: linear-gradient(135deg, #FCFAFF 0%, #F6EFFB 100%) !important;
+        border: 1px solid rgba(123, 45, 142, 0.10) !important;
+        border-radius: 14px !important;
+        box-shadow: 0 6px 18px rgba(45, 0, 77, 0.04);
+    }
+
+    #filterform .input-group {
+        background: #FFFFFF;
+        border: 1px solid rgba(123, 45, 142, 0.10);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    #filterform input[type="text"], #addsearch {
+        border: none !important;
+        background: transparent !important;
+        color: var(--text-primary) !important;
+        padding: 0.55rem 0.8rem !important;
+        min-width: 8rem;
+    }
+
+    #filterform .input-group-text {
+        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+        border: none !important;
+        color: #FFFFFF !important;
+        padding: 0.55rem 0.8rem !important;
+    }
+
+    /* Table - light header - match image */
+    .ui-jqgrid .ui-jqgrid-hdiv {
+        background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
+        border-bottom: 1px solid rgba(123, 45, 142, 0.12) !important;
+    }
+
+    .ui-jqgrid .ui-jqgrid-htable th,
+    .ui-jqgrid .ui-jqgrid-htable .ui-th-column {
+        background: transparent !important;
+        color: #2D004D !important;
+        font-weight: 700 !important;
+        padding: 0.95rem 0.75rem !important;
+        text-transform: uppercase;
+        font-size: 0.68rem;
+        letter-spacing: 0.10em;
+        border-right: 1px solid rgba(123, 45, 142, 0.06) !important;
+        box-shadow: inset 0 -1px 0 rgba(123, 45, 142, 0.08);
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td {
+        color: var(--text-primary) !important;
+        border-bottom: 1px solid #F3F1F7 !important;
+        padding: 0.8rem 0.75rem !important;
+        font-size: 0.85rem;
+        background: #FFFFFF !important;
+    }
+
+    .ui-jqgrid tr.jqgrow:nth-child(even) td {
+        background: var(--row-alt) !important;
+    }
+
+    .ui-jqgrid tr.jqgrow:hover td {
+        background: var(--row-hover) !important;
+    }
+
+    /* Toolbar icons - white with purple border */
+    #toolicons .btn-primary {
+        background: white !important;
+        color: #7B2D8E !important;
+        border: 1px solid rgba(123, 45, 142, 0.2) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+        border-radius: 10px !important;
+        width: 2rem;
+        height: 2rem;
+        padding: 0 !important;
+    }
+
+    #toolicons .btn-primary:hover {
+        background: #7B2D8E !important;
+        color: white !important;
+        transform: translateY(-2px);
+    }
+
+    /* Checkbox column */
+    .ui-jqgrid tr.ui-row-ltr td.td_cbox,
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby="grid_cb"],
+    .ui-jqgrid .ui-jqgrid-htable th#grid_cb {
+        padding: 0.8rem 0 !important;
+        text-align: center;
+        width: 45px !important;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td.td_cbox input,
+    #grid_cb input {
+        accent-color: #7B2D8E;
+        transform: scale(1.1);
+    }
+
+    /* Pager */
+    #gridpager {
+        background: linear-gradient(180deg, #FDFCFF 0%, #F7F1FC 100%) !important;
+        border-top: 1px solid rgba(123, 45, 142, 0.10) !important;
+        padding: 0.7rem 0.9rem !important;
+    }
+
+    /* Header badge */
+    .header-badge {
+        background: var(--soft-purple-bg);
+        border: 1px solid rgba(123, 45, 142, 0.1);
+        border-radius: 20px;
+        color: #7B2D8E !important;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+    }
+
+    .frozen-div .ui-jqgrid-hdiv {
+        background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
+    }
+
+    .frozen-div .ui-jqgrid-htable th {
+        color: #2D004D !important;
+    }
+</style>
+{% endblock %}
+
+{% block before_table %}
+<div class="modern-header-container mb-4">
+    <div class="row align-items-center">
+        <div class="col">
+            <p class="text-muted small mb-1">{% trans "Inventory" %}</p>
+            <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
+                {% trans "Inventory detail" %}
+            </h2>
+        </div>
+        <div class="col-auto">
+            <div class="badge bg-soft-purple text-primary p-2 px-3" style="background: var(--soft-purple-bg); border: 1px solid rgba(123, 45, 142, 0.1); border-radius: 20px; color: #7B2D8E !important; font-weight: 600;">
+                <i class="fa fa-list-alt me-1"></i> {% trans "Track material movements and inventory updates" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

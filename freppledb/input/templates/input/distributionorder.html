@@ -1,0 +1,570 @@
+{% extends "input/operationplanreport.html" %}
+{% load i18n %}
+
+{% block bodyclass %}distribution-order-page {% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    :root {
+        --primary-purple: #7B2D8E;
+        --deep-purple: #2D004D;
+        --bright-accent: #9C27B0;
+        --soft-purple-bg: rgba(123, 45, 142, 0.04);
+        --border-color: #E5E7EB;
+        --card-bg: #FFFFFF;
+        --table-shell: #FCFAFF;
+        --row-alt: #FBF9FD;
+        --row-hover: rgba(123, 45, 142, 0.06);
+        --row-selected: rgba(123, 45, 142, 0.10);
+        --text-primary: #2B2138;
+        --text-secondary: #6F6480;
+        --success-green: #10B981;
+        --error-red: #EF4444;
+        --warning-orange: #F59E0B;
+    }
+
+    /* Save/Undo buttons - match Sales orders style */
+    #save, #undo {
+        background: var(--primary-purple) !important;
+        border: none !important;
+        border-radius: 10px !important;
+        padding: 0.52rem 1rem !important;
+        font-weight: 600 !important;
+        font-size: 0.78rem;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 6px 14px rgba(123, 45, 142, 0.16) !important;
+        color: white !important;
+    }
+
+    #save:hover:not(:disabled),
+    #undo:hover:not(:disabled) {
+        background: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(123, 45, 142, 0.2) !important;
+    }
+
+    #undo:disabled {
+        background: var(--primary-purple) !important;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
+        opacity: 0.65 !important;
+        cursor: not-allowed;
+    }
+
+    #save:disabled {
+        background: var(--primary-purple) !important;
+        color: white !important;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
+        opacity: 0.65 !important;
+        cursor: not-allowed;
+    }
+
+    /* Modernizing the page header */
+    #content > h1 {
+        display: none;
+    }
+
+    /* Grid container modernization */
+    #content-main {
+        position: relative;
+        background: var(--card-bg);
+        border-radius: 20px;
+        box-shadow: 0 18px 45px rgba(45, 0, 77, 0.08);
+        border: 1px solid rgba(123, 45, 142, 0.10);
+        padding: 1.35rem;
+        margin-top: 1rem !important;
+        overflow: hidden;
+    }
+
+    #content-main::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto 0;
+        height: 4px;
+        background: linear-gradient(90deg, #7B2D8E 0%, #9C27B0 55%, #C084FC 100%);
+    }
+
+    #gbox_grid,
+    .ui-jqgrid {
+        width: 100% !important;
+        border: 1px solid rgba(123, 45, 142, 0.10) !important;
+        border-radius: 16px !important;
+        background: var(--table-shell) !important;
+        box-shadow: 0 14px 30px rgba(45, 0, 77, 0.06) !important;
+        overflow: hidden !important;
+    }
+
+    .modern-header-container {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.99) 0%, rgba(250, 247, 253, 0.96) 100%);
+        border: 1px solid rgba(123, 45, 142, 0.07);
+        border-radius: 20px;
+        padding: 1.1rem 1.2rem;
+        box-shadow: 0 14px 28px rgba(45, 0, 77, 0.05);
+    }
+
+    .modern-header-container h2 {
+        font-size: 1.85rem;
+        line-height: 1.1;
+    }
+
+    .modern-header-container .text-muted {
+        color: #8D7EA1 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 600;
+        font-size: 0.72rem !important;
+    }
+
+    /* Toolbar mode buttons (grid, kanban, calendar, gantt) - match Sales orders */
+    #gridmode,
+    #kanbanmode,
+    #calendarmode,
+    #ganttmode {
+        background: #5C197B !important;
+        border-radius: 10px !important;
+        border: none !important;
+        border-radius: 10px !important;
+        color: white !important;
+    }
+
+    #gridmode:hover:not(:disabled),
+    #kanbanmode:hover:not(:disabled),
+    #calendarmode:hover:not(:disabled),
+    #ganttmode:hover:not(:disabled) {
+        background: #4A1263 !important;
+    }
+
+    .btn-primary.active,
+    #gridmode.active,
+    #kanbanmode.active,
+    #calendarmode.active,
+    #ganttmode.active {
+        background: #4A1263 !important;
+    }
+
+    /* Toolbar icon buttons - match Sales orders (white with purple border) */
+    #toolicons .btn-primary {
+        background: white !important;
+        color: var(--primary-purple) !important;
+        border: 1px solid rgba(123, 45, 142, 0.2) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+        border-radius: 10px !important;
+        width: 2rem;
+        height: 2rem;
+        padding: 0 !important;
+    }
+
+    #toolicons .btn-primary:hover {
+        background: var(--primary-purple) !important;
+        color: white !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.15) !important;
+    }
+
+    /* Dropdown specialization */
+    .dropdown-menu {
+        border-radius: 14px !important;
+        border: 1px solid rgba(123, 45, 142, 0.10) !important;
+        box-shadow: 0 18px 30px rgba(45, 0, 77, 0.10) !important;
+        padding: 0.45rem !important;
+    }
+
+    .dropdown-item {
+        border-radius: 10px !important;
+        padding: 0.55rem 0.8rem !important;
+        transition: all 0.2s !important;
+        color: var(--text-primary) !important;
+        font-weight: 500 !important;
+    }
+
+    .dropdown-item:hover {
+        background-color: rgba(123, 45, 142, 0.08) !important;
+        color: var(--primary-purple) !important;
+    }
+
+    /* Action button specialized styling */
+    #actions1 {
+        border: 1px solid rgba(123, 45, 142, 0.12) !important;
+        border-radius: 10px !important;
+        background: linear-gradient(135deg, #FFFFFF 0%, #F7F1FC 100%) !important;
+        color: var(--deep-purple) !important;
+        box-shadow: 0 6px 16px rgba(45, 0, 77, 0.05) !important;
+        min-height: 2rem;
+        font-size: 0.8rem !important;
+        padding: 0.45rem 0.85rem !important;
+    }
+
+    #actions1:disabled {
+        opacity: 0.8 !important;
+        color: #8D7C9F !important;
+    }
+
+    #actions1:hover:not(:disabled) {
+        background: linear-gradient(135deg, #F9F2FD 0%, #F2E5FB 100%) !important;
+        color: var(--primary-purple) !important;
+    }
+
+    #filterform {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.55rem 0.7rem;
+        background: linear-gradient(135deg, #FCFAFF 0%, #F6EFFB 100%) !important;
+        border: 1px solid rgba(123, 45, 142, 0.10) !important;
+        border-radius: 14px !important;
+        box-shadow: 0 6px 18px rgba(45, 0, 77, 0.04);
+    }
+
+    #filterform .input-group {
+        background: #FFFFFF;
+        border: 1px solid rgba(123, 45, 142, 0.10);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    #filterform input[type="text"],
+    #addsearch {
+        border: none !important;
+        background: transparent !important;
+        color: var(--text-primary) !important;
+        padding: 0.55rem 0.8rem !important;
+        min-width: 8rem;
+        box-shadow: none !important;
+    }
+
+    #filterform input[type="text"]::placeholder,
+    #addsearch::placeholder {
+        color: #9A8CAB !important;
+    }
+
+    #filterform input[type="text"]:focus,
+    #addsearch:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    #filterform .input-group-text {
+        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+        border: none !important;
+        color: #FFFFFF !important;
+        padding: 0.55rem 0.8rem !important;
+    }
+
+    #filterform .input-group-text:hover {
+        filter: brightness(0.98);
+    }
+
+    #resetfilter {
+        color: var(--primary-purple) !important;
+        cursor: pointer !important;
+        padding: 0.45rem !important;
+        border-radius: 10px !important;
+        transition: all 0.2s ease !important;
+    }
+
+    #resetfilter:hover {
+        background: rgba(123, 45, 142, 0.08) !important;
+        color: var(--bright-accent) !important;
+        transform: scale(1.05) !important;
+    }
+
+    #save_undo {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.55rem 0.65rem;
+        margin: 0.3rem 0 0.9rem;
+        background: linear-gradient(135deg, #FFFFFF 0%, #F9F3FD 100%);
+        border: 1px solid rgba(123, 45, 142, 0.08);
+        border-radius: 16px;
+        box-shadow: 0 10px 22px rgba(45, 0, 77, 0.04);
+    }
+
+    #save_undo form.form-addon {
+        display: inline-flex;
+        align-items: center;
+        margin: 0 !important;
+    }
+
+    #save_undo .dropdown {
+        display: inline-flex;
+        align-items: center;
+    }
+
+    #toolicons {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.45rem 0.5rem;
+        margin: 0.3rem 0 0.9rem auto;
+        background: linear-gradient(135deg, #FFFFFF 0%, #F9F3FD 100%);
+        border: 1px solid rgba(123, 45, 142, 0.08);
+        border-radius: 16px;
+        box-shadow: 0 10px 22px rgba(45, 0, 77, 0.04);
+    }
+
+    .ui-jqgrid-view,
+    .ui-jqgrid-hbox,
+    .ui-jqgrid-bdiv,
+    .ui-jqgrid-htable,
+    .ui-jqgrid-btable {
+        background: #FFFFFF !important;
+    }
+
+    /* Table header - match Sales orders (light gradient, deep purple text) */
+    .ui-jqgrid .ui-jqgrid-hdiv {
+        background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
+        border-bottom: 1px solid rgba(123, 45, 142, 0.12) !important;
+    }
+
+    .ui-jqgrid .ui-jqgrid-htable th,
+    .ui-jqgrid .ui-jqgrid-htable .ui-th-column {
+        background: transparent !important;
+        color: var(--deep-purple) !important;
+        font-weight: 700 !important;
+        padding: 0.95rem 0.75rem !important;
+        text-transform: uppercase;
+        font-size: 0.68rem;
+        letter-spacing: 0.10em;
+        border-right: 1px solid rgba(123, 45, 142, 0.06) !important;
+        border-bottom: none !important;
+        box-shadow: inset 0 -1px 0 rgba(123, 45, 142, 0.08);
+    }
+
+    .ui-jqgrid .ui-jqgrid-htable th:last-child,
+    .ui-jqgrid .ui-jqgrid-htable .ui-th-column:last-child {
+        border-right: none !important;
+    }
+
+    /* Table body - match Sales orders clean rows */
+    .ui-jqgrid tr.ui-row-ltr td {
+        color: var(--text-primary) !important;
+        border-bottom: 1px solid #F3F1F7 !important;
+        border-right: 1px solid #F7F3FB !important;
+        padding: 0.8rem 0.75rem !important;
+        font-size: 0.85rem;
+        vertical-align: middle !important;
+        background: #FFFFFF !important;
+    }
+
+    .ui-jqgrid tr.jqgrow:nth-child(even) td {
+        background: var(--row-alt) !important;
+    }
+
+    .ui-jqgrid tr.jqgrow:hover td,
+    .ui-jqgrid tr.ui-state-hover td {
+        background: var(--row-hover) !important;
+    }
+
+    .ui-jqgrid tr.ui-state-highlight td,
+    .ui-jqgrid tr.ui-priority-secondary td.ui-state-highlight,
+    .ui-jqgrid td.ui-state-highlight {
+        background: var(--row-selected) !important;
+        color: var(--text-primary) !important;
+        box-shadow: inset 0 0 0 1px rgba(123, 45, 142, 0.06);
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td a {
+        color: var(--deep-purple) !important;
+        font-weight: 500 !important;
+        text-decoration: none !important;
+        transition: color 0.18s ease;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td a:hover {
+        color: var(--bright-accent) !important;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby$="_reference"] a {
+        font-weight: 600 !important;
+        color: #3D2256 !important;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby$="_status"] {
+        color: var(--primary-purple) !important;
+        font-weight: 600 !important;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby$="_origin"],
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby$="_destination"],
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby$="_item"] {
+        color: var(--text-secondary) !important;
+    }
+
+    /* Fix for checkbox column alignment */
+    .ui-jqgrid tr.ui-row-ltr td.td_cbox, 
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby="grid_cb"],
+    .ui-jqgrid .ui-jqgrid-htable th#grid_cb {
+        background: transparent !important;
+        padding: 0.8rem 0 !important;
+        text-align: center;
+        width: 45px !important;
+        position: relative;
+        z-index: 10;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td.td_cbox input,
+    #grid_cb input {
+        margin: 0 !important;
+        cursor: pointer;
+        accent-color: var(--primary-purple);
+        transform: scale(1.1);
+    }
+
+    /* Pager - match Sales orders */
+    #gridpager {
+        background: linear-gradient(180deg, #FDFCFF 0%, #F7F1FC 100%) !important;
+        border: none !important;
+        border-top: 1px solid rgba(123, 45, 142, 0.10) !important;
+        padding: 0.7rem 0.9rem !important;
+        color: var(--text-secondary) !important;
+    }
+
+    #gridpager .ui-pg-table,
+    #gridpager .ui-pager-control,
+    #gridpager td {
+        background: transparent !important;
+        border: none !important;
+        color: var(--text-secondary) !important;
+        font-size: 0.8rem !important;
+    }
+
+    #gridpager .ui-pg-button,
+    #gridpager .ui-pg-input,
+    #gridpager .ui-pg-selbox {
+        border-radius: 8px !important;
+    }
+
+    #gridpager .ui-pg-button:hover {
+        background: rgba(123, 45, 142, 0.10) !important;
+        color: var(--primary-purple) !important;
+    }
+
+    /* Status badges for Orders */
+    .status-proposed { background-color: var(--warning-orange) !important; }
+    .status-approved { background-color: #3B82F6 !important; }
+    .status-confirmed { background-color: #6366F1 !important; }
+    .status-completed { background-color: var(--success-green) !important; }
+    .status-closed { background-color: var(--text-secondary) !important; }
+
+    /* Contextual badge - matching Sales orders */
+    .header-badge,
+    .distribution-badge {
+        background: var(--soft-purple-bg) !important;
+        border: 1px solid rgba(123, 45, 142, 0.1) !important;
+        border-radius: 20px !important;
+        color: var(--primary-purple) !important;
+        font-weight: 600 !important;
+        padding: 0.5rem 1rem !important;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        font-size: 0.78rem !important;
+    }
+
+    #actionsul {
+        border: 1px solid rgba(123, 45, 142, 0.10) !important;
+        border-radius: 14px !important;
+        padding: 0.45rem !important;
+        box-shadow: 0 18px 30px rgba(45, 0, 77, 0.10) !important;
+    }
+
+    #actionsul .dropdown-item {
+        border-radius: 10px !important;
+        padding: 0.55rem 0.8rem !important;
+        color: var(--text-primary) !important;
+        font-weight: 500 !important;
+    }
+
+    #actionsul .dropdown-item:hover {
+        background: rgba(123, 45, 142, 0.08) !important;
+        color: var(--primary-purple) !important;
+    }
+
+    .frozen-div,
+    .frozen-bdiv {
+        background: #FFFFFF !important;
+        border-right: 1px solid rgba(123, 45, 142, 0.10) !important;
+    }
+
+    /* Frozen column header - match Sales orders (light gradient) */
+    .frozen-div .ui-jqgrid-hdiv {
+        background: linear-gradient(180deg, #FCF8FF 0%, #F6EEFC 100%) !important;
+    }
+
+    .frozen-div .ui-jqgrid-htable th {
+        color: var(--deep-purple) !important;
+        border-right: 1px solid rgba(123, 45, 142, 0.06) !important;
+    }
+
+    /* Empty state message */
+    .ui-jqgrid .jqgfirstrow,
+    .ui-jqgrid-overlay + div {
+        color: var(--text-secondary) !important;
+    }
+
+    @media (max-width: 992px) {
+        .modern-header-container {
+            padding: 0.9rem 1rem;
+        }
+
+        .modern-header-container .row {
+            gap: 0.75rem;
+        }
+
+        #save_undo,
+        #toolicons {
+            width: 100%;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+        }
+
+        #filterform {
+            flex-wrap: wrap;
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content_title %}
+{% if title %}
+<div class="row mt-3">
+  <div class="col">
+    <div class="modern-header-container mb-3">
+      <div class="row align-items-center g-3">
+        <div class="col">
+          <p class="text-muted small mb-1">{% trans "Inventory" %}</p>
+          <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
+            {% trans "Distribution orders" %}
+          </h2>
+        </div>
+        <div class="col-auto">
+          <div class="badge bg-soft-purple text-primary p-2 px-3" style="background: var(--soft-purple-bg); border: 1px solid rgba(123, 45, 142, 0.1); border-radius: 20px; color: var(--primary-purple) !important; font-weight: 600;">
+            <i class="fa fa-truck me-1"></i> {% trans "Inter-warehouse transfers and logistics" %}
+          </div>
+        </div>
+        <div class="col-12 col-md-auto mt-2 mt-md-0">
+          {% block filter %}{% endblock %}
+        </div>
+      </div>
+      <div class="mt-2"><span id="curerror"></span></div>
+    </div>
+  </div>
+  <div class="col-auto d-flex ms-auto align-items-top">
+    {% block tools %}{% endblock %}
+    {% if reportclass.help_url %}<h1>
+      <a class="ms-1" href="{% setting "DOCUMENTATION_URL" %}/docs/{% version_short %}/{{reportclass.help_url}}" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-offset="0,7" data-bs-title="{% trans 'help'|capfirst|force_escape %}">
+        <span class="fa fa-question"/>
+      </a>
+    </h1>{% endif %}
+  </div>
+</div>
+{% block tabs %}{% endblock %}
+{% endif %}
+{% endblock %}
+
+{% block before_table %}
+{% endblock %}

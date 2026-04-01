@@ -160,3 +160,41 @@ def createSolvers(loglevel=2, database=DEFAULT_DB_ALIAS):
         fcst_solver = createForecastSolver(database)
         if fcst_solver:
             fcst_solver.loglevel = loglevel
+
+
+def proxyToWebService(request):
+    """
+    Proxies the current request to the running scenario engine (webservice).
+    """
+    import requests
+    from django.http import HttpResponse
+
+    context = getWebServiceContext(request)
+    if not context["port"]:
+        raise Exception("Webservice port not configured for database %s" % request.database)
+
+    url = "http://%s%s" % (
+        context["port"],
+        request.get_full_path().replace("/" + request.database, ""),
+    )
+
+    headers = {
+        "Authorization": "Bearer %s" % context["token"],
+        "Content-Type": request.content_type,
+    }
+
+    try:
+        if request.method == "POST":
+            response = requests.post(
+                url, data=request.body, headers=headers, timeout=300
+            )
+        else:
+            response = requests.get(url, headers=headers, timeout=300)
+
+        return HttpResponse(
+            content=response.content,
+            status=response.status_code,
+            content_type=response.headers.get("Content-Type"),
+        )
+    except Exception as e:
+        raise Exception("Error proxying to webservice: %s" % e)

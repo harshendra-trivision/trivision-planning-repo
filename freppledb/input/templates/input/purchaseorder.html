@@ -1,0 +1,95 @@
+{% extends "input/operationplanreport.html" %}
+{% load i18n %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    /* ---- Purchase Order Page Refinements ---- */
+
+    /* Dropdown refinements */
+    .dropdown-menu {
+        border-radius: 10px !important;
+        border: 1px solid #E8E0F0 !important;
+        box-shadow: 0 8px 30px rgba(45, 0, 77, 0.12) !important;
+        padding: 0.35rem !important;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .dropdown-item {
+        border-radius: 6px !important;
+        padding: 0.45rem 0.85rem !important;
+        font-size: 0.82rem;
+        transition: all 0.15s ease !important;
+    }
+
+    .dropdown-item:hover {
+        background: rgba(123, 45, 142, 0.06) !important;
+        color: #7B2D8E !important;
+    }
+
+    /* Frozen columns */
+    .frozen-div,
+    .frozen-bdiv {
+        background: #FFFFFF !important;
+        border-right: 2px solid #E8E0F0 !important;
+    }
+
+    /* Custom Header Badge */
+    .header-badge {
+        background: rgba(123, 45, 142, 0.04);
+        border: 1px solid rgba(123, 45, 142, 0.1);
+        border-radius: 20px;
+        color: #7B2D8E !important;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.82rem;
+        padding: 0.5rem 1rem;
+    }
+
+    /* Modern header container */
+    .modern-header-container {
+        font-family: 'Inter', sans-serif;
+    }
+
+    .modern-header-container h2 {
+        color: #2D004D !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.02em;
+    }
+
+    .modern-header-container .text-muted {
+        color: #7B2D8E !important;
+        font-weight: 500;
+        font-size: 0.78rem;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+    }
+
+    @media (max-width: 992px) {
+        .modern-header-container {
+            padding: 0.9rem 1rem;
+        }
+        .modern-header-container .row {
+            gap: 0.75rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block before_table %}
+<div class="modern-header-container mb-4">
+    <div class="row align-items-center">
+        <div class="col">
+            <p class="text-muted small mb-1">{% trans "Purchasing" %}</p>
+            <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
+                {% trans "Purchase orders" %}
+            </h2>
+        </div>
+        <div class="col-auto">
+            <div class="header-badge">
+                <i class="fa fa-file-text-o me-1"></i> {% trans "Track and manage external procurements" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

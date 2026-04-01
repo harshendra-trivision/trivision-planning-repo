@@ -90,7 +90,7 @@ try:
     DEBUG = "runserver" in sys.argv
 except Exception:
     DEBUG = False
-DEBUG_JS = DEBUG
+DEBUG_JS = False
 
 # A list of strings representing the host/domain names the application can serve.
 # This is a security measure to prevent an attacker from poisoning caches and
@@ -259,7 +259,7 @@ INTERNAL_IPS = ("127.0.0.1",)
 # manually specified.
 DEFAULT_CHARSET = "utf-8"
 
-BRANDING = "frePPLe"
+BRANDING = "Y3 Solutions"
 
 # Default characterset for writing and reading CSV files.
 # We are assuming here that the default encoding of clients is the same as the server.
@@ -518,6 +518,22 @@ with open(os.path.join(FREPPLE_CONFIGDIR, "djangosettings.py")) as mysettingfile
 if os.access(os.path.join(FREPPLE_CONFIGDIR, "localsettings.py"), os.R_OK):
     with open(os.path.join(FREPPLE_CONFIGDIR, "localsettings.py")) as mysettingfile:
         exec(mysettingfile.read(), globals())
+
+# Allow ngrok for local development / tunneling
+ALLOWED_HOSTS = ["*", ".ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS = [
+    "https://0ade-223-181-41-63.ngrok-free.app",
+    "https://.ngrok-free.app",  # Any ngrok subdomain (e.g. abc123.ngrok-free.app)
+]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
+# Keep signed_cookies - frePPLe's INSTALLED_APPS doesn't include django.contrib.sessions
+# SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+DATABASES['default']['SQL_ROLE'] = os.environ.get('SQL_ROLE', 'report_role')
 
 # duplicate the entries in the DATABASES dict to create the SQL roles entries.
 for i in DATABASES.copy():

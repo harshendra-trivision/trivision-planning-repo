@@ -19,10 +19,10 @@
     font-size: 1.4rem;
     letter-spacing: 2px;
     color: #FFFFFF !important;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);	
 }
 .trivision-nav-link {
-    color: #D8A4E8 !important;
+    color: #e7e7e7 !important;
     font-weight: 500;
     font-size: 0.9rem;
     padding-left: 1rem !important;
@@ -33,7 +33,7 @@
     color: #FFFFFF !important;
 }
 .trivision-search-input {
-    background: rgba(0, 0, 0, 0.2) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     border-radius: 8px !important;
     color: #FFFFFF !important;
@@ -78,10 +78,11 @@
     box-shadow: 0 2px 4px rgba(168,85,247,0.3);
 }
 .trivision-subheader {
-    background: #F8F4FC !important;
-    padding-top: 0.4rem;
-    padding-bottom: 0.4rem;
-    border-bottom: 1px solid rgba(156,39,176,0.15);
+    background: linear-gradient(180deg, #F8F9FC 0%, #F3E8FF 100%) !important;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #E5E7EB;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02) !important;
 }
 #breadcrumbs .breadcrumb-item a {
     color: #7B2D8E !important;
@@ -92,11 +93,12 @@
     transition: color 0.2s ease;
 }
 #breadcrumbs .breadcrumb-item a:hover {
-    color: #A855F7 !important;
+    color: #9C27B0 !important;
 }
 #breadcrumbs .breadcrumb-item.active {
-    color: #5C4670 !important;
+    color: #2D004D !important;
     font-size: 0.85rem;
+    font-weight: 600;
     font-family: 'Inter', sans-serif;
 }
 #breadcrumbs .breadcrumb-item + .breadcrumb-item::before {
@@ -104,19 +106,253 @@
 }
 
 .trivision-scenario-select {
-    background-color: #FAFAFE !important;
-    border-radius: 8px !important;
-    border: 1px solid rgba(156,39,176,0.15) !important;
-    color: #1A0033 !important;
+    background-color: #FFFFFF !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(156,39,176,0.2) !important;
+    color: #4A148C !important;
     font-weight: 600 !important;
-    font-size: 0.85rem !important;
-    padding: 0.3rem 2rem 0.3rem 1rem !important;
-    box-shadow: 0 2px 4px rgba(123, 45, 142, 0.05);
-    transition: all 0.2s ease;
+    font-size: 0.82rem !important;
+    padding: 0.4rem 1.5rem !important;
+    box-shadow: 0 2px 8px rgba(123, 45, 142, 0.08);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer;
+    text-align: center;
+    height: auto !important;
+    line-height: normal !important;
 }
+
 .trivision-scenario-select:hover {
-    border-color: rgba(156,39,176,0.3) !important;
-    box-shadow: 0 4px 8px rgba(123, 45, 142, 0.08);
+    border-color: #A855F7 !important;
+    box-shadow: 0 5px 15px rgba(168, 85, 247, 0.15);
+    transform: translateY(-1px);
+    background-color: #FDFBFF !important;
+}
+
+.trivision-scenario-select::after {
+    margin-left: 0.5em;
+    vertical-align: 0.255em;
+    content: "";
+    border-top: 0.3em solid;
+    border-right: 0.3em solid transparent;
+    border-bottom: 0;
+    border-left: 0.3em solid transparent;
+}
+
+/* --- Modern Dropdown Styling --- */
+.dropdown-menu {
+    border: none !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 0 1px rgba(0,0,0,0.1) !important;
+    padding: 0.5rem !important;
+    min-width: 220px !important;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(10px);
+    margin-top: 10px !important;
+    animation: trivisionFadeInSlide 0.25s ease-out forwards;
+    overflow: hidden;
+}
+
+@keyframes trivisionFadeInSlide {
+    from { 
+        opacity: 0; 
+        transform: translateY(10px) scale(0.98); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+    }
+}
+
+.dropdown-item {
+    border-radius: 8px !important;
+    padding: 0.7rem 1.2rem !important;
+    color: #4A148C !important;
+    font-weight: 500 !important;
+    font-size: 0.88rem !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    margin-bottom: 2px !important;
+    display: flex !important;
+    align-items: center;
+}
+
+.dropdown-item:hover {
+    background: linear-gradient(135deg, #A855F7 0%, #7B2D8E 100%) !important;
+    color: #FFFFFF !important;
+    transform: translateX(6px);
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.25);
+    font-weight: 600 !important;
+}
+
+.dropdown-divider {
+    border-top: 1px solid rgba(156, 39, 176, 0.08) !important;
+    margin: 0.5rem 0.8rem !important;
+}
+
+/* Opening dropdown on hover for desktop */
+@media (min-width: 992px) {
+    .nav-item.dropdown:hover > .dropdown-menu {
+        display: block;
+    }
+    .nav-item.dropdown:hover > .trivision-nav-link {
+        color: #FFFFFF !important;
+    }
+}
+
+/* Submenu/Scenario specific hover */
+.trivision-scenario-select + .dropdown-menu .dropdown-item:hover {
+  transform: translateX(0); /* Don't slide horizontally for the scenario selector to keep it centered */
+  transform: translateY(-2px);
+}
+
+/* Enhanced Search Typeahead Styling */
+.twitter-typeahead {
+  width: 100% !important;
+}
+
+.tt-menu {
+  background: rgba(255, 255, 255, 0.98) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12), 0 0 1px rgba(0,0,0,0.08) !important;
+  padding: 0.25rem !important;
+  min-width: 280px !important;
+  max-width: 320px !important;
+  max-height: 400px !important;
+  overflow-y: auto !important;
+  backdrop-filter: blur(10px);
+  margin-top: 6px !important;
+  animation: trivisionFadeInSlide 0.2s ease-out forwards;
+  z-index: 9999 !important;
+}
+
+.tt-suggestion {
+  padding: 0.4rem 0.75rem !important;
+  border-radius: 6px !important;
+  margin-bottom: 1px !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer;
+  border: none !important;
+  font-size: 0.85rem !important;
+}
+
+/* Category headers styling - these are wrapped in <span> and contain <p> tags */
+.tt-suggestion span p {
+  margin: 0 0 0.25rem 0 !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  color: #7B2D8E !important;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  border-bottom: 1px solid rgba(123, 45, 142, 0.1) !important;
+  padding-bottom: 0.25rem !important;
+}
+
+/* Category headers (span elements) should not have hover effects */
+.tt-suggestion span:hover,
+.tt-suggestion span.tt-cursor {
+  background: transparent !important;
+  color: inherit !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Ensure category header text always stays visible */
+.tt-suggestion:hover span p,
+.tt-suggestion.tt-cursor span p {
+  color: #7B2D8E !important;
+  border-bottom-color: rgba(123, 45, 142, 0.1) !important;
+}
+
+/* Hover effects only for actual result items (li elements with links) */
+.tt-suggestion li:hover,
+.tt-suggestion.tt-cursor li {
+  background: linear-gradient(135deg, #A855F7 0%, #7B2D8E 100%) !important;
+  border-radius: 6px !important;
+  transform: translateX(2px);
+  box-shadow: 0 1px 4px rgba(168, 85, 247, 0.2);
+}
+
+.tt-suggestion li:hover a,
+.tt-suggestion.tt-cursor li a {
+  color: #FFFFFF !important;
+}
+
+.tt-suggestion li {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.tt-suggestion a {
+  color: #374151 !important;
+  text-decoration: none !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+  display: block !important;
+  padding: 0.15rem 0 !important;
+  line-height: 1.3 !important;
+}
+
+.tt-suggestion li:hover a,
+.tt-suggestion.tt-cursor li a {
+  color: #FFFFFF !important;
+}
+
+.tt-external {
+  float: right !important;
+  opacity: 0.6 !important;
+  margin-top: -1px !important;
+}
+
+.tt-external:hover {
+  opacity: 1 !important;
+}
+
+.tt-external a {
+  color: #7B2D8E !important;
+  padding: 0.15rem !important;
+  border-radius: 3px !important;
+  transition: all 0.15s ease !important;
+  font-size: 0.7rem !important;
+}
+
+.tt-suggestion li:hover .tt-external a,
+.tt-suggestion.tt-cursor li .tt-external a {
+  color: #FFFFFF !important;
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Search input focus enhancement */
+.trivision-search-input.tt-input {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: #A855F7 !important;
+  box-shadow: 0 0 0 3px rgba(168,85,247,0.3) !important;
+}
+
+/* Custom scrollbar for search results */
+.tt-menu::-webkit-scrollbar {
+  width: 4px !important;
+}
+
+.tt-menu::-webkit-scrollbar-track {
+  background: rgba(123, 45, 142, 0.05) !important;
+  border-radius: 2px !important;
+}
+
+.tt-menu::-webkit-scrollbar-thumb {
+  background: rgba(123, 45, 142, 0.3) !important;
+  border-radius: 2px !important;
+}
+
+.tt-menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(123, 45, 142, 0.5) !important;
+}
+
+/* Compact divider styling */
+.tt-suggestion .divider {
+  height: 1px !important;
+  background: rgba(123, 45, 142, 0.1) !important;
+  margin: 0.25rem 0 !important;
 }
 </style>
 <script>
@@ -135,7 +371,7 @@ $(function() {
 
           {% if not request.session.navbar or request.session.branding %}
 	      <a href="{{request.prefix}}/" class="navbar-brand trivision-brand">
-            <img src="{{STATIC_URL}}img/Trivision_logo.png" alt="Trivision" style="max-height: 2.5rem; height: auto;">
+            <img src="{{STATIC_URL}}img/Y3-logo.jpeg" alt="Trivision" style="max-height: 2.5rem; height: auto;">
           </a>
           {% endif %}
 
@@ -164,7 +400,7 @@ $(function() {
 			<form class="navbar-form me-start mt-3 mb-3" role="search">
 				<div class="trivision-search-container" style="width: 100%;">
                   <i class="fa fa-search trivision-search-icon"></i>
-				  <input class="form-control typeahead trivision-search-input w-100" type="text" placeholder="{% trans 'Search...' %}">
+				  <input class="form-control typeahead search-input trivision-search-input w-100" type="text" placeholder="{% trans 'Search...' %}">
 				</div>
 			</form>
 			<ul class="nav navbar-nav ms-auto" class="selectdb">
@@ -209,7 +445,7 @@ $(function() {
 			<form class="navbar-form me-start mt-1 mb-1 ms-3 d-none d-lg-block" role="search">
 				<div class="trivision-search-container">
                   <i class="fa fa-search trivision-search-icon"></i>
-				  <input class="form-control typeahead trivision-search-input" type="text" placeholder="{% trans 'Search...' %}">
+				  <input class="form-control typeahead search-input trivision-search-input" type="text" placeholder="{% trans 'Search...' %}">
 				</div>
 			</form>
 
@@ -227,10 +463,10 @@ $(function() {
           </a>
         </li>
 		<li class="navbar-item dropdown">
-		    <a href="#" class="nav-link trivision-nav-link dropdown-toggle pe-3" data-bs-toggle="dropdown"
+        <a href="#" class="nav-link trivision-nav-link dropdown-toggle pe-3 d-flex align-items-center" data-bs-toggle="dropdown"
           role="button" aria-haspopup="true" aria-expanded="false" style="color: #FFFFFF !important;">
           <div class="trivision-avatar">{% firstof user.first_name|make_list|first user.username|make_list|first "A" %}</div>
-          {% firstof user.first_name user.username %}
+          <span class="ms-1">{% firstof user.first_name user.username %}</span>
         </a>
 				<ul class="dropdown-menu dropdown-menu-end" style="right: 0 !important; left: auto !important">
 				  <li><a class="dropdown-item" href="{{request.prefix}}/preferences/">{% trans 'preferences'|capfirst %}</a></li>

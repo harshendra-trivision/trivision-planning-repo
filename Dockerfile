@@ -1,0 +1,159 @@
+# #
+# # frePPLe - Open source supply chain planning
+# # Multi-stage Dockerfile that builds from source
+# #
+
+# # =============================================================================
+# # Stage 1: Build C++ core and Python environment
+# # =============================================================================
+# FROM ubuntu:24.04 AS builder
+
+# ENV LANG=C.UTF-8
+# ENV LC_ALL=C.UTF-8
+# ENV DEBIAN_FRONTEND=noninteractive
+
+# # Install build dependencies
+# RUN apt-get -y -q update && \
+#     apt-get -y install --no-install-recommends \
+#     cmake g++ git python3 python3-pip python3-dev python3-venv \
+#     psmisc libxerces-c3.2 libxerces-c-dev openssl libssl-dev \
+#     postgresql-client libpq5 libpq-dev locales \
+#     nodejs npm && \
+#     rm -rf /var/lib/apt/lists/*
+
+# # Install pnpm for frontend build
+# RUN npm install -g pnpm@latest-10
+
+# WORKDIR /app
+
+# # Copy package files first for better layer caching
+# COPY package.json pnpm-lock.yaml* ./
+# RUN pnpm install --frozen-lockfile 2>/dev/null || pnpm install
+
+# # Copy source code
+# COPY . .
+
+# # Update submodules if present
+# RUN git submodule update --init --recursive 2>/dev/null || true
+
+# # Build frontend (grunt)
+# RUN pnpm exec grunt 2>/dev/null || true
+
+# # Configure and build C++ core
+# RUN mkdir -p build && \
+#     cmake -B build -DCMAKE_BUILD_TYPE=Release && \
+#     cmake --build build --config Release --target venv -- -j$(nproc) && \
+#     cmake --build build --config Release -- -j$(nproc)
+
+# # =============================================================================
+# # Stage 2: Runtime image
+# # =============================================================================
+# FROM ubuntu:24.04 AS runtime
+
+# ENV LANG=C.UTF-8
+# ENV LC_ALL=C.UTF-8
+# ENV DEBIAN_FRONTEND=noninteractive
+
+# # Install runtime dependencies only
+# RUN apt-get -y -q update && \
+#     apt-get -y install --no-install-recommends \
+#     python3 python3-venv libxerces-c3.2 libpq5 postgresql-client \
+#     psmisc locales curl ca-certificates openssl && \
+#     rm -rf /var/lib/apt/lists/*
+
+# # Create frepple user for non-root execution
+# RUN useradd -m -s /bin/bash frepple
+
+# WORKDIR /app
+
+# # Copy built artifacts from builder
+# COPY --from=builder /app/venv /app/venv
+# COPY --from=builder /app/bin /app/bin
+# COPY --from=builder /app/freppledb /app/freppledb
+# COPY --from=builder /app/frepplectl.py /app/frepplectl.py
+# COPY --from=builder /app/djangosettings.py /app/djangosettings.py
+
+# # Create necessary directories
+# RUN mkdir -p /app/logs /app/etc/frepple && \
+#     cp /app/djangosettings.py /app/etc/frepple/djangosettings.py
+
+# # Collect static files
+# RUN . /app/venv/bin/activate && \
+#     FREPPLE_STATIC=/app/static \
+#     python3 /app/frepplectl.py collectstatic --noinput --clear --ignore '*.less' --verbosity=0
+
+# # Set environment variables
+# ENV FREPPLE_APP=/app
+# ENV FREPPLE_HOME=/app/bin
+# ENV FREPPLE_LOGDIR=/app/logs
+# ENV FREPPLE_CONFIGDIR=/app/etc/frepple
+# ENV PATH="/app/venv/bin:$PATH"
+# ENV PYTHONPATH="/app"
+# ENV DJANGO_SETTINGS_MODULE=freppledb.settings
+
+# # Database configuration (override via environment)
+# ENV POSTGRES_HOST=""
+# ENV POSTGRES_PORT="5432"
+# ENV POSTGRES_USER="frepple"
+# ENV POSTGRES_PASSWORD="frepple"
+# ENV POSTGRES_DBNAME="frepple"
+
+# # Copy and set up entrypoint script
+# COPY docker-entrypoint.sh /entrypoint.sh
+# RUN chmod +x /entrypoint.sh
+
+# # Use frepple user
+# RUN chown -R frepple:frepple /app /entrypoint.sh
+
+# USER frepple
+
+# EXPOSE 8000
+
+# ENTRYPOINT ["/entrypoint.sh"]
+# # Use PORT env var for Render/cloud platforms (default 8000 for local)
+# CMD ["sh", "-c", "frepplectl runserver 0.0.0.0:${PORT:-8000}"]
+
+FROM ubuntu:22.04
+
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    python3.11 python3.11-dev python3.11-venv python3-pip \
+    cmake g++ git \
+    libxerces-c-dev libpq-dev postgresql-client \
+    curl ca-certificates gnupg lsb-release && \
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install -g pnpm@latest-10 && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+    curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg && \
+    apt-get update && \
+    apt-get install -y postgresql-client-17
+
+WORKDIR /app
+
+COPY . .
+
+RUN python3.11 -m venv venv
+RUN . venv/bin/activate && pip install --upgrade pip
+RUN . venv/bin/activate && pip install -r requirements.txt
+
+# Create necessary directories and build assets
+RUN mkdir -p /app/static /app/logs
+RUN . venv/bin/activate && pnpm install --frozen-lockfile 2>/dev/null || pnpm install
+RUN . venv/bin/activate && pnpm exec grunt 2>/dev/null || true
+RUN . venv/bin/activate && \
+    FREPPLE_STATIC=/app/static \
+    python3.11 frepplectl.py collectstatic --noinput --clear --ignore '*.less' --verbosity=0
+
+ENV PATH="/app/venv/bin:$PATH"
+ENV PYTHONPATH="/app"
+ENV DJANGO_SETTINGS_MODULE=freppledb.settings
+ENV FREPPLE_STATIC=/app/static
+ENV FREPPLE_LOGDIR=/app/logs
+
+EXPOSE 10000
+
+CMD ["sh","-c","daphne -b 0.0.0.0 -p ${PORT:-10000} freppledb.asgi_web:application"]

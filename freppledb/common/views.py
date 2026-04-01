@@ -363,6 +363,11 @@ def cockpit(request):
     )
 
 
+@staff_member_required
+def yai(request):
+    return render(request, "common/yai.html", context={"title": _("Y-AI Control Centre")})
+
+
 def handler404(request, exception):
     """
     Custom error handler which redirects to the main page rather than displaying the 404 page.
@@ -682,6 +687,18 @@ class UserList(GridReport):
     permissions = (("change_user", "Can change user"),)
     help_url = "user-interface/getting-around/user-permissions-and-roles.html"
     canDuplicate = False
+    message_when_empty = Template(
+        """
+        <div class="grid-empty-message">
+        <h3>Manage your team</h3>
+        <p>Create and manage user accounts for your team members.</p>
+        <p>Configure permissions, assign roles, and control who can access different parts of the application.</p>
+        <a href="{{request.prefix}}/data/common/user/add/" class="add-user-btn">
+        <i class="fa fa-plus"></i> Add user
+        </a>
+        </div>
+        """
+    )
 
     @classmethod
     def initialize(reportclass, request):
@@ -727,12 +744,25 @@ class UserList(GridReport):
 
 class GroupList(GridReport):
     title = _("groups")
+    template = "auth/grouplist.html"
     basequeryset = Group.objects.all()
     model = Group
     frozenColumns = 1
     permissions = (("change_group", "Can change group"),)
     help_url = "user-interface/getting-around/user-permissions-and-roles.html"
     canDuplicate = False
+    message_when_empty = Template(
+        """
+        <div class="grid-empty-message">
+        <h3>Organize users with groups</h3>
+        <p>Groups define sets of permissions that can be assigned to multiple users.</p>
+        <p>Create groups to organize users by role and streamline permission management across teams.</p>
+        <a href="{{request.prefix}}/data/auth/group/add/" class="add-group-btn">
+        <i class="fa fa-plus"></i> Add group
+        </a>
+        </div>
+        """
+    )
 
     rows = (
         GridFieldInteger(
@@ -779,6 +809,15 @@ class CommentList(GridReport):
     frozenColumns = 0
     default_sort = (0, "desc")
     help_url = "user-interface/getting-around/messages.html"
+    message_when_empty = Template(
+        """
+        <div class="grid-empty-message">
+        <h3>No messages yet</h3>
+        <p>Messages track system events, user actions, and important notifications.</p>
+        <p>As you work with the application, activity logs and messages will appear here.</p>
+        </div>
+        """
+    )
 
     rows = (
         GridFieldInteger("id", title=_("identifier"), key=True),
@@ -916,10 +955,23 @@ class FollowerList(GridReport):
 
 class BucketList(GridReport):
     title = _("buckets")
+    template = "common/bucketlist.html"
     basequeryset = Bucket.objects.all()
     model = Bucket
     frozenColumns = 1
     help_url = "model-reference/buckets.html"
+    message_when_empty = Template(
+        """
+        <div class="grid-empty-message">
+        <h3>Define your planning time horizons</h3>
+        <p>Time buckets define the time granularity for planning and reporting.</p>
+        <p>Configure daily, weekly, monthly, quarterly, or yearly buckets to match your business planning cycles.</p>
+        <a href="{{request.prefix}}/data/common/bucket/add/" class="add-bucket-btn">
+        <i class="fa fa-plus"></i> Add bucket
+        </a>
+        </div>
+        """
+    )
     rows = (
         GridFieldText(
             "name",
@@ -937,11 +989,24 @@ class BucketList(GridReport):
 
 class BucketDetailList(GridReport):
     title = _("bucket dates")
+    template = "common/bucketdetaillist.html"
     basequeryset = BucketDetail.objects.all()
     model = BucketDetail
     frozenColumns = 2
     help_url = "model-reference/bucket-dates.html"
     default_sort = (2, "asc", 1, "asc")
+    message_when_empty = Template(
+        """
+        <div class="grid-empty-message">
+        <h3>Define time periods for your buckets</h3>
+        <p>Bucket dates define the specific time periods for each bucket.</p>
+        <p>Each entry specifies the start and end date range, enabling precise time-based planning and reporting.</p>
+        <a href="{{request.prefix}}/data/common/bucketdetail/add/" class="add-bucketdetail-btn">
+        <i class="fa fa-plus"></i> Add bucket date
+        </a>
+        </div>
+        """
+    )
     rows = (
         GridFieldInteger(
             "id",
@@ -968,19 +1033,21 @@ class BucketDetailList(GridReport):
 
 class AttributeList(GridReport):
     title = _("attributes")
+    template = "common/attributelist.html"
     basequeryset = Attribute.objects.all()
     model = Attribute
     frozenColumns = 1
     help_url = "model-reference/attributes.html"
     message_when_empty = Template(
         """
+        <div class="grid-empty-message">
         <h3>Extend frePPLe with your own attributes</h3>
-        <br>
-        Every business uses specific attributes on items, sales orders, suppliers...<br>
-        You can edit, filter, sort, import and export your attribute fields like all other fields.<br>
-        <br><br>
-        <a href="{{request.prefix}}/data/common/attribute/add/" class="btn btn-primary">Add attribute</a>
-        <br>
+        <p>Every business uses specific attributes on items, sales orders, suppliers, and more.</p>
+        <p>You can edit, filter, sort, import and export your attribute fields like all other fields.</p>
+        <a href="{{request.prefix}}/data/common/attribute/add/" class="add-attribute-btn">
+        <i class="fa fa-plus"></i> Add attribute
+        </a>
+        </div>
         """
     )
 
@@ -1317,18 +1384,20 @@ def follow(request):
 
 class APIKeyList(GridReport):
     title = _("my API keys")
+    template = "common/apikeylist.html"
     model = APIKey
     frozenColumns = 1
     help_url = "model-reference/apikeys.html"
     message_when_empty = Template(
         """
-        <h3>API Keys</h3>
-        <br>
-        API Keys are used to connect to frepple from external applications.<br>
-        They replace passwords, and facilitate managing access to the application.<br>
-        <br><br>
-        <a href="{{request.prefix}}/data/common/apikey/add/" class="btn btn-primary">Add API key</a>
-        <br>
+        <div class="grid-empty-message">
+        <h3>Secure API access to frePPLe</h3>
+        <p>API Keys are used to connect to Trivision from external applications.</p>
+        <p>They replace passwords and facilitate managing access to the application.</p>
+        <a href="{{request.prefix}}/data/common/apikey/add/" class="add-apikey-btn">
+        <i class="fa fa-plus"></i> Add API key
+        </a>
+        </div>
         """
     )
 

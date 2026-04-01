@@ -3,6 +3,254 @@
 {% load i18n %}
 
 {% block extrahead %}{{block.super}}
+<style>
+    :root {
+        --primary-purple: #7B2D8E;
+        --deep-purple: #2D004D;
+        --bright-accent: #9C27B0;
+        --soft-purple-bg: rgba(123, 45, 142, 0.04);
+        --border-color: #E5E7EB;
+        --card-bg: #FFFFFF;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+    }
+
+    /* Modern page styling */
+    #content-summary {
+        background: linear-gradient(135deg, rgba(156,39,176,0.08) 0%, rgba(123,45,142,0.05) 100%);
+        border-radius: 12px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        border: 1px solid rgba(156,39,176,0.15);
+        box-shadow: 0 4px 12px rgba(123,45,142,0.08);
+    }
+
+    #content-summary p, #content-summary br {
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        line-height: 1.7;
+    }
+
+    #content-summary a {
+        color: var(--primary-purple);
+        font-weight: 600;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    #content-summary a:hover {
+        color: var(--bright-accent);
+        text-decoration: underline;
+    }
+
+    /* Modern tabs */
+    .nav-tabs {
+        border-bottom: 2px solid var(--border-color);
+        margin-bottom: 0;
+    }
+
+    .nav-tabs .nav-link {
+        color: var(--text-secondary);
+        font-weight: 600;
+        font-size: 0.875rem;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: all 0.2s ease;
+        background: transparent;
+    }
+
+    .nav-tabs .nav-link:hover {
+        color: var(--primary-purple);
+        background: var(--soft-purple-bg);
+        border-bottom-color: rgba(156,39,176,0.3);
+    }
+
+    .nav-tabs .nav-link.active {
+        color: var(--primary-purple);
+        font-weight: 700;
+        border-bottom-color: var(--primary-purple);
+        background: var(--soft-purple-bg);
+    }
+
+    /* Code card styling */
+    .tab-content .card {
+        border: 1px solid rgba(156,39,176,0.15);
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        background: linear-gradient(135deg, #F8F4FC 0%, #FFFFFF 100%);
+    }
+
+    .tab-content .card:hover {
+        border-color: var(--primary-purple);
+        box-shadow: 0 4px 12px rgba(123,45,142,0.15);
+        transform: translateX(4px);
+    }
+
+    .tab-content .card-body {
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.875rem;
+        color: var(--text-primary);
+        padding: 1rem 1.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .tab-content .card-body .fa-clipboard {
+        color: var(--primary-purple);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .tab-content .card-body:hover .fa-clipboard {
+        color: var(--bright-accent);
+        transform: scale(1.1);
+    }
+
+    /* Tab content description */
+    .tab-pane > div:first-child {
+        background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+        border-left: 4px solid #3B82F6;
+        border-radius: 8px;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1rem;
+        color: #1E3A8A;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    /* JWT input field */
+    #jwt {
+        border: 1px solid rgba(156,39,176,0.3) !important;
+        border-radius: 6px !important;
+        font-weight: 600 !important;
+        color: var(--primary-purple) !important;
+        transition: all 0.2s ease !important;
+    }
+
+    #jwt:focus {
+        outline: none !important;
+        border-color: var(--primary-purple) !important;
+        box-shadow: 0 0 0 3px rgba(156,39,176,0.15) !important;
+    }
+
+    /* REST API card */
+    .card {
+        border: 1px solid rgba(156,39,176,0.2);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(123,45,142,0.1);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card:hover {
+        box-shadow: 0 8px 24px rgba(123,45,142,0.15);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+        border-bottom: none !important;
+        padding: 1rem 1.5rem !important;
+        font-weight: 700 !important;
+        color: #FFFFFF !important;
+        font-size: 1rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        box-shadow: 0 2px 8px rgba(123,45,142,0.15);
+    }
+
+    .card-body {
+        padding: 1.5rem;
+        background: #FFFFFF;
+    }
+
+    /* Table styling */
+    .table {
+        margin-bottom: 0;
+    }
+
+    .table thead th {
+        background: linear-gradient(to bottom, #F8F4FC, #FFFFFF);
+        color: var(--deep-purple);
+        font-weight: 700;
+        padding: 1rem 0.75rem;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        border-bottom: 2px solid var(--primary-purple);
+    }
+
+    .table tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table tbody tr:hover {
+        background-color: var(--soft-purple-bg);
+    }
+
+    .table tbody td {
+        padding: 0.875rem 0.75rem;
+        font-size: 0.875rem;
+        color: var(--text-primary);
+        border-bottom: 1px solid #F3F4F6;
+        vertical-align: middle;
+    }
+
+    .table tbody td:first-child {
+        font-weight: 600;
+        color: var(--text-secondary);
+    }
+
+    .table tbody td a {
+        color: var(--primary-purple);
+        text-decoration: none;
+        font-weight: 500;
+        font-family: 'Monaco', 'Menlo', monospace;
+        font-size: 0.8rem;
+        transition: color 0.2s ease;
+    }
+
+    .table tbody td a:hover {
+        color: var(--bright-accent);
+    }
+
+    .table tbody td .fa-caret-right {
+        color: var(--primary-purple);
+        transition: transform 0.2s ease;
+    }
+
+    .table tbody tr:hover .fa-caret-right {
+        transform: translateX(3px);
+    }
+
+    /* Input in table */
+    .table tbody td input.form-control {
+        border: 1px solid rgba(156,39,176,0.25);
+        border-radius: 6px;
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+        transition: all 0.2s ease;
+    }
+
+    .table tbody td input.form-control:focus {
+        outline: none;
+        border-color: var(--primary-purple);
+        box-shadow: 0 0 0 3px rgba(156,39,176,0.15);
+    }
+
+    /* Header badge */
+    .header-badge {
+        background: var(--soft-purple-bg);
+        border: 1px solid rgba(123,45,142,0.1);
+        border-radius: 20px;
+        color: var(--primary-purple) !important;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+</style>
 <script>
 $(function() {
   $("#jwt").on('input', function() {
@@ -39,10 +287,28 @@ function copyToClipboard(el){
 {% endblock %}
 
 {% block content %}
+
+<!-- Modern Page Header -->
+<div class="modern-header-container mb-4">
+    <div class="row align-items-center">
+        <div class="col">
+            <p class="text-muted small mb-1">{% trans "Help" %}</p>
+            <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
+                {% trans "REST API Help"|capfirst %}
+            </h2>
+        </div>
+        <div class="col-auto">
+            <div class="header-badge">
+                <i class="fa fa-code me-1"></i> {% trans "API Documentation & Testing" %}
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="content-summary" class="row"><div class="col">
 {% blocktrans with username=request.user.username %}This page helps developers to learn and experiment with the
 <a class="text-decoration-underline" target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a>
-API of frePPLe.<br>
+API of Trivision Planning.<br>
 This API allows your application to exchange information with frePPLe.<br>
 <br>
 The "list API" link takes you to the object list page.<br>
@@ -134,10 +400,10 @@ For instance, to return the list of all sales orders in JSON format:<br><br>
 <div class="row mb-3"><div class="col" style="max-width:1100px">
   <div class="card">
     <div class="card-header">
-      <b>REST API</b>
+      <i class="fa fa-list-alt me-2"></i>REST API Endpoints
     </div>
     <div class="card-body">
-    <table class="table table-sm table-hover">
+    <table class="table table-sm table-hover mb-0">
       <tr><th></th><th>{% trans 'List API' %}</th><th>{% trans 'Detail API' %}</th></tr>
       {% getMenu as menu %}
       {% for group in menu %}

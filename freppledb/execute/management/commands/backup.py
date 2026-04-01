@@ -232,18 +232,18 @@ class Command(BaseCommand):
             setattr(_thread_locals, "database", old_thread_locals)
 
     # accordion template
-    title = _("Contact frePPLe support")
-    index = 3100
+    # title = _("Contact frePPLe support")
+    # index = 3100
 
-    help_url = "command-reference.html#backup"
+    # help_url = "command-reference.html#backup"
 
-    @staticmethod
-    def getHTML(request):
-        if request.user.is_superuser:
-            return render_to_string(
-                "commands/backup.html",
-                {"hasdebugreport": "freppledb.debugreport" in settings.INSTALLED_APPS},
-                request=request,
-            )
-        else:
-            return None
+    # @staticmethod
+    # def getHTML(request):
+    #     if request.user.is_superuser:
+    #         return render_to_string(
+    #             "commands/backup.html",
+    #             {"hasdebugreport": "freppledb.debugreport" in settings.INSTALLED_APPS},
+    #             request=request,
+    #         )
+    #     else:
+    #         return None

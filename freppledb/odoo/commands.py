@@ -546,7 +546,8 @@ class OdooSendRecommendations(PlanTask):
                     os.path.join(odoo_folder, "metadata.json"), "r", encoding="utf-8"
                 ) as f:
                     metadata = json.load(f)
-                authentication = f"Bearer {metadata.pop("token")}"
+                token = metadata.pop("token")
+                authentication = f"Bearer {token}"
             except Exception:
                 pass
         if not metadata:
@@ -593,7 +594,8 @@ class OdooSendRecommendations(PlanTask):
             loglevel = 0
         metadata["loglevel"] = loglevel
         metadata["description"] = (
-            f"frepple output v{frepple.version} at {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}"
+            "frepple output v%s at %s"
+            % (frepple.version, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
         )
 
         # Try to create the folder if doesn't exist yet
@@ -632,7 +634,7 @@ class OdooSendRecommendations(PlanTask):
         print("Sending recommendations to odoo")
         with open(recommendations, "rb") as f:
             response = requests.post(
-                f"{metadata["odoo_url"]}frepple/recommendations/",
+                "%sfrepple/recommendations/" % metadata["odoo_url"],
                 headers={
                     "Authorization": authentication,
                     "User-Agent": "frepple_connectors",
@@ -708,11 +710,12 @@ class OdooSendRecommendations(PlanTask):
                             sales_orders.append(p.demand.name)
                     recommendation = ""
                     if sales_orders:
-                        recommendation = (
-                            f"Required for sales orders {",".join(sales_orders)}"
-                        )
+                        so_list = ",".join(sales_orders)
+                        recommendation = f"Required for sales orders {so_list}"
                     if forecast:
-                        recommendation = f"{recommendation}{"\n" if sales_orders else ""}Required for forecast {",".join(forecast)}"
+                        fc_list = ",".join(forecast)
+                        separator = "\n" if sales_orders else ""
+                        recommendation = f"{recommendation}{separator}Required for forecast {fc_list}"
                     po_products.append(i.itemsupplier.item.name)
                     if not recommendation:
                         recommendation = "Stock replenishment"
@@ -782,11 +785,12 @@ class OdooSendRecommendations(PlanTask):
                             sales_orders.append(p.demand.name)
                     recommendation = ""
                     if sales_orders:
-                        recommendation = (
-                            f"Required for sales orders {",".join(sales_orders)}"
-                        )
+                        so_list = ",".join(sales_orders)
+                        recommendation = f"Required for sales orders {so_list}"
                     if forecast:
-                        recommendation = f"{recommendation}{"\n" if sales_orders else ""}Required for forecast {",".join(forecast)}"
+                        fc_list = ",".join(forecast)
+                        separator = "\n" if sales_orders else ""
+                        recommendation = f"{recommendation}{separator}Required for forecast {fc_list}"
                     mo_count += 1
                     if not recommendation:
                         recommendation = "Stock replenishment"
@@ -834,7 +838,11 @@ class OdooSendRecommendations(PlanTask):
                             "startdate": j.start.isoformat(),
                             "enddate": j.end.isoformat(),
                             "quantity": j.quantity,
-                            "recommendation": f"{"Produce" if new_mo else "Reschedule"} {i.item.name}\\n{recommendation}",
+                            "recommendation": "{} {}\\n{}".format(
+                                "Produce" if new_mo else "Reschedule",
+                                i.item.name,
+                                recommendation,
+                            ),
                         }
 
             if not self.loglevel:
@@ -869,7 +877,9 @@ class OdooSendRecommendations(PlanTask):
                             late_date = j.end
                 if not late_date:
                     continue
-                recommendation = f"{so[0]} will be shipped {(late_date - i.due).days} days late on {late_date.strftime("%Y-%m-%d")}"
+                late_str = late_date.strftime("%Y-%m-%d")
+                days_late = (late_date - i.due).days
+                recommendation = f"{so[0]} will be shipped {days_late} days late on {late_str}"
                 so_count += 1
                 yield {
                     "tab": "sale",
@@ -880,7 +890,11 @@ class OdooSendRecommendations(PlanTask):
                     "startdate": i.due.isoformat(),
                     "enddate": late_date.isoformat() if late_date else None,
                     "quantity": late_quantity,
-                    "recommendation": f"{recommendation}{"\\n" if i.constraints else ""}{"\\n".join([c.description for c in i.constraints]) if i.constraints else ""}",
+                    "recommendation": "{}{}{}".format(
+                        recommendation,
+                        "\\n" if i.constraints else "",
+                        "\\n".join([c.description for c in i.constraints]) if i.constraints else "",
+                    ),
                 }
             if not self.loglevel:
                 print(f"Generated {so_count} sales order recommendations")

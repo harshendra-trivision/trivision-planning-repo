@@ -1,0 +1,309 @@
+{% extends "admin/base_site_grid.html" %}
+{% load i18n %}
+
+{% block extrahead %}{{block.super}}
+<style>
+    :root {
+        --primary-purple: #7B2D8E;
+        --deep-purple: #2D004D;
+        --bright-accent: #9C27B0;
+        --soft-purple-bg: rgba(123, 45, 142, 0.04);
+        --border-color: #E5E7EB;
+        --card-bg: #FFFFFF;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+    }
+
+    /* Modernizing the page header */
+    #content > h1 {
+        display: none;
+    }
+
+    /* Grid container modernization */
+    #content-main {
+        background: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(45, 0, 77, 0.05);
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+        margin-top: 1rem !important;
+    }
+
+    /* Toolbar buttons modernization */
+    .btn-primary, #save, #undo, #toolicons .btn {
+        background: var(--primary-purple) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 600 !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
+        color: white !important;
+    }
+
+    .btn-primary:hover, #save:hover:not(:disabled), #undo:hover:not(:disabled), #toolicons .btn:hover:not(:disabled) {
+        background: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(123, 45, 142, 0.2) !important;
+    }
+
+    #save:disabled, #undo:disabled {
+        background: #E5E7EB !important;
+        color: #9CA3AF !important;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Grid styling */
+    .ui-jqgrid .ui-jqgrid-hdiv {
+        background: linear-gradient(to bottom, #F8F4FC, #FFFFFF) !important;
+        border-bottom: 2px solid var(--primary-purple) !important;
+    }
+
+    .ui-jqgrid .ui-jqgrid-htable th {
+        color: var(--deep-purple) !important;
+        font-weight: 700 !important;
+        padding: 15px 10px !important;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td {
+        border-bottom: 1px solid #F3F4F6 !important;
+        padding: 12px 10px !important;
+        font-size: 0.85rem;
+    }
+
+    .ui-jqgrid tr.ui-state-hover td {
+        background-color: var(--soft-purple-bg) !important;
+    }
+
+    /* Pager styling */
+    #gridpager {
+        background: #FFFFFF !important;
+        border: none !important;
+        border-top: 1px solid var(--border-color) !important;
+        padding: 12px 0 !important;
+    }
+
+    .ui-pg-input, .ui-pg-selbox {
+        border-radius: 4px !important;
+        border: 1px solid var(--border-color) !important;
+        padding: 2px 4px !important;
+    }
+
+    /* Toolbar icon buttons premium look */
+    #toolicons .btn-primary {
+        background: white !important;
+        color: var(--primary-purple) !important;
+        border: 1px solid rgba(123, 45, 142, 0.2) !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+    }
+
+    #toolicons .btn-primary:hover:not(:disabled) {
+        background: var(--primary-purple) !important;
+        color: white !important;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(123, 45, 142, 0.15) !important;
+    }
+
+    #toolicons .btn-primary:disabled {
+        background: #F3F4F6 !important;
+        color: #9CA3AF !important;
+        border-color: #E5E7EB !important;
+    }
+
+    /* Save/Undo buttons should be prominent */
+    #save, #undo {
+        padding: 0.6rem 2rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.8rem;
+    }
+
+    #save {
+        background: linear-gradient(135deg, var(--primary-purple) 0%, var(--bright-accent) 100%) !important;
+    }
+
+    /* Searching / Filtering modern look */
+    #addsearch {
+        border-radius: 8px 0 0 8px !important;
+        border: 1px solid var(--border-color) !important;
+        padding: 0.5rem 1rem !important;
+    }
+
+    .input-group-text {
+        background: white !important;
+        border: 1px solid var(--border-color) !important;
+        border-left: none !important;
+        border-radius: 0 8px 8px 0 !important;
+        color: var(--primary-purple) !important;
+    }
+
+    .input-group-text:hover {
+        background: var(--soft-purple-bg) !important;
+    }
+
+    /* Checkbox styling */
+    .ui-jqgrid tr.ui-row-ltr td.td_cbox, 
+    .ui-jqgrid tr.ui-row-ltr td[aria-describedby="grid_cb"],
+    .ui-jqgrid .ui-jqgrid-htable th#grid_cb {
+        padding: 12px 0px !important;
+        text-align: center;
+        width: 45px !important;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td.td_cbox input,
+    #grid_cb input {
+        margin: 0 !important;
+        cursor: pointer;
+        accent-color: var(--primary-purple);
+        transform: scale(1.1);
+    }
+
+    /* Enhanced empty state styling */
+    .grid-empty-message {
+        background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%);
+        border-radius: 12px;
+        padding: 3rem 2rem;
+        margin: 2rem auto;
+        max-width: 600px;
+        text-align: center;
+        border: 1px solid #E5E7EB;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .grid-empty-message h3 {
+        color: #2D004D;
+        font-weight: 700;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .grid-empty-message p {
+        color: #6B7280;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .add-group-btn {
+        background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s ease;
+        margin-top: 1rem;
+    }
+
+    .add-group-btn:hover {
+        background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 15px rgba(123, 45, 142, 0.25);
+        color: white;
+        text-decoration: none;
+    }
+
+    /* Link styling in grid */
+    .ui-jqgrid td a {
+        color: var(--primary-purple);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+    }
+
+    .ui-jqgrid td a:hover {
+        color: var(--bright-accent);
+    }
+
+    /* Header badge styling */
+    .header-badge {
+        background: var(--soft-purple-bg);
+        border: 1px solid rgba(123, 45, 142, 0.1);
+        border-radius: 20px;
+        color: var(--primary-purple) !important;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    /* Group name column styling */
+    .ui-jqgrid td[aria-describedby$="_name"] {
+        font-weight: 600;
+        color: var(--primary-purple);
+    }
+
+    /* Info banner */
+    .info-banner {
+        background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+        border: 1px solid #3B82F6;
+        border-left: 4px solid #2563EB;
+        border-radius: 12px;
+        padding: 1rem 1.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: start;
+        gap: 1rem;
+    }
+
+    .info-banner i {
+        color: #2563EB;
+        font-size: 1.25rem;
+        margin-top: 0.125rem;
+    }
+
+    .info-banner-content {
+        flex: 1;
+    }
+
+    .info-banner-content strong {
+        color: #1E40AF;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 0.25rem;
+        font-size: 0.9rem;
+    }
+
+    .info-banner-content p {
+        color: #1E3A8A;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        margin: 0;
+    }
+</style>
+{% endblock %}
+
+{% block before_table %}
+<div class="modern-header-container mb-4">
+    <div class="row align-items-center">
+        <div class="col">
+            <p class="text-muted small mb-1">{% trans "Admin" %}</p>
+            <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
+                {% trans "Groups"|capfirst %}
+            </h2>
+        </div>
+        <div class="col-auto">
+            <div class="header-badge">
+                <i class="fa fa-users me-1"></i> {% trans "Permission groups & roles" %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Info Banner -->
+<div class="info-banner">
+    <i class="fa fa-info-circle"></i>
+    <div class="info-banner-content">
+        <strong>{% trans "About Groups"|capfirst %}</strong>
+        <p>{% trans "Groups define sets of permissions that can be assigned to multiple users. Create groups to organize users by role and streamline permission management across teams." %}</p>
+    </div>
+</div>
+{% endblock %}

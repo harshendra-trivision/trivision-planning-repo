@@ -4,6 +4,70 @@
 {% block title %}{%trans 'forecast wizard'|capfirst %}{% endblock %}
 
 {% block extrahead %}{{block.super}}
+<style>
+    :root {
+        --primary-purple: #7B2D8E;
+        --deep-purple: #2D004D;
+        --bright-accent: #9C27B0;
+        --soft-purple-bg: rgba(123, 45, 142, 0.04);
+        --border-color: #E5E7EB;
+        --card-bg: #FFFFFF;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+    }
+
+    #content > h1 { display: none; }
+
+    .wizard-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(45, 0, 77, 0.05);
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .card {
+        border-radius: 12px !important;
+        border: 1px solid var(--border-color) !important;
+        overflow: hidden;
+        margin-bottom: 1rem;
+    }
+
+    .card-header {
+        background: #F9FAFB !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        padding: 1rem 1.5rem !important;
+        cursor: pointer;
+    }
+
+    .card-title {
+        color: var(--deep-purple);
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .btn-primary {
+        background: var(--primary-purple) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 600 !important;
+    }
+
+    .btn-primary:hover {
+        background: var(--deep-purple) !important;
+    }
+
+    .table thead th {
+        background: #F9FAFB;
+        color: var(--text-secondary);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 2px solid var(--primary-purple);
+    }
+</style>
 <script type="text/javascript">
 
   var reportkey = '{{reportkey|safe}}';

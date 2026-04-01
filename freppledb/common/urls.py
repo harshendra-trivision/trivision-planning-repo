@@ -46,6 +46,7 @@ if mode == "WSGI":
         re_path(r"^inbox/$", freppledb.common.views.inbox, name="inbox"),
         re_path(r"^follow/$", freppledb.common.views.follow, name="follow"),
         re_path(r"^$", freppledb.common.views.cockpit, name="cockpit"),
+        re_path(r"^yai/$", freppledb.common.views.yai, name="yai"),
         re_path(
             r"^preferences/$", freppledb.common.views.preferences, name="preferences"
         ),

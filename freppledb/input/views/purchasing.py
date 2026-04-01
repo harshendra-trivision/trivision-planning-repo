@@ -56,6 +56,7 @@ logger = logging.getLogger(__name__)
 
 
 class SupplierList(GridReport):
+    template = "input/supplier.html"
     title = _("suppliers")
     basequeryset = Supplier.objects.all()
     model = Supplier
@@ -108,6 +109,7 @@ class SupplierList(GridReport):
 
 
 class ItemSupplierList(GridReport):
+    template = "input/itemsupplier.html"
     title = _("item suppliers")
     basequeryset = ItemSupplier.objects.all()
     model = ItemSupplier
@@ -394,7 +396,7 @@ class ItemSupplierList(GridReport):
 
 
 class PurchaseOrderList(OperationPlanMixin):
-    template = "input/operationplanreport.html"
+    template = "input/purchaseorder.html"
     title = _("purchase orders")
     model = PurchaseOrder
     default_sort = (1, "desc")

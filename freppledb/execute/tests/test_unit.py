@@ -303,14 +303,14 @@ class remote_commands(TransactionTestCase):
     def test_remote_command_basic_authentication(self):
         self.remote_commands_base(
             {
-                "HTTP_AUTHORIZATION": f"Basic {base64.b64encode("admin:admin".encode()).decode()}"
+                "HTTP_AUTHORIZATION": "Basic %s" % base64.b64encode(b"admin:admin").decode()
             }
         )
 
     def test_remote_command_jwt_authentication(self):
         self.remote_commands_base(
             {
-                "HTTP_AUTHORIZATION": f"Bearer {getWebserviceAuthorization(user="admin", exp=3600)}"
+                "HTTP_AUTHORIZATION": "Bearer %s" % getWebserviceAuthorization(user="admin", exp=3600)
             }
         )
 

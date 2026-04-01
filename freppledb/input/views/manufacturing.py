@@ -75,6 +75,7 @@ logger = logging.getLogger(__name__)
 
 
 class OperationResourceList(GridReport):
+    template = "input/manufacturing_list.html"
     title = _("operation resources")
     basequeryset = OperationResource.objects.all()
     model = OperationResource
@@ -393,6 +394,7 @@ class OperationResourceList(GridReport):
 
 
 class OperationMaterialList(GridReport):
+    template = "input/manufacturing_list.html"
     title = _("operation materials")
     basequeryset = OperationMaterial.objects.all()
     model = OperationMaterial
@@ -694,6 +696,7 @@ class OperationMaterialList(GridReport):
 
 
 class CalendarList(GridReport):
+    template = "input/calendar.html"
     title = _("calendars")
     basequeryset = Calendar.objects.all()
     model = Calendar
@@ -741,7 +744,7 @@ class CalendarDetail(GridReport):
     model = CalendarBucket
     frozenColumns = 1
     hasTimeBuckets = True
-    template = "input/calendardetail.html"
+    template = "input/calendardetail_modern.html"
     help_url = "user-interface/plan-analysis/calendar-detail.html"
     title = _("calendar buckets")
 
@@ -818,6 +821,7 @@ class CalendarDetail(GridReport):
 
 
 class CalendarBucketList(GridReport):
+    template = "input/manufacturing_list.html"
     title = _("calendar buckets")
     basequeryset = CalendarBucket.objects.all()
     model = CalendarBucket
@@ -905,6 +909,7 @@ class CalendarBucketList(GridReport):
 
 
 class OperationList(GridReport):
+    template = "input/manufacturing_list.html"
     title = _("operations")
     basequeryset = Operation.objects.all()
     model = Operation
@@ -1144,6 +1149,7 @@ class OperationList(GridReport):
 
 
 class SubOperationList(GridReport):
+    template = "input/manufacturing_list.html"
     title = _("suboperations")
     basequeryset = SubOperation.objects.all()
     model = SubOperation
@@ -1409,6 +1415,7 @@ class SubOperationList(GridReport):
 
 
 class OperationDependencyList(GridReport):
+    template = "input/manufacturing_list.html"
     title = _("operation dependencies")
     basequeryset = OperationDependency.objects.all()
     model = OperationDependency
@@ -1695,7 +1702,7 @@ class OperationDependencyList(GridReport):
 
 
 class ManufacturingOrderList(OperationPlanMixin):
-    template = "input/operationplanreport.html"
+    template = "input/operationplanreport_modern.html"
     title = _("manufacturing orders")
     default_sort = (1, "desc")
     model = ManufacturingOrder
@@ -2553,7 +2560,7 @@ class ManufacturingOrderList(OperationPlanMixin):
 
 
 class WorkOrderList(OperationPlanMixin):
-    template = "input/operationplanreport.html"
+    template = "input/operationplanreport_modern.html"
     title = _("work orders")
     default_sort = (1, "desc")
     model = WorkOrder

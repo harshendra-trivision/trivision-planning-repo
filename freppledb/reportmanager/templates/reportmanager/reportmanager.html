@@ -2,6 +2,205 @@
 {% load i18n %}
 
 {% block extrahead %}{{block.super}}
+<style>
+/* Report Manager - Enhanced Styling following existing patterns */
+.report-editor-container {
+  background: #F8F9FC;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.report-form-row {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.report-form-label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+  min-width: 120px;
+  text-align: right;
+}
+
+.report-form-input {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.report-form-input:focus {
+  outline: none;
+  border-color: #7B2D8E;
+  box-shadow: 0 0 0 3px rgba(123, 45, 142, 0.1);
+}
+
+.report-checkbox {
+  accent-color: #7B2D8E;
+  transform: scale(1.2);
+}
+
+.report-btn {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.report-btn:hover {
+  background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(123, 45, 142, 0.25);
+  color: white;
+}
+
+.report-btn-secondary {
+  background: white;
+  color: #374151;
+  border: 1px solid #E5E7EB;
+}
+
+.report-btn-secondary:hover {
+  background: #F9FAFB;
+  border-color: #7B2D8E;
+  color: #7B2D8E;
+}
+
+.report-btn-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+}
+
+.report-btn-danger:hover {
+  background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
+}
+
+.sql-editor-container {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #E5E7EB;
+}
+
+.sql-editor-header {
+  background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #E5E7EB;
+  font-weight: 600;
+  color: #2D004D;
+  font-size: 1.1rem;
+}
+
+.sql-textarea {
+  border: none;
+  border-radius: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  padding: 1.5rem;
+  background: #FAFBFC;
+  transition: all 0.2s ease;
+  resize: none;
+}
+
+.sql-textarea:focus {
+  outline: none;
+  background: white;
+  box-shadow: inset 0 0 0 2px rgba(123, 45, 142, 0.1);
+}
+
+.schema-container {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.schema-header-main {
+  background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #E5E7EB;
+  font-weight: 600;
+  color: #2D004D;
+  font-size: 1.1rem;
+}
+
+.schema-content {
+  padding: 0.5rem;
+  overflow-y: auto;
+  background: #FAFBFC;
+}
+
+.resize-handle {
+  background: #E5E7EB;
+  color: #6B7280;
+  padding: 0.5rem;
+  text-align: center;
+  cursor: ns-resize;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+  margin: 0.5rem 0;
+}
+
+.resize-handle:hover {
+  background: #7B2D8E;
+  color: white;
+}
+
+.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.alert-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .report-form-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .report-form-label {
+    text-align: left;
+    min-width: auto;
+  }
+  
+  .report-btn {
+    width: 100%;
+    justify-content: center;
+    margin-right: 0;
+  }
+}
+</style>
 
 <script>
 
@@ -59,9 +258,9 @@ $(function() {
   });
 
   $("#reportmanager_statements").on("input", function() {
-    $("#reportmanager_save").removeClass("btn-primary").addClass("btn-danger");
+    $("#reportmanager_save").removeClass("report-btn").addClass("report-btn report-btn-danger");
     $(window).on('beforeunload', function() {
-      if ($("#reportmanager_save").hasClass("btn-danger"))
+      if ($("#reportmanager_save").hasClass("report-btn-danger"))
         return 'There are unsaved changes.';
     });
   });
@@ -85,7 +284,7 @@ $(function() {
       async: true,
       success: function(data) {
       	if (data.status == "ok") {
-          $("#reportmanager_save").addClass("btn-primary").removeClass("btn-danger");
+          $("#reportmanager_save").removeClass("report-btn-danger").addClass("report-btn");
           window.location.href = url_prefix + "/reportmanager/" + data.id + '/';
         }
       	else {
@@ -169,68 +368,71 @@ $(function() {
 
 {% block before_table %}
 
-<div class="row form-group mb-0">
-
 {% if perms.reportmanager.change_sqlreport %}
-<div id="editbuttons" class="col-md-5{% if report %} d-none{% endif %}">
-<button id="reportmanager_save" class="btn btn-primary">{% trans "save"|capfirst %}</button>
-<button id="reportmanager_format" class="btn btn-primary">{% trans "format SQL query"|capfirst %}</button>
-{% if report %}<button id="reportmanager_delete" class="btn btn-primary">{% trans "Delete" %}</button>{% endif %}
-</div>
+<div id="editbuttons" class="mb-3{% if report %} d-none{% endif %}">
+<button id="reportmanager_save" class="report-btn">
+<i class="fa fa-save"></i> {% trans "save"|capfirst %}
+</button>
+<button id="reportmanager_format" class="report-btn report-btn-secondary">
+<i class="fa fa-code"></i> {% trans "format SQL query"|capfirst %}
+</button>
+{% if report %}
+<button id="reportmanager_delete" class="report-btn report-btn-danger">
+<i class="fa fa-trash"></i> {% trans "Delete" %}
+</button>
 {% endif %}
 </div>
+{% endif %}
 
-<div id="editreport" {% if report %}class="d-none"{% endif %}>
-<div class="row pt-2 pb-2">
-<div class="col-form-label col-md-2" style="text-align:right">
-  <label class="required" style="font-weight:bold; color:#333" for="id_name">{% trans "name"|capfirst %}:</label>
-</div>
-<div class="controls col-md-10">
-  <input type="text" name="name" class="form-control vTextField" maxlength="300"
-    placeholder="{% trans "name"|capfirst %}" value="{{report.name}}" required id="id_name">
-</div>
+<div id="editreport" class="report-editor-container{% if report %} d-none{% endif %}">
+
+<div class="report-form-row">
+  <label class="report-form-label required" for="id_name">{% trans "name"|capfirst %}:</label>
+  <input type="text" name="name" class="report-form-input" maxlength="300"
+    placeholder="{% trans "Enter report name"|capfirst %}" value="{{report.name}}" required id="id_name">
 </div>
 
-<div class="row pt-2 pb-2">
-<div class="col-form-label col-md-2" style="text-align:right">
-  <label for="id_description">{% trans "description"|capfirst %}:</label>
-</div>
-<div class="controls col-md-10">
-  <input type="text" name="description" class="form-control vTextField" maxlength="500"
-    placeholder="{% trans "description"|capfirst %}" id="id_description"
+<div class="report-form-row">
+  <label class="report-form-label" for="id_description">{% trans "description"|capfirst %}:</label>
+  <input type="text" name="description" class="report-form-input" maxlength="500"
+    placeholder="{% trans "Enter report description"|capfirst %}" id="id_description"
     {% if report.description %}value="{{report.description}}"{% endif %}>
 </div>
+
+<div class="report-form-row">
+  <label class="report-form-label" for="id_public">{% trans "public"|capfirst %}:</label>
+  <div style="display: flex; align-items: center; gap: 0.5rem;">
+    <input class="report-checkbox" type="checkbox" name="public" {% if report.public %}checked {% endif %}id="id_public">
+    <span style="color: #6B7280; font-size: 0.85rem;">Share this report with other users</span>
+    {% if report.public and request.user.id != report.user.id %}
+    <span style="color: #7B2D8E; font-weight: 500; margin-left: 1rem;">{% trans "owner" %}: {{report.user.username}}</span>
+    {% endif %}
+  </div>
 </div>
 
-<div class="row pt-2 pb-2">
-<div class="form-check-label col-md-2" style="text-align:right">
-  <label for="id_public">{% trans "public"|capfirst %}:</label>
-</div>
-<div class="controls col-md-10">
-  <input class="form-check-input" type="checkbox" style="transform: scale(1.5)" name="public" {% if report.public %}checked {% endif %}id="id_public">
-  {% if report.public and request.user.id != report.user.id %}&nbsp;&nbsp;&nbsp;{% trans "owner" %} {{report.user.username}}{% endif %}
-</div>
+<div class="row">
+<div class="col-lg-8 col-md-12 mb-3">
+  <div class="sql-editor-container">
+    <div class="sql-editor-header">
+      <i class="fa fa-code me-2"></i>{% trans "SQL query"|capfirst %}
+    </div>
+    <textarea id="reportmanager_statements" rows="10" class="form-control sql-textarea w-100"
+     style="height:{% if request.prefs.height %}{{ request.prefs.height}}{% else %}300{% endif %}px;"
+     placeholder="Enter your SQL query here...">{{ report.sql }}</textarea>
+  </div>
+  <div class="resize-handle" id="resize-handle">
+    <i class="fa fa-bars"></i> Drag to resize
+  </div>
 </div>
 
-<div class="row" style="text-align:center">
-<div class="col-md-12">
-<div id="sqlandschema" style="width:100%">
-<table style="table-layout: fixed; width: 100%">
-<tr>
-<td style="padding-right: 5px">
-<h5 style="text-align: left">{% trans "SQL query"|capfirst %}</h5>
-<textarea id="reportmanager_statements" rows="10" class="form-control w-100"
- style="height:{% if request.prefs.height %}{{ request.prefs.height}}{% else %}200{% endif %}px; resize: none; font-size:1.25em; font-family:courier">
-{{ report.sql }}
-</textarea>
-</td>
-<td style="width:28em; padding-left:5px; padding-right:10px">
-<h5>{% trans "schema"|capfirst %}</h5>
-<div id="schemacolumn" style="overflow-y: scroll; height:{% if request.prefs.height %}{{ request.prefs.height}}{% else %}200{% endif %}px"></div>
-</td>
-</tr></table>
-</div>
-<span id="resize-handle" class="fa fa-bars handle" style="display: inline-block; touch-action: none"></span>
+<div class="col-lg-4 col-md-12 mb-3">
+  <div class="schema-container">
+    <div class="schema-header-main">
+      <i class="fa fa-database me-2"></i>{% trans "schema"|capfirst %}
+    </div>
+    <div id="schemacolumn" class="schema-content" 
+         style="height:{% if request.prefs.height %}{{ request.prefs.height}}{% else %}300{% endif %}px;"></div>
+  </div>
 </div>
 </div>
 

@@ -85,7 +85,7 @@ class ForecastList(GridReport):
     A list report to show forecasts.
     """
 
-    template = "admin/base_site_grid.html"
+    template = "forecast/forecast_list.html"
     title = _("forecast")
     basequeryset = Forecast.objects.all()
     model = Forecast
@@ -355,7 +355,7 @@ class ForecastList(GridReport):
 
 
 class MeasureList(GridReport):
-    template = "admin/base_site_grid.html"
+    template = "forecast/measure_list.html"
     title = _("measures")
     basequeryset = Measure.objects.all()
     model = Measure
@@ -1532,14 +1532,18 @@ class PeggingReport(pegging.ReportByDemand):
     def extra_context(reportclass, request, *args, **kwargs):
         if args and args[0]:
             request.session["lasttab"] = "detail"
+            plan_label = _("plan detail for delivery between")
+            and_label = _("and")
+            start_date = reportclass.startdate.strftime("%Y-%m-%d")
+            end_date = reportclass.enddate.strftime("%Y-%m-%d")
             return {
                 "active_tab": "detail",
                 "title": force_str(Forecast._meta.verbose_name) + " " + args[0],
                 "post_title": mark_safe(
-                    f"{_("plan detail for delivery between")}&nbsp;"
-                    f'<input id="fromdate" type="date" class="form-control w-auto d-inline" value="{reportclass.startdate.strftime("%Y-%m-%d")}">'
-                    f'&nbsp;{_("and")}&nbsp;'
-                    f'<input id="todate" type="date" class="form-control w-auto d-inline" value="{reportclass.enddate.strftime("%Y-%m-%d")}">'
+                    f"{plan_label}&nbsp;"
+                    f'<input id="fromdate" type="date" class="form-control w-auto d-inline" value="{start_date}">'
+                    f"&nbsp;{and_label}&nbsp;"
+                    f'<input id="todate" type="date" class="form-control w-auto d-inline" value="{end_date}">'
                 ),
                 "model": Forecast,
             }
@@ -1974,8 +1978,156 @@ class ForecastEditor:
         # Dispatch to the correct method
         if request.method == "GET":
             return ForecastEditor.getDetail(request)
+        elif request.method == "POST":
+            return ForecastEditor.postDetail(request)
         else:
-            return HttpResponseNotAllowed(["get"])
+            return HttpResponseNotAllowed(["GET", "POST"])
+
+    @staticmethod
+    def postDetail(request):
+        # Check permissions
+        if not request.user.has_perm("forecast.change_forecast"):
+            return HttpResponseForbidden("Permission denied")
+
+        import json
+        from freppledb.common.localization import parseLocalizedDateTime
+        from freppledb.common.models import Comment
+        from freppledb.forecast.models import Forecast
+        from freppledb.input.models import Item, Location, Customer, Buffer
+        import freppledb.webservice.utils as utils
+        from freppledb.forecast.commands import ExportForecastMetrics
+        try:
+            import frepple
+        except ImportError:
+            frepple = None
+
+        data = json.loads(request.body.decode("utf-8"))
+        errors = []
+
+        if not frepple:
+            if utils.checkRunning(database=request.database):
+                return utils.proxyToWebService(request)
+            else:
+                return HttpResponse(
+                    json.dumps(
+                        {
+                            "errors": [
+                                "Planning engine not loaded and webservice not running for %s"
+                                % request.database
+                            ]
+                        }
+                    ),
+                    content_type="application/json",
+                    status=500,
+                )
+
+        import threading
+        if not hasattr(utils, 'forecast_edit_lock'):
+            utils.forecast_edit_lock = threading.Lock()
+
+        with utils.forecast_edit_lock:
+            frepple.cache.write_immediately = False
+            try:
+                replan = False
+                item_name = data.get("item")
+                location_name = data.get("location")
+                customer_name = data.get("customer")
+                
+                item = None
+                location = None
+                customer = None
+                
+                if item_name:
+                    try: 
+                        item = frepple.item(name=item_name, action="C")
+                    except Exception as e: 
+                        errors.append("Item not found: %s" % item_name)
+                if location_name:
+                    try: 
+                        location = frepple.location(name=location_name, action="C")
+                    except Exception as e: 
+                        errors.append("Location not found: %s" % location_name)
+                if customer_name:
+                    try: 
+                        customer = frepple.customer(name=customer_name, action="C")
+                    except Exception as e: 
+                        errors.append("Customer not found: %s" % customer_name)
+
+                method = data.get("forecastmethod")
+                if method and request.user.has_perm("forecast.change_forecast"):
+                    try:
+                        if item and location and customer:
+                            for f in item.demands:
+                                if isinstance(f, frepple.demand_forecastbucket) and f.location and f.location.name == location.name and f.customer == customer and f.owner.methods != method:
+                                    f.owner.methods = method
+                                    replan = True
+                                    Forecast.objects.all().using(request.database).filter(item=f.owner.item.name, location=f.owner.location.name, customer=f.owner.customer.name).update(method=method)
+                                elif isinstance(f, frepple.demand_forecast) and f.location and f.location.name == location.name and f.customer == customer and f.methods != method:
+                                    f.methods = method
+                                    replan = True
+                                    Forecast.objects.all().using(request.database).filter(item=f.item.name, location=f.location.name, customer=f.customer.name).update(method=method)
+                    except Exception as e:
+                        errors.append("Exception updating forecast method: " + str(e))
+
+                if "buckets" in data and item and location and customer and request.user.has_perm("forecast.change_forecast"):
+                    for bckt in data["buckets"]:
+                        try:
+                            args = {"item": item, "location": location, "customer": customer}
+                            if bckt.get("bucket"): 
+                                args["bucket"] = bckt["bucket"]
+                            if bckt.get("startdate"): 
+                                args["startdate"] = parseLocalizedDateTime(bckt["startdate"])
+                            if bckt.get("enddate"): 
+                                args["enddate"] = parseLocalizedDateTime(bckt["enddate"])
+                            for key, val in bckt.items():
+                                if key not in ("id", "bucket", "startdate", "enddate") and val is not None and val != "":
+                                    args[key] = float(val)
+                                    if key != "forecastoverride":
+                                        replan = True
+                            frepple.setForecast(**args)
+                        except Exception as e:
+                            errors.append("Error processing bucket: %s" % e)
+
+                if replan and item and location:
+                    try:
+                        cluster = frepple.buffer(name="%s @ %s" % (item.name, location.name), item=item, location=location).cluster
+                        if not utils.fcst_solver:
+                            utils.createSolvers(database=request.database)
+                        utils.fcst_solver.solve(cluster=cluster)
+                        ExportForecastMetrics().run(database=request.database, cluster=[cluster])
+                    except Exception as e:
+                        errors.append("Exception during replanning: " + str(e))
+
+            finally:
+                frepple.cache.flush()
+                frepple.cache.write_immediately = True
+
+        if "commenttype" in data and "comment" in data and request.user.has_perm("common.add_comment"):
+            try:
+                ct = data["commenttype"]
+                cm = data["comment"]
+                if ct == "item" and item:
+                    db_item = Item.objects.using(request.database).get(name=item.name)
+                    Comment(content_object=db_item, user=request.user, comment=cm, type="comment").save(using=request.database)
+                elif ct == "location" and location:
+                    db_loc = Location.objects.using(request.database).get(name=location.name)
+                    Comment(content_object=db_loc, user=request.user, comment=cm, type="comment").save(using=request.database)
+                elif ct == "customer" and customer:
+                    db_cust = Customer.objects.using(request.database).get(name=customer.name)
+                    Comment(content_object=db_cust, user=request.user, comment=cm, type="comment").save(using=request.database)
+                elif ct == "itemlocation" and item and location:
+                    b = Buffer(id="%s %s")
+                    b.pk = "%s @ %s" % (item.name, location.name)
+                    Comment(content_object=b, user=request.user, comment=cm, type="comment").save(using=request.database)
+            except Exception as e:
+                errors.append("Exception entering comment: " + str(e))
+
+        if errors:
+            for error in errors:
+                logger.error("Forecast editor error: %s" % error)
+            return HttpResponse(json.dumps({"errors": [str(e) for e in errors]}), content_type="application/json", status=500)
+        else:
+            return HttpResponse(json.dumps({"OK": 1}), content_type="application/json")
 
     @staticmethod
     def getDetail(request):
@@ -2468,7 +2620,8 @@ class ForecastEditor:
         singleRecord = cursor.fetchone()
         minbucketLevel = singleRecord[0] if singleRecord else 4
         bucketlevels = (
-            Bucket.objects.order_by("-level")
+            Bucket.objects.using(request.database)
+            .order_by("-level")
             .filter(level__lte=minbucketLevel)
             .values_list("name", flat=True)
         )
@@ -2483,9 +2636,25 @@ class ForecastEditor:
             request.user.horizonbuckets = bucketlevels[0]
             request.user.save()
         else:
-            return HttpResponseServerError(
-                "No time buckets found. Please generate the forecast first."
-            )
+            # Handle empty bucket case gracefully by showing an informative page
+            # We provide all variables expected by forecast.html to avoid JS syntax errors.
+            ctx = getWebServiceContext(request)
+            from datetime import datetime
+            ctx.update({
+                "bucketnames": [],
+                "bucketsperyear": "[]",
+                "title": _("Forecast editor"),
+                "preferences": request.user.getPreference(
+                    "freppledb.forecast.planning", database=request.database
+                ),
+                "currentbucket": "No bucket",
+                "currentdate": datetime.now().strftime("%Y-%m-%d"),
+                "measures": json.dumps({}),
+                "reportclass": ForecastEditor,
+                "error_message": _("No time buckets found. Please generate the forecast first."),
+                "debug_js": False,  # Fallback to static files to avoid dev server errors when no data
+            })
+            return render(request, "forecast.html", context=ctx)
 
         # Find the current date and current bucket
         currentdate = getCurrentDate(request.database, lastplan=True).date()
@@ -2551,6 +2720,9 @@ class ForecastEditor:
                 "currentbucket": currentbucket,
                 "currentdate": currentdate.strftime("%Y-%m-%d"),
                 "measures": json.dumps(measures),
+                "debug_js": False,  # Force to False to use the built static assets
+                "port": request.get_host() + "/" + request.database,
+                "proxied": False,
                 "reportclass": ForecastEditor,
             }
         )

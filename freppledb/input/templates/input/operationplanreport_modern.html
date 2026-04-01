@@ -1,0 +1,477 @@
+{% extends "admin/base_site_grid.html" %}
+{% load i18n %}
+{% load static %}
+
+{% block extrastyle %}{{block.super}}
+<style>
+    :root {
+        --primary-purple: #7B2D8E;
+        --deep-purple: #2D004D;
+        --bright-accent: #9C27B0;
+        --soft-purple-bg: rgba(123, 45, 142, 0.04);
+        --border-color: #E5E7EB;
+        --card-bg: #FFFFFF;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+    }
+
+    /* Modernizing the page header */
+    #content > h1 {
+        display: none;
+    }
+
+    /* Grid container modernization */
+    #content-main {
+        background: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(45, 0, 77, 0.05);
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+        margin-top: 1rem !important;
+    }
+
+    /* Toolbar buttons modernization */
+    .btn-primary, #save, #undo, #toolicons .btn, .submit-row input {
+        background: var(--primary-purple) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 600 !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
+        color: white !important;
+    }
+
+    .btn-primary:hover, #save:hover, #undo:hover, #toolicons .btn:hover {
+        background: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(123, 45, 142, 0.2) !important;
+    }
+
+    .btn-primary.active {
+        background: var(--deep-purple) !important;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.1) !important;
+    }
+
+    /* Grid styling */
+    .ui-jqgrid .ui-jqgrid-hdiv {
+        background: linear-gradient(to bottom, #F8F4FC, #FFFFFF) !important;
+        border-bottom: 2px solid var(--primary-purple) !important;
+    }
+
+    .ui-jqgrid .ui-jqgrid-htable th {
+        color: var(--deep-purple) !important;
+        font-weight: 700 !important;
+        padding: 15px 10px !important;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td {
+        border-bottom: 1px solid #F3F4F6 !important;
+        padding: 12px 10px !important;
+        font-size: 0.85rem;
+    }
+
+    .ui-jqgrid tr.ui-state-hover td {
+        background-color: var(--soft-purple-bg) !important;
+    }
+
+    /* Pager styling */
+    #gridpager {
+        background: #FFFFFF !important;
+        border: none !important;
+        border-top: 1px solid var(--border-color) !important;
+        padding: 12px 0 !important;
+    }
+
+    /* Header badge */
+    .header-badge {
+        background: var(--soft-purple-bg);
+        border: 1px solid rgba(123, 45, 142, 0.1);
+        border-radius: 20px;
+        color: var(--primary-purple) !important;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+    }
+
+    #attributes-supplyinformation thead tr td,
+    #attributes-networkstatus thead tr td,
+    #attributes-downstreamoperationplans thead tr td,
+    #attributes-upstreamoperationplans thead tr td,
+    #attributes-operationproblems thead tr td,
+    #attributes-operationresources thead tr td,
+    #attributes-operationflowplans thead tr td,
+    #attributes-operationdemandpegging thead tr td,
+    #attributes-inventorydata thead tr td {
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
+        border-bottom-color: #bbb;
+    }
+
+    rect.opplan {
+        vector-effect: non-scaling-stroke;
+        stroke-width: 1px;
+        stroke: rgb(0,0,0);
+    }
+</style>
+{% endblock %}
+
+{% block extrahead %}
+<script>
+  function getVisibleSelectedIds() {
+    pageIDs = (jQuery("#grid").jqGrid && jQuery("#grid").jqGrid('getDataIDs')) || [];
+    const vueSelectedOperationPlans = (upload.selectedRows || []).map((op) => op.reference || op);
+
+    // filter out selected IDs that do not belong to this page
+    upload.selectedRows = pageIDs.filter((id) => vueSelectedOperationPlans.includes(id));
+
+    return upload.selectedRows;
+  }
+  window.getVisibleSelectedIds = getVisibleSelectedIds;
+</script>
+{{block.super}}
+<script src="{{STATIC_URL}}js/d3.min.js"></script>
+
+{% if debug_js %}
+<script type="module" src="http://localhost:5173/static/src/main.js"></script>
+<script type="module" src="http://localhost:5173/static/@vite/client"></script>
+{% else %}
+<script src="{{STATIC_URL}}input/main.js"></script>
+{% endif %}
+
+<script>
+  var urlParams = new URLSearchParams(window.location.search);
+  var mode = preferences && preferences.mode || "table";
+  var calendarmode = preferences && preferences.calendarmode || "{{reportclass.calendarmode}}";
+  var grouping = preferences && preferences.grouping || null;
+  var groupingdir = preferences && preferences.groupingdir || "asc";
+  var editable = {% if reportclass.editable and haschangeperm %}true{% else %}false{% endif %};
+  var service_url = {% if proxied %}'/svc/{{request.database}}/'{% else %}document.location.protocol + "//{{port}}/"{% endif %};
+  var service_token = '{{token}}';
+  var isDataSaved = false;
+  var operationplanChanges = {};
+  var pageIDs = [];
+
+  function setActiveButton(buttonId) {
+    [
+      jQuery('#gridmode'),
+      jQuery('#kanbanmode'),
+      jQuery('#calendarmode'),
+      jQuery('#ganttmode')
+    ].forEach(div => div.removeClass('active'));
+    jQuery(`#${buttonId}`).addClass('active');
+  }
+
+  function setVisibleByMode(mode) {
+    [
+      jQuery('#tablemode'),
+      jQuery('#kanban'),
+      jQuery('#calendar'),
+      jQuery('#gantt')
+    ].forEach(div => div.hasClass('d-none') ? div.removeClass('d-none').addClass('d-none') : div.addClass('d-none'));
+
+    switch (mode) {
+      case 'table': {
+        preferences.mode = mode;
+        jQuery('#tablemode').removeClass('d-none');
+        jQuery("#grid").jqGrid('setGridParam', {datatype: 'json'}).trigger('reloadGrid');
+        break;
+      }
+      case 'kanban': {
+        preferences.mode = mode;
+        jQuery('#kanban').removeClass('d-none');
+        break;
+      }
+      case 'calendar': {
+        preferences.mode = mode;
+        jQuery('#calendar').removeClass('d-none');
+        break;
+      }
+      case 'gantt': {
+        preferences.mode = mode;
+        jQuery('#gantt').removeClass('d-none');
+        break;
+      }
+    }
+  }
+
+  function saveData(rows, ok_callback) {
+      $.ajax({
+        url: service_url + 'operationplan/',
+        data: JSON.stringify(rows),
+        type: "POST",
+        headers: { "Authorization": "Bearer " + service_token },
+        contentType: "application/json",
+        success: function () {
+          const event = new CustomEvent('triggerUndo', {
+            detail: { execute: 'undo', reference: null, status: null, selectedRows: null }
+          });
+          document.getElementById('app').dispatchEvent(event);
+          upload.undo();
+          jQuery("#save i").addClass('hidden');
+          jQuery(".ng-dirty").removeClass('ng-dirty');
+          if (typeof ok_callback !== 'undefined') ok_callback();
+          isDataSaved = true;
+        },
+        error: ajaxerror
+    });
+    operationplanChanges = {};
+  }
+
+  function extraPreference() {
+    return {
+      "height": Math.floor(jQuery("#content-main").height()),
+      "width": Math.floor(jQuery("#fields").width()),
+      "mode": mode,
+      "calendarmode": calendarmode,
+      "columns": window.appInstance?.kanbancolumns || window.preferences.columns || undefined,
+      "grouping": grouping,
+      "groupingdir": groupingdir,
+      "detailwidth": Math.floor(jQuery("#detailspanel").width() || 0),
+      "widgets": jQuery(".widget").length > 1 ? widget.getConfig() : preferences.widgets
+    };
+  }
+
+  function extraSearchUpdate(filter) {
+    thefilter = filter;
+  	if (preferences && (preferences.mode == "kanban" || preferences.mode == "gantt" || (preferences.mode && preferences.mode.startsWith("calendar")))) {
+      initialfilter = filter;
+      return true;
+    }
+    return false;
+  }
+
+  function setHeights() {
+      var initializing = jQuery('.column-body.d-none').length > 0;
+      var saved = window.preferences && window.preferences.height;
+      var h = (initializing && saved) ? Math.floor(saved) : jQuery('#content-main').height();
+
+      jQuery('#grid').setGridWidth(jQuery('#content-main').width());
+      jQuery('#grid').setGridHeight(h - 60);
+      jQuery('.column-body').removeClass('d-none').css('height', h - 60);
+  }
+
+  function setWidths() {
+    var w = jQuery("#workarea").width() - jQuery('#detailspanel').width() - jQuery("#resize-handle").parent().width();
+    jQuery('#grid').setGridWidth(w);
+    jQuery("#grid").setGridHeight(jQuery('#content-main').height() - 52);
+    jQuery("#kanban").css("width", w - 25);
+    jQuery("#scrolldayview").css("width", w - 25);
+    jQuery("#scrollweekview").css("width", w - 60);
+    jQuery("#scrollmonthview").css("width", w - 45);
+  }
+
+  function getDirtyData() {
+  	if (preferences && preferences.mode && (preferences.mode == "kanban" || preferences.mode == "gantt" || preferences.mode.startsWith("calendar"))) {
+      initialfilter = thefilter;
+    }
+  	else {
+      var dirty = jQuery("#grid").getChangedCells('dirty');
+      for (var c of dirty) {
+        var ref = jQuery("#grid").jqGrid('getCell', c.id, "operationplan__reference");
+        if (ref) c.operationplan__reference = ref;
+      }
+      return dirty;
+    }
+  }
+
+  var language = "{{LANGUAGE_CODE}}";
+  var version = '{% version_short %}';
+  var lastid = '';
+  var preferences = {{ preferences | json }};
+  var default_operationplan_type = "{{ default_operationplan_type }}";
+  var groupBy = "{{ groupBy }}";
+  var thefilter = initialfilter;
+  var groupingcfg = {{ groupingcfg | json }};
+  var currentdate = new Date("{{ currentdate|date:'Y-m-d' }}");
+
+  var horizonstart = new Date({{request.report_startdate|date:"Y"}},{{request.report_startdate|date:"n"}}-1,{{request.report_startdate|date:"j"}});
+  var horizonend = new Date({{request.report_enddate|date:"Y"}},{{request.report_enddate|date:"n"}}-1,{{request.report_enddate|date:"j"}});
+  var viewstart = new Date(horizonstart.getTime());
+  var viewend = new Date(horizonend.getTime());
+
+  jQuery(function() {
+    jQuery("#workarea").css('overflow-x','visible');
+    jQuery("#content-main").resizable({
+      handleSelector: "#resize-handle",
+      resizeWidth: false,
+      resizeHeight: true,
+      onDrag: setHeights,
+      onDragEnd: function (e, $el, opt) { grid.saveColumnConfiguration(); }
+    });
+    jQuery("#save").on('click', function() {
+      jQuery(window).off('beforeunload', upload.warnUnsavedChanges);
+      if (mode === 'kanban') {
+        const event = new CustomEvent('triggerSave', {
+          detail: { execute: 'triggerSave', reference: null, status: null, selectedRows: null }
+        });
+        document.getElementById('app').dispatchEvent(event);
+      } else {
+        upload.save();
+      }
+    });
+    jQuery("#undo").on('click', function() {
+      jQuery(window).off('beforeunload', upload.warnUnsavedChanges);
+        const event = new CustomEvent('triggerUndo', {
+          detail: { execute: 'undo', reference: null, status: null, selectedRows: null }
+        });
+        document.getElementById('app').dispatchEvent(event);
+        upload.undo();
+    });
+    jQuery("#actionsul li, button#actions1").on('click', function() {
+      document.getElementById('app').dispatchEvent(new CustomEvent("refreshStatus", {
+        detail: { execute: 'refreshStatus', reference: null, status: jQuery("#actions").val(), selectedRows: null }
+      }));
+    });
+    jQuery("#gridmode").on('click', function() {
+      attemptModeChange('table', function() {
+        mode = "table";
+        document.getElementById('app').dispatchEvent(new CustomEvent("setMode", { detail: { mode: "table" } }));
+        setVisibleByMode(mode);
+        setActiveButton('gridmode');
+        grid.saveColumnConfiguration();
+      });
+    });
+    jQuery("#kanbanmode").on('click', function() {
+      attemptModeChange('kanban', function() {
+        preferences.height = Math.floor(jQuery("#content-main").height());
+        mode = "kanban";
+        document.getElementById('app').dispatchEvent(new CustomEvent("setMode", { detail: { mode: "kanban" } }));
+        setVisibleByMode(mode);
+        setActiveButton('kanbanmode');
+        grid.saveColumnConfiguration();
+      });
+    });
+    jQuery("#calendarmonth").on('click', function() {
+      attemptModeChange('calendarmonth', function () {
+        preferences.height = Math.floor(jQuery("#content-main").height());
+        mode = "calendarmonth";
+        document.getElementById('app').dispatchEvent(new CustomEvent("setMode", { detail: {mode: "calendarmonth"} }));
+        grid.saveColumnConfiguration(function () { location.reload(); });
+      });
+    });
+    jQuery("#calendarweek").on('click', function() {
+      attemptModeChange('calendarweek', function () {
+        preferences.height = Math.floor(jQuery("#content-main").height());
+        mode = "calendarweek";
+        document.getElementById('app').dispatchEvent(new CustomEvent("setMode", { detail: {mode: "calendarweek"} }));
+        grid.saveColumnConfiguration(function () { location.reload(); });
+      });
+    });
+    jQuery("#calendarday").on('click', function() {
+      attemptModeChange('calendarday', function () {
+        preferences.height = Math.floor(jQuery("#content-main").height());
+        mode = "calendarday";
+        document.getElementById('app').dispatchEvent(new CustomEvent("setMode", { detail: {mode: "calendarday"} }));
+        grid.saveColumnConfiguration(function () { location.reload(); });
+      });
+    });
+    {% if showGantt %}
+    jQuery("#ganttmode").on('click', function() {
+      attemptModeChange('gantt', function() {
+        mode = "gantt";
+        document.getElementById('app').dispatchEvent(new CustomEvent("setMode", { detail: { mode: "gantt" } }));
+        setVisibleByMode(mode);
+        grid.saveColumnConfiguration(function() { location.reload(); });
+      });
+    });
+    jQuery("#zoomin, #zoomout").removeClass("d-none");
+    {% endif %}
+
+    setActiveButton(mode.startsWith('calendar') ? 'calendarmode' : (mode == "table") ? 'gridmode' : (mode + 'mode'));
+    setVisibleByMode(mode.startsWith('calendar') ? 'calendar' : mode);
+  });
+
+  function displayongrid(id, columnid, value) {
+    jQuery("#"+id).removeClass("edited").addClass("edited");
+    if (["startdate", "enddate", "quantity", "quantity_completed", "remark"].indexOf(columnid) > -1 || (columnid === "status" && ['proposed', 'approved', 'confirmed', 'completed', 'closed'].indexOf(value) > -1)) {
+      jQuery("#grid").jqGrid("setCell", id, columnid, value, "dirty-cell");
+      jQuery("#save, #undo").removeClass("btn-primary btn-danger").addClass("btn-danger").prop("disabled", false);
+      jQuery(window).off('beforeunload', upload.warnUnsavedChanges);
+      jQuery(window).on('beforeunload', upload.warnUnsavedChanges);
+    }
+  }
+  window.displayongrid = displayongrid;
+
+  function attemptModeChange(targetMode, modeChangeFunction) {
+    document.getElementById('app').dispatchEvent(new CustomEvent("attemptModeChange", {
+      detail: { mode: targetMode, modeChangeFunction: modeChangeFunction }
+    }));
+  }
+</script>
+{% endblock %}
+
+{% block before_table %}
+<div class="modern-header-container mb-4">
+    <div class="row align-items-center">
+        <div class="col">
+            <p class="text-muted small mb-1">{% trans "Manufacturing" %}</p>
+            <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
+                {{ title|capfirst }}
+            </h2>
+        </div>
+        <div class="col-auto">
+            <div class="header-badge">
+                <i class="fa fa-cogs me-1"></i> {% trans "Manufacturing and production execution" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block tools %}{% if args %}{% include "common/snippet_follow.html" %}{% endif %}{% endblock %}
+{% block tabs %}{% if args %}{% tabs model %}{% endif %}{% endblock %}
+
+{% block actions %}
+  <div class="btn-group" role="group">
+    <button data-bs-toggle="tooltip" data-bs-placement="top" title="{% trans "display table"|capfirst %}"
+      class="btn btn-sm btn-primary{% if preferences.mode != 'kanban' and preferences.mode != 'gantt' and not preferences.mode.startsWith('calendar') %} active{% endif %}"
+      type="button" id="gridmode">
+      <span class="fa fa-table fa-lg"></span>
+    </button>
+    <button data-bs-toggle="tooltip" data-bs-placement="top" title="{% trans "display kanban cards"|capfirst %}" 
+      class="btn btn-sm btn-primary{% if preferences.mode == 'kanban' %} active{% endif %}" type="button" id="kanbanmode">
+      <span class="fa fa-columns fa-lg"></span>
+    </button>
+    <div class="btn-group dropdown" data-bs-toggle="tooltip" data-bs-placement="top" title="{% trans "display calendar"|capfirst %}">
+      <button type="button" id="calendarmode" class="btn btn-sm btn-primary dropdown-toggle{% if preferences.mode.startsWith('calendar') %} active{% endif %}" data-bs-toggle="dropdown">
+        <span class="fa fa-calendar-o"></span>
+      </button>
+      <ul class="dropdown-menu">
+        <li class="dropdown-item" id="calendarmonth"><a href="#">{% trans "month"|capfirst %}</a></li>
+        <li class="dropdown-item" id="calendarweek"><a href="#">{% trans "week"|capfirst %}</a></li>
+        <li class="dropdown-item" id="calendarday"><a href="#">{% trans "day"|capfirst %}</a></li>
+      </ul>
+    </div>
+    {% if showGantt %}
+    <button data-bs-toggle="tooltip" data-bs-placement="top" title="{% trans "display Gantt chart"|capfirst %}" class="btn btn-sm btn-primary{% if preferences.mode == 'gantt' %} active{% endif %}" type="button" id="ganttmode">
+      <span class="fa fa-align-left fa-lg"></span>
+    </button>
+    {% endif %}
+  </div>
+
+  {% if hasaddperm %}<button class="btn btn-sm btn-primary" onclick="location.href='{{request.prefix}}/data/{{model|app_label}}/{{model|object_name|lower}}/add/'" data-bs-toggle="tooltip" title="{% trans "Create new" %}" ><span class="fa fa-plus"></span></button>{% endif %}
+  {% if hasdeleteperm %}<button class="btn btn-sm btn-primary" id="delete_selected" disabled onclick="grid.showDelete('{{request.prefix}}/data/{{model|app_label}}/{{model|object_name|lower}}/')" ><span class="fa fa-minus"></span></button>{% endif %}
+  <button class="btn btn-sm btn-primary" onclick="grid.showExport(true,{{ scenario_permissions }})" ><span class="fa fa-arrow-down"></span></button>
+  <button id="customize" class="btn btn-sm btn-primary" onclick="grid.showCustomize(false);" ><span class="fa fa-wrench"></span></button>
+{% endblock %}
+
+{% block table %}
+<div id="content-main" style="min-height: 150px;">
+  <div id="tablemode">
+    <table id="grid" class="table table-striped"></table>
+    <div id="gridpager"></div>
+  </div>
+  <div id="calendar" class="col-md-12 d-none"></div>
+  <div id="kanban" class="row d-none"></div>
+  <div id="gantt" class="row d-none"></div>
+</div>
+<span id="resize-handle" class="fa fa-bars handle"></span>
+{% endblock %}
+
+{% block after_table %}
+<div id="app"></div>
+<div id="popup" class="modal fade" role="dialog"></div>
+{% endblock %}

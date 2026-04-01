@@ -54,6 +54,26 @@ class ForecastWidget(Widget):
 
     javascript = r"""
 
+    var svg = d3.select("#forecast");
+
+    // Define gradients
+    var defs = svg.append("defs");
+
+    // Closed orders gradient (deep purple)
+    var closedGrad = defs.append("linearGradient")
+      .attr("id", "fcstClosedGrad")
+      .attr("x1", "0%").attr("y1", "0%")
+      .attr("x2", "0%").attr("y2", "100%");
+    closedGrad.append("stop").attr("offset", "0%").attr("stop-color", "#7B2D8E");
+    closedGrad.append("stop").attr("offset", "100%").attr("stop-color", "#5C197B");
+
+    // Open orders gradient (light violet)
+    var openGrad = defs.append("linearGradient")
+      .attr("id", "fcstOpenGrad")
+      .attr("x1", "0%").attr("y1", "0%")
+      .attr("x2", "0%").attr("y2", "100%");
+    openGrad.append("stop").attr("offset", "0%").attr("stop-color", "#E9D5FF");
+    openGrad.append("stop").attr("offset", "100%").attr("stop-color", "#C4B5FD");
 
     // Collect the data
     var domain_x = [];
@@ -118,7 +138,6 @@ class ForecastWidget(Widget):
 
     var margin_y = 50;  // Width allocated for the Y-axis
     var margin_x = 9 * max_length;  // Height allocated for the X-axis
-    var svg = d3.select("#forecast");
     var svgrectangle = document.getElementById("forecast").getBoundingClientRect();
 
     // Reduce the number of displayed points if too many
@@ -181,18 +200,22 @@ class ForecastWidget(Widget):
         .attr("x", 2)
         .attr("y", function(d) {return y(d[2]-d[3]);})
         .attr("height", function(d) {return y_zero - y(d[2]-d[3]);})
-        .attr("rx","1")
+        .attr("rx","4")
         .attr("width", Math.max(1, x_width - 2))
-        .style("fill", "#828915");
+        .style("fill", "url(#fcstClosedGrad)")
+        .style("stroke", "#5C197B")
+        .style("stroke-width", "1");
 
       // Draw the open orders
       bar.append("rect")
         .attr("x", 2)
         .attr("y", function(d) {return y(d[2]);})
         .attr("height", function(d) {return y(d[2] - d[3]) - y(d[2]);})
-        .attr("rx","1")
+        .attr("rx","4")
         .attr("width", Math.max(1, x_width - 2))
-        .style("fill", "#FFC000");
+        .style("fill", "url(#fcstOpenGrad)")
+        .style("stroke", "#A855F7")
+        .style("stroke-width", "1");
 
       // Draw invisible rectangles for the hoverings
       bar.append("rect")
@@ -241,7 +264,8 @@ class ForecastWidget(Widget):
         .attr("transform", "translate(" + margin_y + ", 10 )")
         .attr('class', 'graphline')
         .attr('id','fcst_line')
-        .attr("stroke","#8BBA00")
+        .attr("stroke","#A855F7")
+        .attr("stroke-width", "3")
         .attr("d", line(data));
     }
     draw();
@@ -428,7 +452,8 @@ class ForecastAccuracyWidget(Widget):
     svg.append("svg:path")
       .attr("transform", "translate(" + margin_y + ", 10 )")
       .attr('class', 'graphline')
-      .attr("stroke","#8BBA00")
+      .attr("stroke","#A855F7")
+      .attr("stroke-width", "3")
       .attr("d", line(data));
     """
 

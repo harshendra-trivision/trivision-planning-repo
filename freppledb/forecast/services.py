@@ -217,7 +217,7 @@ class ForecastService(AsyncHttpConsumer):
                                     }
                                     bucket = bckt.get("bucket", None)
                                     if bucket:
-                                        args["bucket"] = bucket.lower()
+                                        args["bucket"] = bucket
                                     startdate = bckt.get("startdate", None)
                                     if startdate:
                                         args["startdate"] = parseLocalizedDateTime(
@@ -354,7 +354,7 @@ class ForecastService(AsyncHttpConsumer):
                                     }
                                     bucket = bckt.get("bucket", None)
                                     if bucket:
-                                        args["bucket"] = bucket.lower()
+                                        args["bucket"] = bucket
                                     startdate = bckt.get("startdate", None)
                                     if startdate:
                                         args["startdate"] = parseLocalizedDateTime(

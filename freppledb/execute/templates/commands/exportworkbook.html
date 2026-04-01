@@ -1,49 +1,126 @@
 {% load i18n %}
 {% getMenu as menu %}
-<form role="form" method="post" action="{{request.prefix}}/execute/launch/exportworkbook/">{% csrf_token %}
-  <table>
-  <tr>
-    <td style="vertical-align:top; padding:15px">
-        <button type="submit" class="btn btn-primary" id="export" value="{% trans "export"|capfirst %}" >{% trans "export"|capfirst %}</button>
-    </td>
-    <td style="padding:1rem; line-height:1.5rem">
-     <p>
-      {% blocktrans %}Download all input data in a single spreadsheet.<br>Optionally, you can make the data anonymous during the export to hide sensitive company data.{% endblocktrans %}
-      &nbsp;<input class="form-check-input" style="margin: 0; display:inline-block; vertical-align: middle" type="checkbox" name="anonymous" value="0">
-      <br>
-     </p>
-      {% getMenu as menu %}
-      <p>
-      <label class="form-check-label">
-        <input class="chck_all form-check-input" type="checkbox" name="alldata" value="1">&nbsp;<strong>{%trans 'data tables'|upper%}</strong>
-      </label><br>
+<style>
+.export-container {
+  background: #F8F9FC;
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.export-btn {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.export-btn:hover {
+  background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(123, 45, 142, 0.25);
+  color: white;
+}
+
+.export-section {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #E5E7EB;
+  margin-bottom: 1rem;
+}
+
+.export-section-title {
+  color: #2D004D;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #E5E7EB;
+}
+
+.export-checkbox {
+  accent-color: #7B2D8E;
+}
+
+.export-label {
+  color: #374151;
+  font-weight: 400;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.export-description {
+  color: #6B7280;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+</style>
+
+<form role="form" method="post" action="{{request.prefix}}/execute/launch/exportworkbook/" class="export-container">{% csrf_token %}
+<div class="row">
+  <div class="col-md-3 mb-3">
+    <button type="submit" class="export-btn" id="export" value="{% trans "export"|capfirst %}">
+      <i class="fa fa-download me-2"></i>{% trans "export"|capfirst %}
+    </button>
+  </div>
+  
+  <div class="col-md-9">
+    <div class="export-description">
+      {% blocktrans %}Download all input data in a single spreadsheet. Optionally, you can make the data anonymous during the export to hide sensitive company data.{% endblocktrans %}
+    </div>
+    
+    <div class="form-check mb-3">
+      <input class="form-check-input export-checkbox" type="checkbox" name="anonymous" value="0" id="anonymousCheck">
+      <label class="form-check-label export-label" for="anonymousCheck">
+        Make data anonymous
+      </label>
+    </div>
+    <div class="export-section">
+      <div class="export-section-title">
+        <input class="chck_all form-check-input export-checkbox me-2" type="checkbox" name="alldata" value="1" id="allDataCheck">
+        <label for="allDataCheck">{%trans 'data tables'|upper%}</label>
+      </div>
       {% for group in menu %}
         {% for item in group.1 %}
           {% if item.1.model and not item.1.excludeFromBulkOperations and not item.1.admin %}
-            <label class="form-check-label" for="chbx_{{ item.1.model | model_name }}">
-              <input class="chck_entity form-check-input" data-tables="data" type="checkbox" name="entities" value="{{ item.1.model | model_name }}"{% if item.3 %} checked=""{% endif %} id="chbx_{{ item.1.model | model_name }}">
+            <div class="form-check mb-1">
+              <input class="chck_entity form-check-input export-checkbox" data-tables="data" type="checkbox" name="entities" value="{{ item.1.model | model_name }}"{% if item.3 %} checked=""{% endif %} id="chbx_{{ item.1.model | model_name }}">
+              <label class="form-check-label export-label" for="chbx_{{ item.1.model | model_name }}">
                 {{ group.0 }} - {{ item.0 }}
-            </label><br>
+              </label>
+            </div>
           {% endif %}
         {% endfor %}
       {% endfor %}
-      <label class="form-check-label">
-        <input class="chck_all form-check-input" type="checkbox" checked name="alladmin" value="1">&nbsp;<strong>{%trans 'admin tables'|upper%}</strong>
-      </label><br>
+    </div>
+    
+    <div class="export-section">
+      <div class="export-section-title">
+        <input class="chck_all form-check-input export-checkbox me-2" type="checkbox" checked name="alladmin" value="1" id="allAdminCheck">
+        <label for="allAdminCheck">{%trans 'admin tables'|upper%}</label>
+      </div>
       {% for group in menu %}
         {% for item in group.1 %}
           {% if item.1.model and not item.1.excludeFromBulkOperations and item.1.admin %}
-            <label class="form-check-label" for="chbx_{{ item.1.model | model_name }}">
-              <input class="chck_entity form-check-input" data-tables="admin" type="checkbox" name="entities" value="{{ item.1.model | model_name }}"{% if item.3 %} checked=""{% endif %} id="chbx_{{ item.1.model | model_name }}">
+            <div class="form-check mb-1">
+              <input class="chck_entity form-check-input export-checkbox" data-tables="admin" type="checkbox" name="entities" value="{{ item.1.model | model_name }}"{% if item.3 %} checked=""{% endif %} id="chbx_{{ item.1.model | model_name }}">
+              <label class="form-check-label export-label" for="chbx_{{ item.1.model | model_name }}">
                 {{ group.0 }} - {{ item.0 }}
-            </label><br>
+              </label>
+            </div>
           {% endif %}
         {% endfor %}
       {% endfor %}
-      </p>
-    </td>
-  </tr>
-  </table>
+    </div>
+  </div>
+</div>
 </form>
 <script>
 $(function() {

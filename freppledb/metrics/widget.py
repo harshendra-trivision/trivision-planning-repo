@@ -147,16 +147,16 @@ class DeliveryPerformanceWidget(Widget):
 
         function draw() {
             var delivery_data = include_fcst ? [
-                { category: "ontime_so", label: "on-time orders", value: 0, count: 0, quantity: 0, cost: 0, color: "#8bba00" },
-                { category: "ontime_fcst", label: "on-time forecast", value: 0, count: 0, quantity: 0, cost: 0, color: "#c4dc7d" },
-                { category: "late_so", label: "late orders", value: 0, count: 0, quantity: 0, cost: 0, color: "#FFA500" },
-                { category: "late_fcst", label: "late forecast", value: 0, count: 0, quantity: 0, cost: 0, color: "#FFD17D" },
-                { category: "unplanned_so", label: "unplanned orders", value: 0, count: 0, quantity: 0, cost: 0, color: "#FF0000" },
-                { category: "unplanned_fcst", label: "unplanned forecast", value: 0, count: 0, quantity: 0, cost: 0, color: "#FF9797" }
+                { category: "ontime_so", label: "on-time orders", value: 0, count: 0, quantity: 0, cost: 0, gradient: "url(#gradOntime)", color: "#5C197B" },
+                { category: "ontime_fcst", label: "on-time forecast", value: 0, count: 0, quantity: 0, cost: 0, gradient: "url(#gradOntimeFcst)", color: "#A855F7" },
+                { category: "late_so", label: "late orders", value: 0, count: 0, quantity: 0, cost: 0, gradient: "url(#gradLate)", color: "#F59E0B" },
+                { category: "late_fcst", label: "late forecast", value: 0, count: 0, quantity: 0, cost: 0, gradient: "url(#gradLateFcst)", color: "#FCD34D" },
+                { category: "unplanned_so", label: "unplanned orders", value: 0, count: 0, quantity: 0, cost: 0, gradient: "url(#gradUnplanned)", color: "#DC2626" },
+                { category: "unplanned_fcst", label: "unplanned forecast", value: 0, count: 0, quantity: 0, cost: 0, gradient: "url(#gradUnplannedFcst)", color: "#FCA5A5" }
             ] : [
-                { category: "ontime_so", label: "on-time orders", value: 0, count: 0, quantity: 0, cost: 0, color: "#8bba00" },
-                { category: "late_so", label: "late orders", value: 0, count: 0, quantity: 0, cost: 0, color: "#FFA500" },
-                { category: "unplanned_so", label: "unplanned orders", value: 0, count: 0, quantity: 0, cost: 0, color: "#FF0000" }
+                { category: "ontime_so", label: "on-time orders", value: 0, count: 0, quantity: 0, cost: 0, gradient: "url(#gradOntime)", color: "#5C197B" },
+                { category: "late_so", label: "late orders", value: 0, count: 0, quantity: 0, cost: 0, gradient: "url(#gradLate)", color: "#F59E0B" },
+                { category: "unplanned_so", label: "unplanned orders", value: 0, count: 0, quantity: 0, cost: 0, gradient: "url(#gradUnplanned)", color: "#DC2626" }
             ] ;
 
             // Collect data
@@ -164,98 +164,156 @@ class DeliveryPerformanceWidget(Widget):
                 var el = $(e);
                 var category = el.closest("tr").attr("data-category");
                 var metric = el.attr("data-metric");
-                for (var e of delivery_data) {
-                    if (e.category == category) {
-                        if (metric == chart_type) e.value = Number(el.text());
-                        if (metric == "count") e.count = Number(el.text());
-                        if (metric == "quantity") e.quantity = Number(el.text());
-                        if (metric == "cost") e.cost = Number(el.text());
+                for (var j = 0; j < delivery_data.length; j++) {
+                    if (delivery_data[j].category == category) {
+                        if (metric == chart_type) delivery_data[j].value = Number(el.text());
+                        if (metric == "count") delivery_data[j].count = Number(el.text());
+                        if (metric == "quantity") delivery_data[j].quantity = Number(el.text());
+                        if (metric == "cost") delivery_data[j].cost = Number(el.text());
                     }
                 }
             });
 
             // Remove empty cells
             delivery_data = delivery_data.filter(function(row) {return row.value > 0;});
-            const total = d3.sum(delivery_data, d => d.value);
+            var total = d3.sum(delivery_data, function(d) { return d.value; });
 
             // Clear previous chart
             d3.select('#deliveryPerformanceChart').selectAll("*").remove();
 
-            // Pie chart
-            const width = 350;
-            const height = 350;
-            const radius = Math.min(width, height) / 2;
-            const svg = d3.select('#deliveryPerformanceChart')
+            // Donut chart with gradients
+            var width = 350;
+            var height = 350;
+            var radius = Math.min(width, height) / 2;
+            var innerRadius = radius * 0.5;
+            var svg = d3.select('#deliveryPerformanceChart')
                 .attr('width', width)
-                .attr('height', height)
-                .append('g')
-                .attr('transform', `translate(${width / 2}, ${height / 2})`);
-            var color = d3.scale.category10()
-                .domain(delivery_data.map(function(d) { return d.category; }));
-            const pie = d3.layout.pie()
+                .attr('height', height);
+
+            // Define gradients
+            var defs = svg.append("defs");
+
+            // On-time gradient (deep purple)
+            var g1 = defs.append("linearGradient").attr("id", "gradOntime")
+                .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%");
+            g1.append("stop").attr("offset", "0%").attr("stop-color", "#7B2D8E");
+            g1.append("stop").attr("offset", "100%").attr("stop-color", "#5C197B");
+
+            // On-time forecast gradient (light purple)
+            var g2 = defs.append("linearGradient").attr("id", "gradOntimeFcst")
+                .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%");
+            g2.append("stop").attr("offset", "0%").attr("stop-color", "#C084FC");
+            g2.append("stop").attr("offset", "100%").attr("stop-color", "#A855F7");
+
+            // Late gradient (amber)
+            var g3 = defs.append("linearGradient").attr("id", "gradLate")
+                .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%");
+            g3.append("stop").attr("offset", "0%").attr("stop-color", "#FBBF24");
+            g3.append("stop").attr("offset", "100%").attr("stop-color", "#F59E0B");
+
+            // Late forecast gradient (light amber)
+            var g4 = defs.append("linearGradient").attr("id", "gradLateFcst")
+                .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%");
+            g4.append("stop").attr("offset", "0%").attr("stop-color", "#FDE68A");
+            g4.append("stop").attr("offset", "100%").attr("stop-color", "#FCD34D");
+
+            // Unplanned gradient (red)
+            var g5 = defs.append("linearGradient").attr("id", "gradUnplanned")
+                .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%");
+            g5.append("stop").attr("offset", "0%").attr("stop-color", "#EF4444");
+            g5.append("stop").attr("offset", "100%").attr("stop-color", "#DC2626");
+
+            // Unplanned forecast gradient (light red)
+            var g6 = defs.append("linearGradient").attr("id", "gradUnplannedFcst")
+                .attr("x1", "0%").attr("y1", "0%").attr("x2", "100%").attr("y2", "100%");
+            g6.append("stop").attr("offset", "0%").attr("stop-color", "#FECACA");
+            g6.append("stop").attr("offset", "100%").attr("stop-color", "#FCA5A5");
+
+            var chartGroup = svg.append('g')
+                .attr('transform', "translate(" + (width / 2) + ", " + (height / 2) + ")");
+
+            var pie = d3.layout.pie()
                 .sort(null)
-                .startAngle(Math.PI / 2) // Starts at 90 degrees (3 o'clock)
-                .endAngle(Math.PI * 2.5) // Must also offset the end angle (2.5 * PI)
-                .value(d => d.value);
-            const arc = d3.svg.arc()
-                .innerRadius(0)
-                .outerRadius(radius);
-            const slices = svg.selectAll('path')
+                .startAngle(Math.PI / 2)
+                .endAngle(Math.PI * 2.5)
+                .value(function(d) { return d.value; });
+
+            var arc = d3.svg.arc()
+                .innerRadius(innerRadius)
+                .outerRadius(radius - 10);
+
+            var slices = chartGroup.selectAll('path')
                 .data(pie(delivery_data))
                 .enter()
                 .append('path')
                 .attr('d', arc)
-                .attr('fill', d => d.data.color)
+                .attr('fill', function(d) { return d.data.gradient; })
                 .attr('stroke', 'white')
                 .style('stroke-width', '2px')
                 .on("mouseover", function(d) {
-
                     graph.showTooltip(
                         '<span class="text-strong">' + d.data.label + "</span>"
                         + "<br>count: "
-                        + + d.data.count.toLocaleString('en-US', {
+                        + d.data.count.toLocaleString('en-US', {
                             minimumFractionDigits: 0,
-                            maximumFractionDigits: 2  // Round to 2 places if decimals exist
+                            maximumFractionDigits: 2
                           })
                         + "<br>quantity: "
-                        + d.data.cost.toLocaleString('en-US', {
+                        + d.data.quantity.toLocaleString('en-US', {
                             minimumFractionDigits: 0,
-                            maximumFractionDigits: 2  // Round to 2 places if decimals exist
+                            maximumFractionDigits: 2
                           })
                         + (d.data.cost ? "<br>cost: "
                         + d.data.cost.toLocaleString('en-US', {
                             minimumFractionDigits: 0,
-                            maximumFractionDigits: 2  // Round to 2 places if decimals exist
+                            maximumFractionDigits: 2
                           })
-                        + currency[1] : "")
+                        + " " + currency[1] : "")
                         );
-                    $("#tooltip").css('background-color','black').css('color','white');
+                    $("#tooltip").css('background-color','#1F2937').css('color','white').css('border-radius','8px').css('padding','10px');
                 })
                 .on("mousemove", graph.moveTooltip)
                 .on("mouseout", graph.hideTooltip);
-            svg.selectAll('text')
+
+            // Center text showing total
+            chartGroup.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dy', '-0.2em')
+                .style('font-size', '24px')
+                .style('font-weight', '700')
+                .style('fill', '#5C197B')
+                .text(total.toLocaleString());
+            chartGroup.append('text')
+                .attr('text-anchor', 'middle')
+                .attr('dy', '1.2em')
+                .style('font-size', '12px')
+                .style('fill', '#6B7280')
+                .text('total');
+
+            // Labels
+            chartGroup.selectAll('text.label')
                 .data(pie(delivery_data))
                 .enter()
                 .append('text')
+                .attr('class', 'label')
                 .attr('transform', function(d) {
                     var center = arc.centroid(d);
                     var rotation = ((d.startAngle + d.endAngle) / 2 * 180 / Math.PI) - 90;
-                    if (rotation > 90 && rotation <= 270)
-                    // Flip text 180 degrees if it's on the bottom half so it's not upside down
-                    rotation += 180;
-                    return `translate(${center[0] * 1.8},${center[1] * 1.8}) rotate(${rotation})`;
-                    })
+                    if (rotation > 90 && rotation <= 270) rotation += 180;
+                    return "translate(" + (center[0] * 1.9) + "," + (center[1] * 1.9) + ") rotate(" + rotation + ")";
+                })
                 .style('text-anchor', function(d){
-                    // Depends whether we are left of right in the chart
                     var rotation = ((d.startAngle + d.endAngle) / 2 * 180 / Math.PI) - 90;
                     return (rotation <= 90 || rotation > 270) ? 'end' : 'start';
                 })
                 .attr('dy', '.35em')
-                .text(d => {
-                    const perc = ((d.data.value / total) * 100).toFixed(0);
-                    return `${d.data.label} ${perc}%`;
-                })
-                .attr('class', 'text-capitalize text-body-inverted pe-none');
+                .style('font-size', '11px')
+                .style('font-weight', '600')
+                .style('fill', function(d) { return d.data.color; })
+                .text(function(d) {
+                    var perc = ((d.data.value / total) * 100).toFixed(0);
+                    return d.data.label + " " + perc + "%";
+                });
         }
         draw();
         """

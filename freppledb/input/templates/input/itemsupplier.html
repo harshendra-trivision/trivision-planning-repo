@@ -1,0 +1,112 @@
+{% extends "admin/base_site_grid.html" %}
+{% load i18n %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    :root {
+        --primary-purple: #7B2D8E;
+        --deep-purple: #2D004D;
+        --bright-accent: #9C27B0;
+        --soft-purple-bg: rgba(123, 45, 142, 0.04);
+        --border-color: #E5E7EB;
+        --card-bg: #FFFFFF;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+    }
+
+    /* Modernizing the page header */
+    #content > h1 {
+        display: none;
+    }
+
+    /* Grid container modernization */
+    #content-main {
+        background: var(--card-bg);
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(45, 0, 77, 0.05);
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+        margin-top: 1rem !important;
+    }
+
+    /* Toolbar buttons modernization */
+    .btn-primary, #save, #undo, #toolicons .btn {
+        background: var(--primary-purple) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.5rem 1.25rem !important;
+        font-weight: 600 !important;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        box-shadow: 0 2px 4px rgba(123, 45, 142, 0.1) !important;
+        color: white !important;
+    }
+
+    .btn-primary:hover, #save:hover, #undo:hover, #toolicons .btn:hover {
+        background: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(123, 45, 142, 0.2) !important;
+    }
+
+    /* Grid styling */
+    .ui-jqgrid .ui-jqgrid-hdiv {
+        background: linear-gradient(to bottom, #F8F4FC, #FFFFFF) !important;
+        border-bottom: 2px solid var(--primary-purple) !important;
+    }
+
+    .ui-jqgrid .ui-jqgrid-htable th {
+        color: var(--deep-purple) !important;
+        font-weight: 700 !important;
+        padding: 15px 10px !important;
+        text-transform: uppercase;
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+    }
+
+    .ui-jqgrid tr.ui-row-ltr td {
+        border-bottom: 1px solid #F3F4F6 !important;
+        padding: 12px 10px !important;
+        font-size: 0.85rem;
+    }
+
+    .ui-jqgrid tr.ui-state-hover td {
+        background-color: var(--soft-purple-bg) !important;
+    }
+
+    /* Pager styling */
+    #gridpager {
+        background: #FFFFFF !important;
+        border: none !important;
+        border-top: 1px solid var(--border-color) !important;
+        padding: 12px 0 !important;
+    }
+
+    /* Header badge */
+    .header-badge {
+        background: var(--soft-purple-bg);
+        border: 1px solid rgba(123, 45, 142, 0.1);
+        border-radius: 20px;
+        color: var(--primary-purple) !important;
+        font-weight: 600;
+        padding: 0.5rem 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block before_table %}
+<div class="modern-header-container mb-4">
+    <div class="row align-items-center">
+        <div class="col">
+            <p class="text-muted small mb-1">{% trans "Purchasing" %}</p>
+            <h2 class="m-0" style="color: var(--deep-purple); font-weight: 800; letter-spacing: -0.02em;">
+                {% trans "Item suppliers" %}
+            </h2>
+        </div>
+        <div class="col-auto">
+            <div class="header-badge">
+                <i class="fa fa-shopping-cart me-1"></i> {% trans "Procurement rules and lead times" %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

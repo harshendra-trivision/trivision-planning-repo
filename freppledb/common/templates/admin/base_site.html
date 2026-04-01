@@ -2,14 +2,16 @@
 {% load i18n %}
 
 {% block title %}{% if title %}{{title|capfirst}} - {% endif %}{% setting 'BRANDING' %}{% endblock %}
-{% block branding %}<img class="img-fluid" style="max-height: 2.5rem; height: auto; width: auto; max-width: 12rem" src="{{STATIC_URL}}img/Trivision_logo.png" alt="Trivision">{% endblock %}
+{% block branding %}<img class="img-fluid" style="max-height: 5.5rem; height: auto; width: auto; max-width: 15rem" src="{{STATIC_URL}}img/Y3-logo.svg" alt="Trivision">{% endblock %}
 {% block extrastyle %}{{block.super}}
 <link rel="stylesheet" href="{{STATIC_URL}}css/font-awesome.min.css" />
 <link rel="stylesheet" href="{{STATIC_URL}}css/{{request.theme}}/fonts.css" />
 <link rel="stylesheet" href="{{STATIC_URL}}css/ui.jqgrid.min.css" />
 <link rel="stylesheet" href="{{STATIC_URL}}css/{{request.theme}}/bootstrap.min.css" />
 
-<link rel="shortcut icon" href="{{STATIC_URL}}favicon.ico"/>
+<link rel="shortcut icon" href="{{STATIC_URL}}img/Y3-logo.svg"/>
+<link rel="icon" type="image/jpeg" href="{{STATIC_URL}}img/Y3-logo.svg"/>
+<link rel="apple-touch-icon" href="{{STATIC_URL}}img/Y3-logo.svg"/>
 <link rel="manifest" href="{{STATIC_URL}}manifest.json">
 {% endblock %}
 {% block extrahead %}{{block.super}}
@@ -39,5 +41,443 @@ $(function() {
     {% endif %}
   });
 </script>
+
+<style>
+/* Import Modal - Modern Premium UI Enhancement */
+#popup .modal-dialog {
+  max-width: 600px !important;
+}
+
+#popup .modal-content {
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 20px 60px rgba(123, 45, 142, 0.15), 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+  background: #FFFFFF !important;
+}
+
+#popup .modal-header {
+  background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%) !important;
+  border-bottom: 1px solid #E5E7EB !important;
+  border-radius: 12px 12px 0 0 !important;
+  padding: 1.5rem 2rem !important;
+}
+
+#popup .modal-title {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: #2D004D !important;
+  margin: 0 !important;
+}
+
+#popup .modal-title .fa-cog {
+  color: #7B2D8E !important;
+}
+
+#popup .btn-close {
+  background: none !important;
+  border: none !important;
+  font-size: 1.25rem !important;
+  color: #6B7280 !important;
+  opacity: 1 !important;
+  transition: all 0.2s ease !important;
+}
+
+#popup .btn-close:hover {
+  color: #7B2D8E !important;
+  transform: scale(1.1) !important;
+}
+
+#popup .modal-body {
+  padding: 2rem !important;
+  background: #FFFFFF !important;
+}
+
+#popup .modal-body p {
+  color: #6B7280 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Checkbox styling */
+#popup .form-check-input {
+  width: 1.125rem !important;
+  height: 1.125rem !important;
+  border: 2px solid #DC2626 !important;
+  border-radius: 4px !important;
+  margin-right: 0.75rem !important;
+}
+
+#popup .form-check-input:checked {
+  background-color: #DC2626 !important;
+  border-color: #DC2626 !important;
+}
+
+#popup label[for="eraseBeforeImport"] {
+  color: #DC2626 !important;
+  font-weight: 500 !important;
+  font-size: 0.9rem !important;
+  line-height: 1.5 !important;
+  padding: 1rem !important;
+  background: linear-gradient(135deg, #FEF3F2 0%, #FDF2F8 100%) !important;
+  border: 1px solid #FECACA !important;
+  border-radius: 8px !important;
+  display: block !important;
+  margin-top: 1rem !important;
+  cursor: pointer !important;
+}
+
+/* Upload area styling */
+#popup .box {
+  border: 2px dashed #D1D5DB !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%) !important;
+  transition: all 0.3s ease !important;
+  margin-top: 1rem !important;
+  outline: none !important;
+  outline-offset: 0 !important;
+}
+
+#popup .box:hover {
+  border-color: #7B2D8E !important;
+  background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 25px rgba(123, 45, 142, 0.15) !important;
+}
+
+#popup .box.bg-warning {
+  border-color: #7B2D8E !important;
+  background: linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%) !important;
+  box-shadow: 0 0 0 4px rgba(123, 45, 142, 0.1) !important;
+}
+
+#popup .box__input {
+  text-align: center !important;
+  padding: 3rem 2rem !important;
+}
+
+#popup #uploadlabel {
+  display: block !important;
+  cursor: pointer !important;
+  margin: 0 !important;
+  color: #6B7280 !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+}
+
+#popup #uploadlabel .btn {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(123, 45, 142, 0.3) !important;
+  display: inline-block !important;
+  margin-bottom: 0.5rem !important;
+}
+
+#popup .box:hover #uploadlabel .btn {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(123, 45, 142, 0.4) !important;
+}
+
+#popup #uploadlabel .fa {
+  color: #7B2D8E !important;
+  opacity: 0.7 !important;
+  transition: all 0.3s ease !important;
+  margin-left: 1rem !important;
+}
+
+#popup .box:hover #uploadlabel .fa {
+  opacity: 1 !important;
+  transform: scale(1.1) !important;
+}
+
+/* Response area styling */
+#popup #uploadResponse {
+  background: #F9FAFB !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 8px !important;
+  padding: 1rem !important;
+  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace !important;
+  font-size: 0.85rem !important;
+  line-height: 1.5 !important;
+  margin-top: 1.5rem !important;
+}
+
+/* Footer styling */
+#popup .modal-footer {
+  background: #F8F9FC !important;
+  border-top: 1px solid #E5E7EB !important;
+  border-radius: 0 0 12px 12px !important;
+  padding: 1.5rem 2rem !important;
+}
+
+/* Button styling */
+#popup .btn-primary {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+  color: #FFFFFF !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(123, 45, 142, 0.3) !important;
+}
+
+#popup .btn-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(123, 45, 142, 0.4) !important;
+}
+
+#popup .btn-gray {
+  background: #FFFFFF !important;
+  color: #6B7280 !important;
+  border: 1px solid #E5E7EB !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 500 !important;
+  font-size: 0.95rem !important;
+  transition: all 0.3s ease !important;
+}
+
+#popup .btn-gray:hover {
+  background: #F9FAFB !important;
+  border-color: #D1D5DB !important;
+  color: #374151 !important;
+}
+
+/* Status messages */
+#popup .box__uploading, 
+#popup .box__success, 
+#popup .box__error {
+  text-align: center !important;
+  padding: 1rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  margin-top: 1rem !important;
+}
+
+#popup .box__uploading {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%) !important;
+  color: #92400E !important;
+  border: 1px solid #F59E0B !important;
+}
+
+#popup .box__success {
+  background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%) !important;
+  color: #065F46 !important;
+  border: 1px solid #10B981 !important;
+}
+
+#popup .box__error {
+  background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%) !important;
+  color: #991B1B !important;
+  border: 1px solid #EF4444 !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  #popup .modal-header, 
+  #popup .modal-body, 
+  #popup .modal-footer {
+    padding: 1rem !important;
+  }
+  
+  #popup .box__input {
+    padding: 2rem 1rem !important;
+  }
+}
+
+/* ================================================================
+   Global Modern Checkboxes & Radio Buttons — Trivision Purple Theme
+   Applies to ALL pages
+   ================================================================ */
+input[type="checkbox"]:not(.no-custom-cb) {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 2px solid #D1C4E0;
+  border-radius: 5px;
+  background: #FFFFFF;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+input[type="checkbox"]:not(.no-custom-cb):hover {
+  border-color: #A855F7;
+  background: rgba(123, 45, 142, 0.04);
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+input[type="checkbox"]:not(.no-custom-cb):checked {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;
+  border-color: #7B2D8E !important;
+  box-shadow: 0 1px 3px rgba(123, 45, 142, 0.3);
+  animation: checkPop 0.2s ease;
+}
+
+input[type="checkbox"]:not(.no-custom-cb):checked::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 5px;
+  height: 10px;
+  border: solid #FFFFFF;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+@keyframes checkPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.88); }
+  100% { transform: scale(1); }
+}
+
+input[type="checkbox"]:not(.no-custom-cb):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.25);
+}
+
+input[type="checkbox"]:not(.no-custom-cb):disabled {
+  background: #F3F4F6;
+  border-color: #E5E7EB;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+input[type="checkbox"]:not(.no-custom-cb):disabled:checked {
+  background: #D1C4E0 !important;
+  border-color: #D1C4E0 !important;
+}
+
+/* ---- Modern Radio Buttons ---- */
+input[type="radio"]:not(.no-custom-rb) {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 2px solid #D1C4E0;
+  border-radius: 50%;
+  background: #FFFFFF;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  vertical-align: middle;
+}
+
+input[type="radio"]:not(.no-custom-rb):hover {
+  border-color: #A855F7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+input[type="radio"]:not(.no-custom-rb):checked {
+  border-color: #7B2D8E !important;
+  background: #FFFFFF !important;
+  box-shadow: 0 1px 3px rgba(123, 45, 142, 0.3);
+}
+
+input[type="radio"]:not(.no-custom-rb):checked::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+}
+
+input[type="radio"]:not(.no-custom-rb):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.25);
+}
+
+input[type="radio"]:not(.no-custom-rb):disabled {
+  background: #F3F4F6;
+  border-color: #E5E7EB;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ================================================================
+   Global .btn-primary — Trivision Purple Theme
+   Overrides Bootstrap default teal/blue for ALL pages
+   ================================================================ */
+.btn-primary {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9333EA 100%) !important;
+  border-color: #7B2D8E !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+  border-radius: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(123, 45, 142, 0.25);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background: linear-gradient(135deg, #6B2080 0%, #7B2D8E 100%) !important;
+  border-color: #6B2080 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 3px 8px rgba(123, 45, 142, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  background: #5B1A70 !important;
+  border-color: #5B1A70 !important;
+  box-shadow: 0 1px 2px rgba(123, 45, 142, 0.3);
+  transform: translateY(0);
+}
+
+.btn-primary:disabled,
+.btn-primary.disabled {
+  background: #D1C4E0 !important;
+  border-color: #D1C4E0 !important;
+  color: #FFFFFF !important;
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-primary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.3) !important;
+}
+
+/* ---- Outline variant ---- */
+.btn-outline-primary {
+  color: #7B2D8E !important;
+  border-color: #7B2D8E !important;
+  background: transparent !important;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9333EA 100%) !important;
+  border-color: #7B2D8E !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 2px 6px rgba(123, 45, 142, 0.25);
+}
+
+.btn-outline-primary:active {
+  background: #5B1A70 !important;
+  border-color: #5B1A70 !important;
+  color: #FFFFFF !important;
+}
+</style>
 {% endblock %}
 {% block nav-global %}{% endblock %}

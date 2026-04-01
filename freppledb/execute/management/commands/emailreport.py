@@ -218,9 +218,10 @@ class Command(BaseCommand):
                 body.append("You can download the latest version of these files directly:")
                 body_html.append("You can download the latest version of these files directly:")
                 for f in correctedReports:
+                    db_prefix = "" if database == DEFAULT_DB_ALIAS else "/%s" % database
                     url = (
                         f"{settings.EMAIL_URL_PREFIX}"
-                        f"{"" if database==DEFAULT_DB_ALIAS else "/%s" % database}"
+                        f"{db_prefix}"
                         f"/execute/downloadfromfolder/1/{basename(f)}/"
                     )
                     body.append(f"    {url}")

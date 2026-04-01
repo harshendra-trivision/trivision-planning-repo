@@ -25,6 +25,7 @@
 import {computed, ref, onUnmounted, toRaw} from "vue";
 import { useI18n } from 'vue-i18n';
 import { useForecastsStore } from '@/stores/forecastsStore';
+import { forecastEditorItemSlug } from '@/utils/forecastEditorUrl.js';
 import ForecastSelectionCard from "@/components/ForecastSelectionCard.vue";
 import CustomizeGrid from "@/components/CustomizeGrid.vue";
 import { useBootstrapTooltips } from '@common/useBootstrapTooltips.js'
@@ -51,8 +52,11 @@ const customizeGridRef = ref(null);
 
 const currentMeasure = computed(() => {
   if (store.currentMeasure === null) {
-    store.setCurrentMeasure(store.preferences.measure || 'nodata', false);
-    return store.preferences.measure || 'nodata'
+    const pref = store.preferences.measure;
+    const name =
+      pref && store.measures[pref] ? pref : "forecasttotal";
+    store.setCurrentMeasure(name, false);
+    return name;
   }
   return store.currentMeasure;
 });
@@ -89,7 +93,7 @@ const sortedMeasureList = computed(() => {
   });
 });
 
-const itemUnlocked = window.location.pathname.split('/editor/')[1] === "";
+const itemUnlocked = !forecastEditorItemSlug();
 
 // Button event handlers
 const showBucket = (event) => window.grid.showBucket();
@@ -195,8 +199,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div>
-    <div class="row mb-1">
+  <div class="forecast-selection-wrapper">
+    <div class="row mb-1 align-items-center">
       <div class="col-auto">
         <div class="dropdown d-inline w-auto">
           <button id="selectseq" :title="ttt('Select panel sequence')" class="form-control d-inline w-auto dropdown-toggle text-capitalize" name="sequence" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -253,7 +257,7 @@ onUnmounted(() => {
         &nbsp;&nbsp;
         <div class="dropdown d-inline w-auto ">
           <button id="selectmeasure" :title="ttt('Select panel measure')" class="dropdown-toggle form-control d-inline w-auto text-capitalize" name="measure" :value="measure" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{ttt(store.measures[currentMeasure].label) }}&nbsp;&nbsp;<span class="caret"></span>
+            {{ttt((store.measures[currentMeasure] || store.measures.forecasttotal)?.label || currentMeasure) }}&nbsp;&nbsp;<span class="caret"></span>
           </button>
           <ul class="dropdown-menu">
             <li v-for="m in sortedMeasureList" :key="m.name" >
@@ -350,3 +354,39 @@ onUnmounted(() => {
     <CustomizeGrid ref="customizeGridRef" />
   </div>
 </template>
+
+<style scoped>
+.forecast-selection-wrapper {
+  background: linear-gradient(180deg, rgba(123, 45, 142, 0.02) 0%, transparent 100%);
+  border-radius: 12px;
+  padding: 0.5rem 0;
+}
+
+#toolicons .btn {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  border-radius: 8px !important;
+}
+
+#toolicons .btn .fa {
+  font-size: 0.85rem;
+}
+
+#resize-handle {
+  color: #C4B5D0;
+  font-size: 10px;
+  padding: 3px 0 !important;
+  cursor: ns-resize;
+  transition: color 0.2s ease;
+  opacity: 0.5;
+}
+
+#resize-handle:hover {
+  color: #7B2D8E;
+  opacity: 1;
+}
+</style>

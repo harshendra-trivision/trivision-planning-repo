@@ -12,97 +12,587 @@
 <script type="module" src="{{STATIC_URL}}forecast/main.js"></script>
 {% endif %}
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-#forecasttable thead th {
-  background-color: #aaa;
-  height: 22px;
-  border: 1px solid #bbb;
-  border-top: 0;
-  border-bottom: 0;
-}
+    :root {
+        --primary-purple: #7B2D8E;
+        --deep-purple: #2D004D;
+        --bright-accent: #A855F7;
+        --soft-purple-bg: rgba(123, 45, 142, 0.04);
+        --border-color: #E8E0F0;
+        --card-bg: #FFFFFF;
+        --text-primary: #1A1A1A;
+        --text-secondary: #6B7280;
+        --purple-gradient: linear-gradient(135deg, #7B2D8E 0%, #2D004D 100%);
+        --card-shadow: 0 2px 12px rgba(45, 0, 77, 0.06);
+        --card-hover-shadow: 0 4px 20px rgba(45, 0, 77, 0.10);
+        --card-radius: 12px;
+        --transition-base: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-#forecasttable tbody tr {
-  height: 21px;
-}
+    #app {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
 
-#forecasttable tbody tr td{
-  padding-top: 0px;
-  padding-bottom: 0px;
-  padding-right: 3px;
-  padding-left: 3px;
-  width: 79px;
-  border: 1px solid #bbb;
-  border-top: 0;
-  border-bottom: 0;
-}
+    #content > h1 {
+        display: none;
+    }
 
-#forecasttable tbody tr td input {
-  width: 75px;
-  text-align: center;
-  font-size: 11px;
-}
+    #forecast-editor-header {
+        margin-bottom: 2rem;
+    }
 
-#forecasttabletags tbody tr {
-  height: 21px;
-}
+    .modern-card {
+        background: var(--card-bg);
+        border-radius: var(--card-radius);
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        padding: 1.5rem;
+    }
 
-#forecasttabletags tbody tr td{
-  padding-top: 0px;
-  padding-bottom: 0px;
-}
+    /* ---- Cards ---- */
+    .card {
+        border: 1px solid var(--border-color) !important;
+        border-radius: var(--card-radius) !important;
+        box-shadow: var(--card-shadow) !important;
+        overflow: hidden;
+        transition: var(--transition-base);
+    }
 
-tbody tr td {
-  border-top: none !important;
-}
+    .card:hover {
+        box-shadow: var(--card-hover-shadow) !important;
+    }
 
-#forecasttable input[type='number'] {
-    -moz-appearance:textfield;
-}
+    .card-header {
+        background: var(--purple-gradient) !important;
+        border-bottom: none !important;
+        padding: 0.65rem 1rem !important;
+    }
 
-.evtitemrow, .evtcustrow, .evtlocatrow {
-  padding-left: 15px;
-  padding-bottom: 3px;
-}
+    .card-header .card-title,
+    .card-header .card-title span {
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+        font-size: 0.85rem !important;
+        letter-spacing: 0.3px;
+    }
 
-.numbervaluesfirst {
-  overflow: hidden;
-  float: right;
-  padding-right: 10px;
-  padding-left: 10px;
-  white-space: nowrap;
-}
+    .card-body {
+        padding: 0.75rem 1rem !important;
+    }
 
-.numbervaluesmiddle {
-  min-width: 70px;
-  overflow: hidden;
-  float: right;
-  padding-right: 10px;
-  white-space: nowrap;
-}
+    /* ---- Buttons ---- */
+    .btn-primary {
+        background: var(--primary-purple) !important;
+        border: none !important;
+        border-radius: 8px !important;
+        padding: 0.45rem 1.1rem !important;
+        font-weight: 600 !important;
+        font-size: 0.82rem !important;
+        letter-spacing: 0.2px;
+        transition: var(--transition-base) !important;
+        box-shadow: 0 2px 6px rgba(123, 45, 142, 0.18) !important;
+    }
 
-.numbervalues {
-  min-width: 70px;
-  overflow: hidden;
-  float: right;
-  padding-right: 10px;
-  white-space: nowrap;
-}
+    .btn-primary:hover {
+        background: var(--deep-purple) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 14px rgba(123, 45, 142, 0.25) !important;
+    }
 
-.numbervalueslast {
-  min-width: 70px;
-  overflow: hidden;
-  float: right;
-  padding-right: 10px;
-  white-space: nowrap;
-}
+    .btn-primary:active {
+        transform: translateY(0);
+        box-shadow: 0 1px 4px rgba(123, 45, 142, 0.15) !important;
+    }
 
-.evtitemrow .fa, .evtcustrow .fa, .evtlocatrow .fa {
-  float: left;
-}
+    .btn-primary:disabled {
+        background: #C4B5D0 !important;
+        box-shadow: none !important;
+        transform: none;
+        opacity: 0.7;
+    }
 
-.fa-warning.text-danger {
-  color: #8a6d3b !important;
-}
+    .btn-danger {
+        background: linear-gradient(135deg, #EF4444, #DC2626) !important;
+        box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2) !important;
+    }
+
+    .btn-danger:hover {
+        background: linear-gradient(135deg, #DC2626, #B91C1C) !important;
+        box-shadow: 0 4px 14px rgba(239, 68, 68, 0.3) !important;
+    }
+
+    /* ---- Form Controls ---- */
+    .form-control {
+        border: 1px solid var(--border-color) !important;
+        border-radius: 8px !important;
+        font-size: 0.85rem !important;
+        transition: var(--transition-base) !important;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .form-control:focus {
+        border-color: var(--bright-accent) !important;
+        box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15) !important;
+    }
+
+    /* ---- Forecast Table ---- */
+    #forecasttable thead th {
+        background: linear-gradient(135deg, #7B2D8E 0%, #5A1B6B 100%) !important;
+        color: #FFFFFF !important;
+        font-weight: 600;
+        font-size: 0.78rem;
+        letter-spacing: 0.3px;
+        height: 28px;
+        border: none !important;
+        border-right: 1px solid rgba(255,255,255,0.15) !important;
+        padding: 4px 6px;
+    }
+
+    #forecasttable thead th:first-child {
+        border-top-left-radius: 8px;
+    }
+
+    #forecasttable thead th:last-child {
+        border-top-right-radius: 8px;
+        border-right: none !important;
+    }
+
+    #forecasttable tbody tr {
+        height: 24px;
+        transition: background-color 0.15s ease;
+    }
+
+    #forecasttable tbody tr:hover {
+        background-color: rgba(123, 45, 142, 0.04) !important;
+    }
+
+    #forecasttable tbody tr td {
+        padding: 2px 4px;
+        width: 79px;
+        border: none !important;
+        border-right: 1px solid #F3E8FF !important;
+        border-bottom: 1px solid #F5F3F7 !important;
+        font-size: 0.8rem;
+        color: var(--text-primary);
+    }
+
+    #forecasttable tbody tr td input {
+        width: 75px;
+        text-align: center;
+        font-size: 11px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        padding: 1px 2px;
+        transition: var(--transition-base);
+    }
+
+    #forecasttable tbody tr td input:focus {
+        border-color: var(--bright-accent);
+        box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.15);
+        outline: none;
+        background: #FEFBFF;
+    }
+
+    #forecasttable tbody tr td input.ng-dirty {
+        background-color: #FFF3E0 !important;
+        border-color: #FF9800;
+    }
+
+    #forecasttable tbody tr td input.edit-cell {
+        background-color: #F3E8FF !important;
+        border-color: var(--bright-accent);
+    }
+
+    /* ---- Forecast Tags Table ---- */
+    #forecasttabletags thead th {
+        background: linear-gradient(135deg, #7B2D8E 0%, #5A1B6B 100%) !important;
+        color: #FFFFFF !important;
+        font-weight: 600;
+        font-size: 0.78rem;
+        height: 28px;
+        border: none !important;
+        border-top-left-radius: 8px;
+    }
+
+    #forecasttabletags tbody tr {
+        height: 24px;
+    }
+
+    #forecasttabletags tbody tr td {
+        padding-top: 2px;
+        padding-bottom: 2px;
+        font-size: 0.8rem;
+        border-bottom: 1px solid #F5F3F7 !important;
+    }
+
+    tbody tr td {
+        border-top: none !important;
+    }
+
+    #forecasttable input[type='number'] {
+        -moz-appearance: textfield;
+    }
+
+    /* ---- Selection Tree Rows ---- */
+    .evtitemrow, .evtcustrow, .evtlocatrow {
+        padding-left: 15px;
+        padding-bottom: 3px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.15s ease;
+        font-size: 0.82rem;
+    }
+
+    .evtitemrow:hover, .evtcustrow:hover, .evtlocatrow:hover {
+        background-color: rgba(123, 45, 142, 0.06) !important;
+    }
+
+    .numbervaluesfirst {
+        overflow: hidden;
+        float: right;
+        padding-right: 10px;
+        padding-left: 10px;
+        white-space: nowrap;
+    }
+
+    .numbervaluesmiddle {
+        min-width: 70px;
+        overflow: hidden;
+        float: right;
+        padding-right: 10px;
+        white-space: nowrap;
+    }
+
+    .numbervalues {
+        min-width: 70px;
+        overflow: hidden;
+        float: right;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-size: 0.8rem;
+        color: var(--text-primary);
+    }
+
+    .numbervalueslast {
+        min-width: 70px;
+        overflow: hidden;
+        float: right;
+        padding-right: 10px;
+        white-space: nowrap;
+    }
+
+    .evtitemrow .fa, .evtcustrow .fa, .evtlocatrow .fa {
+        float: left;
+        color: var(--primary-purple);
+    }
+
+    .fa-warning.text-danger {
+        color: #E65100 !important;
+    }
+
+    /* ---- Nav Tabs ---- */
+    .nav-tabs {
+        border-bottom: 2px solid #F3E8FF !important;
+    }
+
+    .nav-tabs .nav-link {
+        border: none !important;
+        border-bottom: 2px solid transparent !important;
+        color: var(--text-secondary) !important;
+        font-weight: 500;
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem !important;
+        margin-bottom: -2px;
+        transition: var(--transition-base);
+        border-radius: 0 !important;
+    }
+
+    .nav-tabs .nav-link:hover {
+        color: var(--primary-purple) !important;
+        background: transparent !important;
+        border-bottom-color: rgba(123, 45, 142, 0.3) !important;
+    }
+
+    .nav-tabs .nav-link.active {
+        color: var(--primary-purple) !important;
+        background: transparent !important;
+        border-bottom: 2px solid var(--primary-purple) !important;
+        font-weight: 600;
+    }
+
+    /* ---- Resize Handle ---- */
+    #resize-handle {
+        color: #C4B5D0;
+        font-size: 10px;
+        padding: 4px 0 !important;
+        cursor: ns-resize;
+        transition: color 0.2s ease;
+        user-select: none;
+        opacity: 0.6;
+    }
+
+    #resize-handle:hover {
+        color: var(--primary-purple);
+        opacity: 1;
+    }
+
+    /* ---- Graph Container ---- */
+    .forecast-graph-container {
+        border: 1px solid var(--border-color) !important;
+        border-radius: var(--card-radius) !important;
+        box-shadow: var(--card-shadow) !important;
+        padding: 0.75rem;
+        background: #FFFFFF !important;
+    }
+
+    /* ---- Scrollbar Styling ---- */
+    #forecasttable::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    #forecasttable::-webkit-scrollbar-track {
+        background: rgba(123, 45, 142, 0.04);
+        border-radius: 3px;
+    }
+
+    #forecasttable::-webkit-scrollbar-thumb {
+        background: rgba(123, 45, 142, 0.2);
+        border-radius: 3px;
+    }
+
+    #forecasttable::-webkit-scrollbar-thumb:hover {
+        background: rgba(123, 45, 142, 0.35);
+    }
+
+    .card-body::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .card-body::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .card-body::-webkit-scrollbar-thumb {
+        background: rgba(123, 45, 142, 0.15);
+        border-radius: 3px;
+    }
+
+    .card-body::-webkit-scrollbar-thumb:hover {
+        background: rgba(123, 45, 142, 0.3);
+    }
+
+    /* ---- Selection Row Highlight ---- */
+    .bg-light {
+        background-color: rgba(123, 45, 142, 0.08) !important;
+        border-left: 3px solid var(--primary-purple);
+    }
+
+    /* ---- Tooltip for graph ---- */
+    #tooltipgraph {
+        background: rgba(45, 0, 77, 0.92) !important;
+        color: #FFFFFF !important;
+        border-radius: 8px !important;
+        padding: 8px 12px !important;
+        font-size: 0.8rem !important;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+        border: none !important;
+    }
+
+    /* ---- D3 Chart Axis ---- */
+    .y.axis path, .y.axis line,
+    .x.axis path, .x.axis line {
+        stroke: #D1C4E9;
+    }
+
+    .y.axis text, .x.axis text {
+        fill: var(--text-secondary);
+        font-size: 0.72rem;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* ---- Red value class ---- */
+    .red {
+        color: #EF4444 !important;
+        font-weight: 600;
+    }
+
+    /* ---- Dropdown Enhancements ---- */
+    #selectseq, #selectmeasure {
+        border: 1px solid var(--border-color) !important;
+        border-radius: 8px !important;
+        font-size: 0.82rem !important;
+        font-weight: 500 !important;
+        padding: 0.4rem 0.75rem !important;
+        background: #FFFFFF !important;
+        color: var(--text-primary) !important;
+        transition: var(--transition-base) !important;
+    }
+
+    #selectseq:hover, #selectmeasure:hover {
+        border-color: var(--bright-accent) !important;
+        box-shadow: 0 2px 8px rgba(168, 85, 247, 0.1) !important;
+    }
+
+    /* ---- Table Styles ---- */
+    .table-borderless td {
+        padding: 0.4rem 0.6rem !important;
+        font-size: 0.85rem;
+    }
+
+    /* ---- Comments Section ---- */
+    #commentsdata textarea.form-control {
+        border: 1px solid var(--border-color) !important;
+        border-radius: 10px !important;
+        font-size: 0.85rem;
+        padding: 0.75rem 1rem !important;
+        transition: var(--transition-base);
+    }
+
+    #commentsdata textarea.form-control:focus {
+        border-color: var(--bright-accent) !important;
+        box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12) !important;
+    }
+
+    #commentsdata hr {
+        border-top-color: #F3E8FF !important;
+        opacity: 0.6;
+    }
+
+    #commentsdata h3 {
+        font-size: 0.95rem !important;
+        font-weight: 600;
+        color: var(--deep-purple);
+    }
+
+    #commentsdata pre {
+        background: var(--soft-purple-bg);
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        font-size: 0.82rem;
+        border: 1px solid #F3E8FF;
+        color: var(--text-primary);
+    }
+
+    /* ---- Edit Form Enhancements ---- */
+    .radio label {
+        font-size: 0.85rem;
+        color: var(--text-primary);
+    }
+
+    .form-check-input:checked {
+        background-color: var(--primary-purple) !important;
+        border-color: var(--primary-purple) !important;
+    }
+
+    /* ---- Drilldown Links ---- */
+    .fa-caret-right {
+        color: var(--primary-purple);
+        transition: transform 0.15s ease;
+    }
+
+    a:hover .fa-caret-right {
+        transform: translateX(2px);
+        color: var(--bright-accent);
+    }
+
+    /* ---- Animations ---- */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .tab-content {
+        animation: fadeIn 0.2s ease-out;
+    }
+
+    /* ---- Modal / Customize Dialog ---- */
+    #popup .modal-content {
+        border: none;
+        border-radius: 14px;
+        box-shadow: 0 20px 60px rgba(45, 0, 77, 0.15);
+        overflow: hidden;
+    }
+
+    #popup .modal-header {
+        background: var(--purple-gradient);
+        border-bottom: none;
+        padding: 0.9rem 1.2rem;
+    }
+
+    #popup .modal-title {
+        color: #FFFFFF;
+        font-weight: 600;
+        font-size: 1rem;
+        letter-spacing: 0.3px;
+    }
+
+    #popup .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+        opacity: 0.7;
+    }
+
+    #popup .modal-header .btn-close:hover {
+        opacity: 1;
+    }
+
+    #popup .modal-body .card {
+        border: 1px solid var(--border-color) !important;
+        border-radius: 10px !important;
+    }
+
+    #popup .modal-body .card-header {
+        background: linear-gradient(135deg, rgba(123, 45, 142, 0.08), rgba(123, 45, 142, 0.04)) !important;
+        color: var(--deep-purple) !important;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border-bottom: 1px solid var(--border-color) !important;
+        padding: 0.6rem 0.9rem !important;
+    }
+
+    #popup .modal-body .list-group-item {
+        font-size: 0.82rem;
+        padding: 0.4rem 0.75rem;
+        border-bottom: 1px solid #F5F3F7 !important;
+        transition: background-color 0.15s ease;
+    }
+
+    #popup .modal-body .list-group-item:hover {
+        background-color: rgba(123, 45, 142, 0.05);
+    }
+
+    #popup .modal-footer {
+        border-top: 1px solid var(--border-color);
+        padding: 0.75rem 1.2rem;
+    }
+
+    #popup .btn-gray {
+        background: #F3F4F6 !important;
+        color: #6B7280 !important;
+        border: 1px solid #E5E7EB !important;
+        border-radius: 8px !important;
+        font-weight: 500;
+        font-size: 0.82rem;
+        padding: 0.4rem 1rem;
+        transition: var(--transition-base);
+    }
+
+    #popup .btn-gray:hover {
+        background: #E5E7EB !important;
+        color: var(--text-primary) !important;
+    }
+
+    /* ---- Selection Panel Cards custom overrides ---- */
+    #itempanel .card-header,
+    #locationpanel .card-header,
+    #customerpanel .card-header {
+        padding: 0.5rem 0.9rem !important;
+    }
+
+    /* ---- Content area spacing ---- */
+    #content {
+        padding-top: 0.5rem;
+    }
 
 </style>
 {% endblock %}

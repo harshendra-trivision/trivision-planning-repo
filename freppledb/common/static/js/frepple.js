@@ -781,16 +781,22 @@ var grid = {
       '' :
       '<div class="row mb-3">' +
       '<div class="col">' +
-      '<div class="card"><div class="card-header">' + gettext("Available options") + '</div>' +
-      '<div class="card-body">' +
-      '<ul class="list-group" id="DroppointRows" style="height: 160px; overflow-y: scroll;">placeholder1</ul>' +
+      '<div class="card" style="border: 1px solid rgba(156, 39, 176, 0.2); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(123, 45, 142, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">' +
+      '<div class="card-header" style="background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%); border-bottom: none; padding: 1rem 1.25rem; font-weight: 700; color: #FFFFFF; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 2px 8px rgba(123, 45, 142, 0.15);">' +
+      gettext("Available options") +
+      '</div>' +
+      '<div class="card-body" style="padding: 1rem; background: #FAFAFE;">' +
+      '<ul class="list-group" id="DroppointRows" style="height: 200px; overflow-y: auto; border: 1px solid #E5E7EB; border-radius: 8px; background: #FFFFFF; padding: 0.5rem;">placeholder1</ul>' +
       '</div>' +
       '</div>' +
       '</div>' +
       '<div class="col">' +
-      '<div class="card"><div class="card-header">' + gettext("Selected options") + '</div>' +
-      '<div class="card-body">' +
-      '<ul class="list-group" id="Rows" style="height: 160px; overflow-y: scroll;">placeholder0</ul>' +
+      '<div class="card" style="border: 1px solid rgba(156, 39, 176, 0.2); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(123, 45, 142, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">' +
+      '<div class="card-header" style="background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%); border-bottom: none; padding: 1rem 1.25rem; font-weight: 700; color: #FFFFFF; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 2px 8px rgba(123, 45, 142, 0.15);">' +
+      gettext("Selected options") +
+      '</div>' +
+      '<div class="card-body" style="padding: 1rem; background: #FAFAFE;">' +
+      '<ul class="list-group" id="Rows" style="height: 200px; overflow-y: auto; border: 1px solid #E5E7EB; border-radius: 8px; background: #FFFFFF; padding: 0.5rem;">placeholder0</ul>' +
       '</div>' +
       '</div>' +
       '</div>' +
@@ -811,7 +817,7 @@ var grid = {
       else if (colModel[i].name != "rn" && colModel[i].name != "cb" && colModel[i].counter != null && colModel[i].label != '' && !('alwayshidden' in colModel[i])) {
         if (colModel[i].frozen) maxfrozen = parseInt(i, 10) + 1 - skipped;
         if (!colModel[i].hidden)
-          val0s += '<li id="' + (i) + '"  class="list-group-item" style="cursor: move; border: none">' + colModel[i].label + '</li>';
+          val0s += '<li id="' + (i) + '"  class="list-group-item" style="cursor: move; border: none; background: #FFFFFF; padding: 0.625rem 0.875rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #1A1A1A; transition: all 0.2s ease; border: 1px solid #E5E7EB;" onmouseover="this.style.background=\'rgba(156,39,176,0.08)\'; this.style.borderColor=\'#9C27B0\'; this.style.transform=\'translateX(4px)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateX(0)\';">' + colModel[i].label + '</li>';
         else
           val0a[colModel[i].label] = i;
       }
@@ -825,28 +831,28 @@ var grid = {
       // Add list of crosses
       var row1 = '<div class="row">' +
         '<div class="col">' +
-        '<div class="card">' +
-        '<div class="card-header">' +
+        '<div class="card" style="border: 1px solid rgba(156, 39, 176, 0.2); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(123, 45, 142, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">' +
+        '<div class="card-header" style="background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%); border-bottom: none; padding: 1rem 1.25rem; font-weight: 700; color: #FFFFFF; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 2px 8px rgba(123, 45, 142, 0.15);">' +
         gettext('Available Cross') +
         '</div>' +
-        '<div class="card-body">' +
-        '<ul class="list-group" id="DroppointCrosses" style="height: 160px; overflow-y: scroll;">placeholder1</ul>' +
+        '<div class="card-body" style="padding: 1rem; background: #FAFAFE;">' +
+        '<ul class="list-group" id="DroppointCrosses" style="height: 200px; overflow-y: auto; border: 1px solid #E5E7EB; border-radius: 8px; background: #FFFFFF; padding: 0.5rem;">placeholder1</ul>' +
         '</div>' +
         '</div>' +
         '</div>' +
         '<div class="col">' +
-        '<div class="card">' +
-        '<div class="card-header">' +
+        '<div class="card" style="border: 1px solid rgba(156, 39, 176, 0.2); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(123, 45, 142, 0.1); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);">' +
+        '<div class="card-header" style="background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%); border-bottom: none; padding: 1rem 1.25rem; font-weight: 700; color: #FFFFFF; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.08em; box-shadow: 0 2px 8px rgba(123, 45, 142, 0.15);">' +
         gettext('Selected Cross') +
         '</div>' +
-        '<div class="card-body">' +
-        '<ul class="list-group" id="Crosses" style="height: 160px; overflow-y: scroll;">placeholder0</ul>' +
+        '<div class="card-body" style="padding: 1rem; background: #FAFAFE;">' +
+        '<ul class="list-group" id="Crosses" style="height: 200px; overflow-y: auto; border: 1px solid #E5E7EB; border-radius: 8px; background: #FFFFFF; padding: 0.5rem;">placeholder0</ul>' +
         '</div>' +
         '</div>' +
         '</div>' +
         '</div>';
       for (var j in my_cross_idx) {
-        val1s += '<li class="list-group-item" id="' + (1000 + parseInt(my_cross_idx[j], 10)) + '" style="cursor: move; border: none">' + my_cross[my_cross_idx[j]]['name'] + '</li>';
+        val1s += '<li class="list-group-item" id="' + (1000 + parseInt(my_cross_idx[j], 10)) + '" style="cursor: move; border: none; background: #FFFFFF; padding: 0.625rem 0.875rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #1A1A1A; transition: all 0.2s ease; border: 1px solid #E5E7EB;" onmouseover="this.style.background=\'rgba(156,39,176,0.08)\'; this.style.borderColor=\'#9C27B0\'; this.style.transform=\'translateX(4px)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateX(0)\';">' + my_cross[my_cross_idx[j]]['name'] + '</li>';
       }
       var fieldlist = {};
       for (var j in my_cross) {
@@ -854,13 +860,15 @@ var grid = {
         fieldlist[my_cross[j]['name']] = parseInt(j, 10);
       }
       for (var j of Object.keys(fieldlist).sort())
-        val1a += '<li class="list-group-item" id="' + (1000 + fieldlist[j]) + '" style="cursor: move; border: none">' + j + '</li>';
+        val1a += '<li class="list-group-item" id="' + (1000 + fieldlist[j]) + '" style="cursor: move; border: none; background: #FFFFFF; padding: 0.625rem 0.875rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #1A1A1A; transition: all 0.2s ease; border: 1px solid #E5E7EB;" onmouseover="this.style.background=\'rgba(156,39,176,0.08)\'; this.style.borderColor=\'#9C27B0\'; this.style.transform=\'translateX(4px)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateX(0)\';">' + j + '</li>';
     }
     else {
       // Add selection of number of frozen columns
-      row2 = '<div class="row mt-3"><div class="col">' +
+      row2 = '<div class="row mt-3"><div class="col" style="background: linear-gradient(135deg, rgba(156,39,176,0.08) 0%, rgba(123,45,142,0.05) 100%); padding: 1.25rem; border-radius: 10px; border: 1px solid rgba(156,39,176,0.2); box-shadow: 0 2px 8px rgba(123,45,142,0.08);">' +
+        '<label style="color: #2D004D; font-weight: 700; font-size: 0.875rem; margin-right: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">' +
         gettext("Frozen columns") +
-        '&nbsp;&nbsp;<select id="frozen" class="form-select w-auto d-inline">';
+        '</label>' +
+        '<select id="frozen" class="form-select w-auto d-inline" style="border: 1px solid rgba(156,39,176,0.3); border-radius: 6px; padding: 0.5rem 2.5rem 0.5rem 0.875rem; font-size: 0.875rem; font-weight: 500; color: #2D004D; background-color: #FFFFFF; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(123,45,142,0.1);" onmouseover="this.style.borderColor=\'#9C27B0\'; this.style.boxShadow=\'0 0 0 3px rgba(156,39,176,0.15)\';" onmouseout="this.style.borderColor=\'rgba(156,39,176,0.3)\'; this.style.boxShadow=\'0 2px 6px rgba(123,45,142,0.1)\';">';
       var maxfreeze = Math.min(colModel.length, 5);
       for (var i = 0; i <= maxfreeze; i++) {
         if (i == maxfrozen)
@@ -878,12 +886,12 @@ var grid = {
         collapsibleOption = o.split(' - ')[0];
         if (!collapsibleSet.has(collapsibleOption)) {
           collapsibleSet.add(collapsibleOption);
-          let collapseIcon = '<i class="fa fa-chevron-right pt-1 float-end" style="cursor: pointer; z-index: 3000; position: relative"></i>';
-          availableoptions += '<li id="' + collapsibleSet.size * 1000 + '" class="list-group-item do-not-drag" style="cursor: pointer; border: none" onclick="grid.toggleCollapseSubOptions(\'' + collapsibleOption + '\',' + collapsibleSet.size * 1000 + ')">' + collapsibleOption + ' attributes' + collapseIcon + '</li>';
+          let collapseIcon = '<i class="fa fa-chevron-right pt-1 float-end" style="cursor: pointer; z-index: 3000; position: relative; color: #FFFFFF; transition: transform 0.2s ease;"></i>';
+          availableoptions += '<li id="' + collapsibleSet.size * 1000 + '" class="list-group-item do-not-drag" style="cursor: pointer; border: none; background: linear-gradient(135deg, rgba(123,45,142,0.85) 0%, rgba(156,39,176,0.85) 100%); padding: 0.625rem 0.875rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #FFFFFF; font-weight: 600; transition: all 0.2s ease; border: 1px solid rgba(156,39,176,0.3); box-shadow: 0 2px 6px rgba(123,45,142,0.12);" onmouseover="this.style.background=\'linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%)\'; this.style.transform=\'translateX(4px)\'; this.style.boxShadow=\'0 4px 12px rgba(123,45,142,0.25)\';" onmouseout="this.style.background=\'linear-gradient(135deg, rgba(123,45,142,0.85) 0%, rgba(156,39,176,0.85) 100%)\'; this.style.transform=\'translateX(0)\'; this.style.boxShadow=\'0 2px 6px rgba(123,45,142,0.12)\';" onclick="grid.toggleCollapseSubOptions(\'' + collapsibleOption + '\',' + collapsibleSet.size * 1000 + ')">' + collapsibleOption + ' attributes' + collapseIcon + '</li>';
         }
-        availableoptions += '<li id="' + val0a[o] + '" type="' + collapsibleOption + '" class="list-group-item ps-4 d-none" style="cursor: move; border: none">' + o + '</li>';
+        availableoptions += '<li id="' + val0a[o] + '" type="' + collapsibleOption + '" class="list-group-item ps-4 d-none" style="cursor: move; border: none; background: #FFFFFF; padding: 0.625rem 0.875rem 0.625rem 1.5rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #1A1A1A; transition: all 0.2s ease; border: 1px solid #E5E7EB; border-left: 3px solid #9C27B0;" onmouseover="this.style.background=\'rgba(156,39,176,0.08)\'; this.style.borderColor=\'#9C27B0\'; this.style.transform=\'translateX(4px)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.borderLeftColor=\'#9C27B0\'; this.style.transform=\'translateX(0)\';">' + o + '</li>';
       } else {
-        availableoptions += '<li id="' + val0a[o] + '" class="list-group-item" style="cursor: move; border: none">' + o + '</li>';
+        availableoptions += '<li id="' + val0a[o] + '" class="list-group-item" style="cursor: move; border: none; background: #FFFFFF; padding: 0.625rem 0.875rem; margin-bottom: 0.375rem; border-radius: 6px; font-size: 0.875rem; color: #1A1A1A; transition: all 0.2s ease; border: 1px solid #E5E7EB;" onmouseover="this.style.background=\'rgba(156,39,176,0.08)\'; this.style.borderColor=\'#9C27B0\'; this.style.transform=\'translateX(4px)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateX(0)\';">' + o + '</li>';
       }
     }
     row0 = row0.replace('placeholder1', availableoptions);
@@ -893,22 +901,22 @@ var grid = {
     }
 
     $('#popup').html('' +
-      '<div class="modal-dialog modal-lg">' +
-      '<div class="modal-content">' +
-      '<div class="modal-header">' +
-      '<h5 class="modal-title">' + gettext("Customize") + '</h5>' +
-      '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label=' + gettext("Close") + '></button>' +
+      '<div class="modal-dialog modal-lg" style="max-width: 900px;">' +
+      '<div class="modal-content" style="border: none; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(45, 0, 77, 0.15);">' +
+      '<div class="modal-header" style="background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%); border-bottom: none; padding: 1.5rem 2rem;">' +
+      '<h5 class="modal-title" style="color: #FFFFFF; font-weight: 800; font-size: 1.5rem; letter-spacing: 0.02em; font-family: \'Inter\', sans-serif; text-shadow: 0 2px 8px rgba(0,0,0,0.2);">' + gettext("Customize") + '</h5>' +
+      '<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label=' + gettext("Close") + ' style="filter: brightness(0) invert(1); opacity: 0.8; transition: all 0.2s ease;" onmouseover="this.style.opacity=\'1\'; this.style.transform=\'scale(1.1)\';" onmouseout="this.style.opacity=\'0.8\'; this.style.transform=\'scale(1)\';"></button>' +
       '</div>' +
-      '<div class="modal-body">' +
+      '<div class="modal-body" style="padding: 2rem; background: #FAFAFE;">' +
       row0 +
       row1 +
       row2 +
       (typeof extra_customize_html !== 'undefined' ? extra_customize_html : '') +  // Not very clean to use a global variable here
       '</div>' +
-      '<div class="modal-footer justify-content-between">' +
-      '<input type="submit" id="cancelCustbutton" role="button" class="btn btn-gray" data-bs-dismiss="modal" value="' + gettext('Cancel') + '">' +
-      '<input type="submit" id="resetCustbutton" role="button" class="btn btn-gray" value="' + gettext('Reset') + '">' +
-      '<input type="submit" id="okCustbutton" role="button" class="btn btn-primary" value="' + gettext("OK") + '">' +
+      '<div class="modal-footer justify-content-between" style="background: #F8F4FC; border-top: 1px solid #E5E7EB; padding: 1.25rem 2rem;">' +
+      '<input type="submit" id="cancelCustbutton" role="button" class="btn btn-gray" data-bs-dismiss="modal" value="' + gettext('Cancel') + '" style="background: #FFFFFF; color: #6B7280; border: 1px solid #E5E7EB; border-radius: 8px; padding: 0.625rem 1.5rem; font-weight: 600; font-size: 0.875rem; transition: all 0.2s ease; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05);" onmouseover="this.style.background=\'#F3F4F6\'; this.style.borderColor=\'#D1D5DB\'; this.style.transform=\'translateY(-1px)\'; this.style.boxShadow=\'0 2px 6px rgba(0,0,0,0.08)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateY(0)\'; this.style.boxShadow=\'0 1px 3px rgba(0,0,0,0.05)\';">' +
+      '<input type="submit" id="resetCustbutton" role="button" class="btn btn-gray" value="' + gettext('Reset') + '" style="background: #FFFFFF; color: #6B7280; border: 1px solid #E5E7EB; border-radius: 8px; padding: 0.625rem 1.5rem; font-weight: 600; font-size: 0.875rem; transition: all 0.2s ease; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.05);" onmouseover="this.style.background=\'#F3F4F6\'; this.style.borderColor=\'#D1D5DB\'; this.style.transform=\'translateY(-1px)\'; this.style.boxShadow=\'0 2px 6px rgba(0,0,0,0.08)\';" onmouseout="this.style.background=\'#FFFFFF\'; this.style.borderColor=\'#E5E7EB\'; this.style.transform=\'translateY(0)\'; this.style.boxShadow=\'0 1px 3px rgba(0,0,0,0.05)\';">' +
+      '<input type="submit" id="okCustbutton" role="button" class="btn btn-primary" value="' + gettext("OK") + '" style="background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%); color: #FFFFFF; border: none; border-radius: 8px; padding: 0.625rem 2rem; font-weight: 700; font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; box-shadow: 0 4px 12px rgba(123, 45, 142, 0.25);" onmouseover="this.style.background=\'linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%)\'; this.style.transform=\'translateY(-2px)\'; this.style.boxShadow=\'0 8px 20px rgba(123, 45, 142, 0.35)\';" onmouseout="this.style.background=\'linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%)\'; this.style.transform=\'translateY(0)\'; this.style.boxShadow=\'0 4px 12px rgba(123, 45, 142, 0.25)\';">' +
       '</div>' +
       '</div>' +
       '</div>');
@@ -3208,53 +3216,323 @@ function import_show(title, paragraph, multiple, fxhr, initialDropped, buttonlab
   hideModal('timebuckets');
   $.jgrid.hideModal("#searchmodfbox_grid");
   var modalcontent = '<div class="modal-dialog modal-lg">' +
-    '<div class="modal-content">' +
-    '<div class="modal-header">' +
-    '<h5 class="modal-title">' +
+    '<div class="modal-content import-modal-content">' +
+    '<div class="modal-header import-modal-header">' +
+    '<h5 class="modal-title import-modal-title">' +
     '<span id="modal_title">' + gettext("Import CSV or Excel file") + '</span>' + '&nbsp;' +
-    '<span id="animatedcog" class="fa fa-cog fa-spin fa-2x fa-fw" style="visibility: hidden;"></span>' +
+    '<span id="animatedcog" class="fa fa-cog fa-spin fa-2x fa-fw import-spinner" style="visibility: hidden;"></span>' +
     '</h5>' +
-    '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
+    '<button type="button" class="btn-close import-close-btn" data-bs-dismiss="modal" aria-label="Close"></button>' +
     '</div>' +
-    '<div class="modal-body">' +
+    '<div class="modal-body import-modal-body">' +
     '<form id="uploadform">' +
-    '<p id="extra_text">' + gettext('Load an Excel file or a CSV-formatted text file.') + '<br>' +
-    gettext('The first row should contain the field names.') + '<br><br>' +
-    '<input class="form-check-input" type="checkbox" autocomplete="off" name="erase" value="yes" id="eraseBeforeImport"/><label for="eraseBeforeImport">&nbsp;&nbsp;' +
-    gettext('First delete all existing records AND ALL RELATED TABLES') + '</label><br>' +
-    '</p>';
-  if (isDragnDropUploadCapable()) {
-    modalcontent += '' +
-      '<div class="box" style="outline: 2px dashed black; outline-offset: -1em">' +
-      '<div class=text-center box__input" style="text-align: center; padding: 20px;">' +
-      '<input class="box__file d-none" type="file" id="csv_file" name="csv_file" data-multiple-caption="{count} ' + gettext("files selected") + '" multiple/>' +
-      '<label class="d-block p-3" id="uploadlabel" for="csv_file">' +
-      '<a class="btn btn-primary">' + gettext("Select files to upload") +
-      '</a>&nbsp;' + gettext("or drop them here") +
-      '<i class="fa fa-sign-in fa-2x fa-rotate-90"></i>' +
-      '</label>' +
-      '</div>' +
-      '<div class="d-none box__uploading" style="display: none;">Uploading&hellip;</div>' +
-      '<div class="d-none box__success" style="display: none;">Done!</div>' +
-      '<div class="box__error" style="display: none;">Error!<span></span>.</div>' +
-      '</div>';
-  } else {
-    modalcontent += gettext('Data file') + ':<input type="file" id="csv_file" name="csv_file"/>';
-  }
-  modalcontent += '' +
-    '<br></form>' +
-    '<div style="margin: 5px 0">' +
-    '<div id="uploadResponse" style="height: 50vh; resize: vertical; display: none; background-color: inherit; border: none; overflow: auto;"></div>' +
-    '</div>' +
-    '</div>' +
-    '<div class="modal-footer justify-content-between">' +
-    '<input type="submit" id="cancelbutton" role="button" class="btn btn-gray pull-left" data-bs-dismiss="modal" value="' + gettext('Close') + '">' +
-    '<input type="submit" id="copytoclipboard" role="button" class="btn btn-gray pull-left" value="' + gettext('Copy to clipboard') + '" style="display: none;">' +
-    '<input type="submit" id="importbutton" role="button" class="btn btn-primary pull-right" value="' + gettext('Import') + '">' +
-    '<input type="submit" id="cancelimportbutton" role="button" class="btn btn-primary pull-left" value="' + gettext('Cancel Import') + '" style="display: none;">' +
-    '</div>' +
+    '<div id="extra_text" class="import-description">' + 
+    '<p class="import-description-text">' + gettext('Load an Excel file or a CSV-formatted text file.') + '</p>' +
+    '<p class="import-description-text">' + gettext('The first row should contain the field names.') + '</p>' +
+    '<div class="import-checkbox-container">' +
+    '<input class="form-check-input import-checkbox" type="checkbox" autocomplete="off" name="erase" value="yes" id="eraseBeforeImport"/>' +
+    '<label for="eraseBeforeImport" class="import-checkbox-label">' +
+    gettext('First delete all existing records AND ALL RELATED TABLES') + '</label>' +
     '</div>' +
     '</div>';
+  if (isDragnDropUploadCapable()) {
+    modalcontent += '' +
+      '<div class="import-upload-area">' +
+      '<div class="import-upload-zone" id="import-drop-zone">' +
+      '<input class="box__file d-none" type="file" id="csv_file" name="csv_file" data-multiple-caption="{count} ' + gettext("files selected") + '" multiple/>' +
+      '<label class="import-upload-label" id="uploadlabel" for="csv_file">' +
+      '<div class="import-upload-content">' +
+      '<div class="import-upload-icon">' +
+      '<i class="fa fa-cloud-upload fa-3x"></i>' +
+      '</div>' +
+      '<div class="import-upload-text">' +
+      '<span class="import-upload-button">' + gettext("Select files to upload") + '</span>' +
+      '<span class="import-upload-or">' + gettext("or drop them here") + '</span>' +
+      '</div>' +
+      '</div>' +
+      '</label>' +
+      '</div>' +
+      '<div class="d-none box__uploading import-status-uploading" style="display: none;">Uploading&hellip;</div>' +
+      '<div class="d-none box__success import-status-success" style="display: none;">Done!</div>' +
+      '<div class="box__error import-status-error" style="display: none;">Error!<span></span>.</div>' +
+      '</div>';
+  } else {
+    modalcontent += '<div class="import-fallback">' + gettext('Data file') + ':<input type="file" class="form-control" id="csv_file" name="csv_file"/></div>';
+  }
+  modalcontent += '' +
+    '</form>' +
+    '<div class="import-response-container">' +
+    '<div id="uploadResponse" class="import-response-area"></div>' +
+    '</div>' +
+    '</div>' +
+    '<div class="modal-footer import-modal-footer">' +
+    '<input type="submit" id="cancelbutton" role="button" class="btn import-btn-secondary" data-bs-dismiss="modal" value="' + gettext('Close') + '">' +
+    '<input type="submit" id="copytoclipboard" role="button" class="btn import-btn-secondary" value="' + gettext('Copy to clipboard') + '" style="display: none;">' +
+    '<input type="submit" id="importbutton" role="button" class="btn import-btn-primary" value="' + gettext('Import') + '">' +
+    '<input type="submit" id="cancelimportbutton" role="button" class="btn import-btn-danger" value="' + gettext('Cancel Import') + '" style="display: none;">' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '<style>' +
+    '/* Import Modal - Modern Premium UI Enhancement */' +
+    '.import-modal-content {' +
+    '  border: none !important;' +
+    '  border-radius: 12px !important;' +
+    '  box-shadow: 0 20px 60px rgba(123, 45, 142, 0.15), 0 8px 32px rgba(0, 0, 0, 0.1) !important;' +
+    '  background: #FFFFFF !important;' +
+    '}' +
+    '.import-modal-header {' +
+    '  background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%) !important;' +
+    '  border-bottom: 1px solid #E5E7EB !important;' +
+    '  border-radius: 12px 12px 0 0 !important;' +
+    '  padding: 1.5rem 2rem !important;' +
+    '}' +
+    '.import-modal-title {' +
+    '  font-size: 1.25rem !important;' +
+    '  font-weight: 600 !important;' +
+    '  color: #2D004D !important;' +
+    '  margin: 0 !important;' +
+    '}' +
+    '.import-spinner {' +
+    '  color: #7B2D8E !important;' +
+    '}' +
+    '.import-close-btn {' +
+    '  background: none !important;' +
+    '  border: none !important;' +
+    '  font-size: 1.25rem !important;' +
+    '  color: #6B7280 !important;' +
+    '  opacity: 1 !important;' +
+    '  transition: all 0.2s ease !important;' +
+    '}' +
+    '.import-close-btn:hover {' +
+    '  color: #7B2D8E !important;' +
+    '  transform: scale(1.1) !important;' +
+    '}' +
+    '.import-modal-body {' +
+    '  padding: 2rem !important;' +
+    '  background: #FFFFFF !important;' +
+    '}' +
+    '.import-description {' +
+    '  margin-bottom: 2rem !important;' +
+    '}' +
+    '.import-description-text {' +
+    '  color: #6B7280 !important;' +
+    '  font-size: 0.95rem !important;' +
+    '  line-height: 1.6 !important;' +
+    '  margin-bottom: 0.5rem !important;' +
+    '}' +
+    '.import-checkbox-container {' +
+    '  margin-top: 1.5rem !important;' +
+    '  padding: 1rem !important;' +
+    '  background: linear-gradient(135deg, #FEF3F2 0%, #FDF2F8 100%) !important;' +
+    '  border: 1px solid #FECACA !important;' +
+    '  border-radius: 8px !important;' +
+    '  display: flex !important;' +
+    '  align-items: flex-start !important;' +
+    '  gap: 0.75rem !important;' +
+    '}' +
+    '.import-checkbox {' +
+    '  width: 1.125rem !important;' +
+    '  height: 1.125rem !important;' +
+    '  border: 2px solid #DC2626 !important;' +
+    '  border-radius: 4px !important;' +
+    '  margin: 0 !important;' +
+    '  flex-shrink: 0 !important;' +
+    '}' +
+    '.import-checkbox:checked {' +
+    '  background-color: #DC2626 !important;' +
+    '  border-color: #DC2626 !important;' +
+    '}' +
+    '.import-checkbox-label {' +
+    '  color: #DC2626 !important;' +
+    '  font-weight: 500 !important;' +
+    '  font-size: 0.9rem !important;' +
+    '  line-height: 1.5 !important;' +
+    '  margin: 0 !important;' +
+    '  cursor: pointer !important;' +
+    '}' +
+    '.import-upload-area {' +
+    '  margin-top: 1rem !important;' +
+    '}' +
+    '.import-upload-zone {' +
+    '  border: 2px dashed #D1D5DB !important;' +
+    '  border-radius: 12px !important;' +
+    '  background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%) !important;' +
+    '  transition: all 0.3s ease !important;' +
+    '  position: relative !important;' +
+    '  overflow: hidden !important;' +
+    '}' +
+    '.import-upload-zone:hover {' +
+    '  border-color: #7B2D8E !important;' +
+    '  background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%) !important;' +
+    '  transform: translateY(-2px) !important;' +
+    '  box-shadow: 0 8px 25px rgba(123, 45, 142, 0.15) !important;' +
+    '}' +
+    '.import-upload-zone.bg-warning {' +
+    '  border-color: #7B2D8E !important;' +
+    '  background: linear-gradient(135deg, #F3E8FF 0%, #E9D5FF 100%) !important;' +
+    '  box-shadow: 0 0 0 4px rgba(123, 45, 142, 0.1) !important;' +
+    '}' +
+    '.import-upload-label {' +
+    '  display: block !important;' +
+    '  padding: 3rem 2rem !important;' +
+    '  cursor: pointer !important;' +
+    '  margin: 0 !important;' +
+    '}' +
+    '.import-upload-content {' +
+    '  text-align: center !important;' +
+    '}' +
+    '.import-upload-icon {' +
+    '  margin-bottom: 1.5rem !important;' +
+    '}' +
+    '.import-upload-icon i {' +
+    '  color: #7B2D8E !important;' +
+    '  opacity: 0.7 !important;' +
+    '  transition: all 0.3s ease !important;' +
+    '}' +
+    '.import-upload-zone:hover .import-upload-icon i {' +
+    '  opacity: 1 !important;' +
+    '  transform: scale(1.1) !important;' +
+    '}' +
+    '.import-upload-text {' +
+    '  display: flex !important;' +
+    '  flex-direction: column !important;' +
+    '  gap: 0.5rem !important;' +
+    '}' +
+    '.import-upload-button {' +
+    '  display: inline-block !important;' +
+    '  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;' +
+    '  color: #FFFFFF !important;' +
+    '  padding: 0.75rem 1.5rem !important;' +
+    '  border-radius: 8px !important;' +
+    '  font-weight: 600 !important;' +
+    '  font-size: 0.95rem !important;' +
+    '  text-decoration: none !important;' +
+    '  transition: all 0.3s ease !important;' +
+    '  box-shadow: 0 4px 12px rgba(123, 45, 142, 0.3) !important;' +
+    '}' +
+    '.import-upload-zone:hover .import-upload-button {' +
+    '  transform: translateY(-2px) !important;' +
+    '  box-shadow: 0 6px 20px rgba(123, 45, 142, 0.4) !important;' +
+    '}' +
+    '.import-upload-or {' +
+    '  color: #6B7280 !important;' +
+    '  font-size: 0.9rem !important;' +
+    '  font-weight: 500 !important;' +
+    '}' +
+    '.import-fallback {' +
+    '  margin-top: 1rem !important;' +
+    '  padding: 1rem !important;' +
+    '  background: #F9FAFB !important;' +
+    '  border-radius: 8px !important;' +
+    '  border: 1px solid #E5E7EB !important;' +
+    '}' +
+    '.import-response-container {' +
+    '  margin-top: 1.5rem !important;' +
+    '}' +
+    '.import-response-area {' +
+    '  height: 50vh !important;' +
+    '  resize: vertical !important;' +
+    '  display: none !important;' +
+    '  background: #F9FAFB !important;' +
+    '  border: 1px solid #E5E7EB !important;' +
+    '  border-radius: 8px !important;' +
+    '  overflow: auto !important;' +
+    '  padding: 1rem !important;' +
+    '  font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace !important;' +
+    '  font-size: 0.85rem !important;' +
+    '  line-height: 1.5 !important;' +
+    '}' +
+    '.import-modal-footer {' +
+    '  background: #F8F9FC !important;' +
+    '  border-top: 1px solid #E5E7EB !important;' +
+    '  border-radius: 0 0 12px 12px !important;' +
+    '  padding: 1.5rem 2rem !important;' +
+    '  display: flex !important;' +
+    '  justify-content: space-between !important;' +
+    '  align-items: center !important;' +
+    '}' +
+    '.import-btn-primary {' +
+    '  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%) !important;' +
+    '  color: #FFFFFF !important;' +
+    '  border: none !important;' +
+    '  border-radius: 8px !important;' +
+    '  padding: 0.75rem 1.5rem !important;' +
+    '  font-weight: 600 !important;' +
+    '  font-size: 0.95rem !important;' +
+    '  transition: all 0.3s ease !important;' +
+    '  box-shadow: 0 4px 12px rgba(123, 45, 142, 0.3) !important;' +
+    '}' +
+    '.import-btn-primary:hover {' +
+    '  transform: translateY(-2px) !important;' +
+    '  box-shadow: 0 6px 20px rgba(123, 45, 142, 0.4) !important;' +
+    '}' +
+    '.import-btn-secondary {' +
+    '  background: #FFFFFF !important;' +
+    '  color: #6B7280 !important;' +
+    '  border: 1px solid #E5E7EB !important;' +
+    '  border-radius: 8px !important;' +
+    '  padding: 0.75rem 1.5rem !important;' +
+    '  font-weight: 500 !important;' +
+    '  font-size: 0.95rem !important;' +
+    '  transition: all 0.3s ease !important;' +
+    '}' +
+    '.import-btn-secondary:hover {' +
+    '  background: #F9FAFB !important;' +
+    '  border-color: #D1D5DB !important;' +
+    '  color: #374151 !important;' +
+    '}' +
+    '.import-btn-danger {' +
+    '  background: linear-gradient(135deg, #DC2626 0%, #EF4444 100%) !important;' +
+    '  color: #FFFFFF !important;' +
+    '  border: none !important;' +
+    '  border-radius: 8px !important;' +
+    '  padding: 0.75rem 1.5rem !important;' +
+    '  font-weight: 600 !important;' +
+    '  font-size: 0.95rem !important;' +
+    '  transition: all 0.3s ease !important;' +
+    '  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3) !important;' +
+    '}' +
+    '.import-btn-danger:hover {' +
+    '  transform: translateY(-2px) !important;' +
+    '  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4) !important;' +
+    '}' +
+    '/* Status Messages */' +
+    '.import-status-uploading, .import-status-success, .import-status-error {' +
+    '  text-align: center !important;' +
+    '  padding: 1rem !important;' +
+    '  border-radius: 8px !important;' +
+    '  font-weight: 500 !important;' +
+    '  margin-top: 1rem !important;' +
+    '}' +
+    '.import-status-uploading {' +
+    '  background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%) !important;' +
+    '  color: #92400E !important;' +
+    '  border: 1px solid #F59E0B !important;' +
+    '}' +
+    '.import-status-success {' +
+    '  background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%) !important;' +
+    '  color: #065F46 !important;' +
+    '  border: 1px solid #10B981 !important;' +
+    '}' +
+    '.import-status-error {' +
+    '  background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%) !important;' +
+    '  color: #991B1B !important;' +
+    '  border: 1px solid #EF4444 !important;' +
+    '}' +
+    '/* Responsive Design */' +
+    '@media (max-width: 768px) {' +
+    '  .import-modal-header, .import-modal-body, .import-modal-footer {' +
+    '    padding: 1rem !important;' +
+    '  }' +
+    '  .import-upload-label {' +
+    '    padding: 2rem 1rem !important;' +
+    '  }' +
+    '  .import-upload-icon i {' +
+    '    font-size: 2rem !important;' +
+    '  }' +
+    '}' +
+    '</style>';
   $('#popup').html(modalcontent);
   console.log(3254, modalcontent);
   showModal('popup');
@@ -3274,22 +3552,28 @@ function import_show(title, paragraph, multiple, fxhr, initialDropped, buttonlab
   var filesdropped = false;
   var filesselected = false;
   if (isDragnDropUploadCapable()) {
-    $('.box').on('drag dragstart dragend dragover dragenter dragleave drop', function (e) {
+    $('.import-upload-zone').on('drag dragstart dragend dragover dragenter dragleave drop', function (e) {
       e.preventDefault();
       e.stopPropagation();
     })
       .on('dragover dragenter', function () {
-        $('.box').removeClass('bg-warning').addClass('bg-warning');
+        $('.import-upload-zone').removeClass('bg-warning').addClass('bg-warning');
       })
       .on('dragleave dragend drop', function () {
-        $('.box').removeClass('bg-warning');
+        $('.import-upload-zone').removeClass('bg-warning');
       })
       .on('drop', function (e) {
         if (multiple)
           filesdropped = e.originalEvent.dataTransfer.files;
         else
           filesdropped = [e.originalEvent.dataTransfer.files[0]];
-        $("#uploadlabel").text(filesdropped.length > 1 ? ($("#csv_file").attr('data-multiple-caption') || '').replace('{count}', filesdropped.length) : filesdropped[0].name);
+        var fileText = filesdropped.length > 1 ? 
+          ($("#csv_file").attr('data-multiple-caption') || '').replace('{count}', filesdropped.length) : 
+          filesdropped[0].name;
+        $("#uploadlabel .import-upload-text").html(
+          '<span class="import-upload-button">' + fileText + '</span>' +
+          '<span class="import-upload-or">' + gettext("Ready to import") + '</span>'
+        );
       });
   }
   $("#csv_file").on('change', function (e) {
@@ -3297,17 +3581,25 @@ function import_show(title, paragraph, multiple, fxhr, initialDropped, buttonlab
       filesselected = e.target.files;
     else
       filesselected = [e.target.files[0]];
-    $("#uploadlabel").text(filesselected.length > 1 ? ($("#csv_file").attr('data-multiple-caption') || '').replace('{count}', filesselected.length) : filesselected[0].name);
+    var fileText = filesselected.length > 1 ? 
+      ($("#csv_file").attr('data-multiple-caption') || '').replace('{count}', filesselected.length) : 
+      filesselected[0].name;
+    $("#uploadlabel .import-upload-text").html(
+      '<span class="import-upload-button">' + fileText + '</span>' +
+      '<span class="import-upload-or">' + gettext("Ready to import") + '</span>'
+    );
   });
   if (initialDropped !== null && typeof initialDropped !== 'undefined') {
     if (multiple)
       filesdropped = initialDropped;
     else
       filesdropped = [initialDropped[0]];
-    $("#uploadlabel").text(
-      filesdropped.length > 1 ?
-        ($("#csv_file").attr('data-multiple-caption') || '').replace('{count}', filesdropped.length) :
-        filesdropped[0].name
+    var fileText = filesdropped.length > 1 ?
+      ($("#csv_file").attr('data-multiple-caption') || '').replace('{count}', filesdropped.length) :
+      filesdropped[0].name;
+    $("#uploadlabel .import-upload-text").html(
+      '<span class="import-upload-button">' + fileText + '</span>' +
+      '<span class="import-upload-or">' + gettext("Ready to import") + '</span>'
     );
   };
   $('#importbutton').on('click', function () {
@@ -3317,7 +3609,7 @@ function import_show(title, paragraph, multiple, fxhr, initialDropped, buttonlab
     var filesdata = '';
 
     $('#uploadResponse').css('display', 'block');
-    $('#uploadResponse').html(gettext('Importing...'));
+    $('#uploadResponse').html('<div style="text-align: center; padding: 1rem; color: #7B2D8E; font-weight: 500;"><i class="fa fa-spinner fa-spin"></i> ' + gettext('Importing...') + '</div>');
     $('#uploadResponse').on('scroll', function () {
       if (parseInt($('#uploadResponse').attr('data-scrolled')) !== $('#uploadResponse').scrollTop()) {
         $('#uploadResponse').attr('data-scrolled', true);

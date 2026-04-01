@@ -1,0 +1,41 @@
+# Render Blueprint - Deploy frePPLe with one click
+# https://render.com/docs/blueprint-spec
+#
+# Free tier notes:
+# - Web Service: Spins down after 15 min inactivity (cold start ~30-60 sec)
+# - PostgreSQL: Free for 90 days, 1GB storage
+# - Build may take 15-25 min (C++ compilation) - free tier has 4000 min/month
+
+services:
+  - type: web
+    name: frepple
+    runtime: docker
+    plan: free
+    region: oregon  # or singapore, frankfurt
+    envVars:
+      - key: POSTGRES_HOST
+        fromDatabase:
+          name: frepple-db
+          property: host
+      - key: POSTGRES_PORT
+        fromDatabase:
+          name: frepple-db
+          property: port
+      - key: POSTGRES_USER
+        fromDatabase:
+          name: frepple-db
+          property: user
+      - key: POSTGRES_PASSWORD
+        fromDatabase:
+          name: frepple-db
+          property: password
+      - key: POSTGRES_DBNAME
+        fromDatabase:
+          name: frepple-db
+          property: database
+
+databases:
+  - name: frepple-db
+    plan: free
+    databaseName: frepple
+    user: frepple

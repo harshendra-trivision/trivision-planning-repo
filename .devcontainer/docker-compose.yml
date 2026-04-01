@@ -30,20 +30,38 @@ services:
     command: ["postgres", "-c", "log_statement=all"]
     volumes:
       - ~/frepple_data:/var/lib/postgresql/data
+    networks:
+      - frepple-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U frepple"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   webserver:
     image: ghcr.io/frepple/frepple-community:9.13.0
     container_name: frepple-community-webserver
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     environment:
       POSTGRES_HOST: postgres
+      POSTGRES_PORT: "5432"
       POSTGRES_USER: frepple
       POSTGRES_PASSWORD: frepple
-      POSTGRES_DB: frepple
+      POSTGRES_DBNAME: frepple
+      NGROK_DOMAIN: "0ade-223-181-41-63.ngrok-free.app"
     platform: linux/amd64
     ports:
       - "9000:80"
       - "8000:8000"
     volumes:
       - ..:/app
+
+      
+    networks:
+      - frepple-network
+
+networks:
+  frepple-network:
+    driver: bridge

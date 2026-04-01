@@ -171,8 +171,15 @@ class GetPlanMetrics(PlanTask):
 
                     for i, m in metrics.items():
                         yield (
-                            f"{clean_value(i)}\v{m["late_count"]}\v{m["late_quantity"]}\v{m["late_cost"]}\v"
-                            f"{m["unplanned_count"]}\v{m["unplanned_quantity"]}\v{m["unplanned_cost"]}\n"
+                            "{}\v{}\v{}\v{}\v{}\v{}\v{}\n".format(
+                                clean_value(i),
+                                m["late_count"],
+                                m["late_quantity"],
+                                m["late_cost"],
+                                m["unplanned_count"],
+                                m["unplanned_quantity"],
+                                m["unplanned_cost"],
+                            )
                         )
 
                 performance = {

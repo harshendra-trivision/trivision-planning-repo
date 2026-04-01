@@ -5,44 +5,74 @@
 
 <style>
 rect.border {
-   rx: 2;
-   ry: 2;
-   stroke: gray;
-   fill: white;
+   rx: 10;
+   ry: 10;
+   stroke: rgba(123,45,142,0.2);
+   stroke-width: 1.5;
+   fill: #FAFBFC;
+   filter: drop-shadow(0 2px 4px rgba(45,0,77,0.08));
 }
 
 text {
    font-size: 1em;
+   font-family: 'Inter', -apple-system, sans-serif;
 }
 
 text.border {
-   fill: gray;
-   font-size: 0.75em;
+   fill: #5C4670;
+   font-size: 0.7em;
+   font-weight: 600;
+   text-transform: uppercase;
+   letter-spacing: 0.5px;
 }
 
 .gold {
-   fill: gold;
+   fill: #F59E0B;
 }
 
 tspan.gold {
-   text-shadow: 0 0 3px #000;
+   filter: drop-shadow(0 1px 2px rgba(245,158,11,0.4));
 }
 
 path.notrophy {
-  fill: lightgray;
+  fill: #E5E7EB;
 }
 
 rect.ok, rect.nok {
-  rx: 2;
-  ry: 2;
+  rx: 8;
+  ry: 8;
   cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+rect.ok:hover, rect.nok:hover {
+  filter: brightness(1.05);
+}
+
+.fill-primary {
+  fill: #7B2D8E;
+}
+
+.fill-primary-light {
+  fill: #E9D5F5;
+}
+
+rect.ok text, rect.nok text {
+  fill: white;
+  font-weight: 500;
 }
 </style>
 
 <!-- Path -->
-<path stroke="grey" fill="transparent" stroke-width="4"
+<path stroke="url(#pathGradient)" fill="transparent" stroke-width="3" stroke-linecap="round"
  d="M 66,65 C 210,65 353,100 393,100"
  />
+<defs>
+  <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" style="stop-color:#7B2D8E;stop-opacity:0.4" />
+    <stop offset="100%" style="stop-color:#A855F7;stop-opacity:0.6" />
+  </linearGradient>
+</defs>
 
 <!-- Master data -->
 <g transform="translate(0 10)">

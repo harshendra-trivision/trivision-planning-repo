@@ -43,15 +43,15 @@
 
   function status (cellvalue, options, rowdata) {
     if (cellvalue == 'Failed')
-      return "<span class='bg-danger' style='display:block; margin:-5px; line-height:32px'>{% trans 'failed'|capfirst %}</span>";
+      return "<span class='task-status-failed' style='display:block; margin:-5px; line-height:32px'>{% trans 'failed'|capfirst %}</span>";
     else if (cellvalue == 'Waiting')
-      return "{% trans 'waiting'|capfirst|force_escape %}&nbsp;&nbsp;<button class='btn btn-primary' style='padding:0 0.5em 0 0.5em; font-size:66%' onclick='cancelTask(" + rowdata['id'] + ")'>{% filter force_escape %}{% trans 'Cancel' %}{% endfilter %}</button>";
+      return "<span class='task-status-waiting'>{% trans 'waiting'|capfirst|force_escape %}</span>&nbsp;&nbsp;<button class='task-cancel-btn' onclick='cancelTask(" + rowdata['id'] + ")'>{% filter force_escape %}{% trans 'Cancel' %}{% endfilter %}</button>";
     else if (cellvalue == 'Done')
-      return "{% trans 'done'|capfirst %}";
+      return "<span class='task-status-done'>{% trans 'done'|capfirst %}</span>";
     else if (cellvalue == 'Canceled')
-      return "{% trans 'canceled'|capfirst %}";
+      return "<span class='task-status-canceled'>{% trans 'canceled'|capfirst %}</span>";
     else if (rowdata.cancelable == "True")
-      return cellvalue + "&nbsp;&nbsp;<button class='btn btn-primary' style='padding:0 0.5em 0 0.5em; font-size:66%' onclick='cancelTask(" + rowdata['id'] + ")'>{% filter force_escape %}{% trans 'Cancel' %}{% endfilter %}</button>";
+      return cellvalue + "&nbsp;&nbsp;<button class='task-cancel-btn' onclick='cancelTask(" + rowdata['id'] + ")'>{% filter force_escape %}{% trans 'Cancel' %}{% endfilter %}</button>";
     else
       return cellvalue;
   }
@@ -69,12 +69,12 @@
       var taskid = rowdata['id'];
       var taskname = rowdata['name'];
       if (taskname == "backup")
-        return '<a class="btn btn-primary" style="padding:0 0.5em 0 0.5em; font-size:66%" href="{{request.prefix}}/execute/logdownload/'
-          + taskid + '/">{% trans "download"|capfirst|force_escape %}</a>&nbsp;'
-          + '<a class="btn btn-primary" style="padding:0 0.5em 0 0.5em; font-size:66%" onclick="deletebutton(\'{{request.prefix}}/execute/logdelete/'
+        return '<a class="task-log-btn me-1" href="{{request.prefix}}/execute/logdownload/'
+          + taskid + '/">{% trans "download"|capfirst|force_escape %}</a>'
+          + '<a class="task-log-btn" onclick="deletebutton(\'{{request.prefix}}/execute/logdelete/'
           + taskid + '/\')">{% trans "Delete"|capfirst|force_escape %}</a>';
       else
-        return '<a class="btn btn-primary" style="padding:0 0.5em 0 0.5em; font-size:66%" href="{{request.prefix}}/execute/logfrepple/'+taskid+'/">{% trans "view"|capfirst|force_escape %}</a>';
+        return '<a class="task-log-btn" href="{{request.prefix}}/execute/logfrepple/'+taskid+'/">{% trans "view"|capfirst|force_escape %}</a>';
     } else {
       return "";
     }
@@ -158,14 +158,17 @@
 </script>
 
 <style>
+/* Execute Page - Enhanced Styling following existing patterns */
 #scenarios td {
   padding: 5px;
   white-space: nowrap;
   vertical-align: middle;
 }
+
 #grid tr td {
   line-height: 22px;
 }
+
 #grid_frozen tr td {
   line-height: 22px;
 }
@@ -175,11 +178,173 @@
   margin-right: 0.5rem;
 }
 
+/* Enhanced Task Status Styling */
+.task-status-failed {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.task-status-waiting {
+  color: #856404;
+  font-weight: 500;
+}
+
+.task-status-done {
+  color: #155724;
+  font-weight: 500;
+}
+
+.task-status-canceled {
+  color: #721c24;
+  font-weight: 500;
+}
+
+.task-cancel-btn {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.task-cancel-btn:hover {
+  background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(123, 45, 142, 0.3);
+}
+
+.task-log-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.task-log-btn:hover {
+  background: #0056b3;
+  color: white;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+/* Enhanced Launch Tasks Section */
+#tasks h1 {
+  color: #2D004D;
+  font-weight: 700;
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #E5E7EB;
+}
+
+/* Enhanced Command Cards */
+.widget .card {
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.widget .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(123, 45, 142, 0.12);
+  border-color: #9C27B0;
+}
+
+.widget .card-header {
+  background: linear-gradient(135deg, #F8F9FC 0%, #F3E8FF 100%);
+  border-bottom: 1px solid #E5E7EB;
+  padding: 1rem 1.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.widget .card-header:hover {
+  background: linear-gradient(135deg, #F3E8FF 0%, #EDE7F6 100%);
+}
+
+.widget .card-title {
+  color: #2D004D;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.widget .card-body {
+  padding: 1.5rem 1.25rem;
+  background: white;
+}
+
+/* Enhanced Help and Handle Icons */
+.widget .fa-question {
+  color: #7B2D8E;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+.widget .fa-question:hover {
+  color: #9C27B0;
+  background: rgba(156, 39, 176, 0.1);
+}
+
+.widget .widget-handle {
+  color: #6B7280;
+  cursor: grab;
+  transition: all 0.2s ease;
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+.widget .widget-handle:hover {
+  color: #7B2D8E;
+  background: rgba(123, 45, 142, 0.1);
+}
+
+.widget .widget-handle:active {
+  cursor: grabbing;
+}
+
+/* Auto-refresh Button Enhancement */
+#autorefresh {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+  border: none;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+#autorefresh:hover {
+  background: linear-gradient(135deg, #2D004D 0%, #7B2D8E 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(123, 45, 142, 0.3);
+}
+
+/* Toast Notifications */
 .toast {
   visibility: hidden;
   position: absolute;
   z-index: 1;
   left: 50%;
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(123, 45, 142, 0.3);
 }
 
 .toast.show {
@@ -189,25 +354,102 @@
 }
 
 @-webkit-keyframes fadein {
-  from {opacity: 0}
-  to {opacity: 1}
+  from {opacity: 0; transform: translateY(-10px);}
+  to {opacity: 1; transform: translateY(0);}
 }
 
 @keyframes fadein {
-  from {opacity: 0}
-  to {opacity: 1}
+  from {opacity: 0; transform: translateY(-10px);}
+  to {opacity: 1; transform: translateY(0);}
 }
 
 @-webkit-keyframes fadeout {
-  from {opacity: 1}
-  to {opacity: 0}
+  from {opacity: 1; transform: translateY(0);}
+  to {opacity: 0; transform: translateY(-10px);}
 }
 
 @keyframes fadeout {
-  from {opacity: 1;}
-  to {opacity: 0;}
+  from {opacity: 1; transform: translateY(0);}
+  to {opacity: 0; transform: translateY(-10px);}
 }
 
+/* Enhanced Modal Styling */
+.modal-content {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  background: linear-gradient(135deg, #7B2D8E 0%, #9C27B0 100%);
+  color: white;
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+}
+
+.modal-title {
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  color: #1A1A1A;
+}
+
+.modal-footer {
+  border-top: 1px solid #E5E7EB;
+  padding: 1rem 1.5rem;
+}
+
+/* Enhanced Button Styling in Modals */
+.btn-gray {
+  background: #6B7280;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-gray:hover {
+  background: #4B5563;
+  color: white;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-danger:hover {
+  background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+/* Responsive Enhancements */
+@media (max-width: 768px) {
+  #tasks h1 {
+    font-size: 1.5rem;
+  }
+  
+  .widget .card-header {
+    padding: 0.75rem 1rem;
+  }
+  
+  .widget .card-body {
+    padding: 1rem;
+  }
+  
+  .widget .card-title {
+    font-size: 1rem;
+  }
+}
 </style>
 {% endblock %}
 
