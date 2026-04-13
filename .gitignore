@@ -9,7 +9,7 @@
 .vs
 
 .*Zone.Identifier
-
+.env
 # Executables
 *.exe
 *.dll

@@ -1,30 +1,24 @@
 #!/bin/bash
 set -e
 
-# Configure djangosettings if custom config dir is writable
-if [ -w "$FREPPLE_CONFIGDIR/djangosettings.py" ] 2>/dev/null; then
-  sed -i "s/SECRET_KEY.*/SECRET_KEY = \"$(openssl rand -hex 32)\"/g" "$FREPPLE_CONFIGDIR/djangosettings.py" 2>/dev/null || true
-fi
+# Wait for PostgreSQL to be ready
+echo "Waiting for the database to be ready"
+retries=30
+until pg_isready -h "${POSTGRES_HOST}" -p "${POSTGRES_PORT:-5432}" -U "${POSTGRES_USER:-frepple}" -q; do
+  sleep 1
+  ((retries--))
+  if [ $retries -eq 0 ]; then
+    echo "Cannot connect to PostgreSQL on ${POSTGRES_HOST}:${POSTGRES_PORT:-5432}"
+    exit 1
+  fi
+done
 
-# Wait for PostgreSQL if host is configured
-if [ -n "$POSTGRES_HOST" ]; then
-  echo "Waiting for PostgreSQL at $POSTGRES_HOST:${POSTGRES_PORT:-5432}..."
-  for i in $(seq 1 30); do
-    if pg_isready -h "$POSTGRES_HOST" -p "${POSTGRES_PORT:-5432}" -U "$POSTGRES_USER" 2>/dev/null; then
-      echo "PostgreSQL is ready"
-      break
-    fi
-    if [ $i -eq 30 ]; then
-      echo "PostgreSQL not available after 30 attempts"
-      exit 1
-    fi
-    sleep 1
-  done
-fi
+# Create the databases (skip if they already exist)
+/usr/share/frepple/venv/bin/python /app/frepplectl.py createdatabase --skip-if-exists
 
-# Create database and run migrations
-frepplectl createdatabase --skip-if-exists 2>/dev/null || true
-frepplectl migrate --noinput
+# Run migrations
+/usr/share/frepple/venv/bin/python /app/frepplectl.py migrate --noinput
 
-# Execute command
-exec "$@"
+# Start Django development server (same as local dev)
+echo "Starting Django development server on 0.0.0.0:${PORT:-8000}"
+exec /usr/share/frepple/venv/bin/python /app/frepplectl.py runserver "0.0.0.0:${PORT:-8000}"
