@@ -968,10 +968,14 @@ export const useForecastsStore = defineStore('forecasts', {
         }
 
       } catch (error) {
+        const backendErrors = error?.response?.data?.errors;
+        const details = Array.isArray(backendErrors) && backendErrors.length
+          ? backendErrors.join('; ')
+          : (error.response?.data?.message || error.message);
         this.setError({
           title: 'Error',
           message: 'Unable to apply forecast changes',
-          details: error.response?.data?.message || error.message,
+          details,
           type: 'error'
         });
       } finally {

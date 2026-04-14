@@ -341,10 +341,16 @@ class Command(BaseCommand):
             if "DJANGO_SETTINGS_MODULE" not in os.environ:
                 os.environ["DJANGO_SETTINGS_MODULE"] = "freppledb.settings"
             os.environ["PYTHONPATH"] = os.path.normpath(settings.FREPPLE_APP)
-            # Ensure frepple subprocess finds Django (venv at FREPPLE_APP/venv, e.g. Docker)
-            venv_path = os.path.join(settings.FREPPLE_APP, "venv")
-            if os.path.isfile(os.path.join(venv_path, "bin", "python3")):
-                os.environ["VIRTUAL_ENV"] = venv_path
+            # Ensure frepple subprocess finds Django.
+            # In containerized source mounts FREPPLE_APP is often /app while the
+            # real virtualenv is /usr/share/frepple/venv.
+            for venv_path in (
+                os.path.join(settings.FREPPLE_APP, "venv"),
+                os.path.join(settings.FREPPLE_HOME, "venv"),
+            ):
+                if os.path.isfile(os.path.join(venv_path, "bin", "python3")):
+                    os.environ["VIRTUAL_ENV"] = venv_path
+                    break
 
             if options["background"] or options["daemon"]:
                 subprocess.Popen(["frepple", cmd], preexec_fn=setlimits)

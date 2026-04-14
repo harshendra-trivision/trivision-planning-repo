@@ -2008,18 +2008,28 @@ class ForecastEditor:
             if utils.checkRunning(database=request.database):
                 return utils.proxyToWebService(request)
             else:
-                return HttpResponse(
-                    json.dumps(
-                        {
-                            "errors": [
-                                "Planning engine not loaded and webservice not running for %s"
-                                % request.database
-                            ]
-                        }
-                    ),
-                    content_type="application/json",
-                    status=500,
-                )
+                try:
+                    from django.core import management
+
+                    management.call_command(
+                        "runwebservice", database=request.database, daemon=True
+                    )
+                    utils.waitTillRunning(database=request.database, timeout=30)
+                    return utils.proxyToWebService(request)
+                except Exception as e:
+                    return HttpResponse(
+                        json.dumps(
+                            {
+                                "errors": [
+                                    "Planning engine not loaded and webservice not running for %s"
+                                    % request.database,
+                                    "Failed to start webservice automatically: %s" % e,
+                                ]
+                            }
+                        ),
+                        content_type="application/json",
+                        status=500,
+                    )
 
         import threading
         if not hasattr(utils, 'forecast_edit_lock'):
@@ -2029,6 +2039,14 @@ class ForecastEditor:
             frepple.cache.write_immediately = False
             try:
                 replan = False
+                recalculate = data.get("recalculate", True)
+                if isinstance(recalculate, str):
+                    recalculate = recalculate.lower() in (
+                        "1",
+                        "true",
+                        "yes",
+                        "on",
+                    )
                 item_name = data.get("item")
                 location_name = data.get("location")
                 customer_name = data.get("customer")
@@ -2041,17 +2059,60 @@ class ForecastEditor:
                     try: 
                         item = frepple.item(name=item_name, action="C")
                     except Exception as e: 
-                        errors.append("Item not found: %s" % item_name)
+                        root_item = (
+                            Item.objects.using(request.database)
+                            .filter(lvl=0)
+                            .order_by("name")
+                            .first()
+                        )
+                        if (
+                            root_item
+                            and item_name.lower().strip() in ("all items", "all products")
+                        ):
+                            try:
+                                item = frepple.item(name=root_item.name, action="C")
+                            except Exception:
+                                errors.append("Item not found: %s" % item_name)
+                        else:
+                            errors.append("Item not found: %s" % item_name)
                 if location_name:
                     try: 
                         location = frepple.location(name=location_name, action="C")
                     except Exception as e: 
-                        errors.append("Location not found: %s" % location_name)
+                        root_location = (
+                            Location.objects.using(request.database)
+                            .filter(lvl=0)
+                            .order_by("name")
+                            .first()
+                        )
+                        if root_location and location_name.lower().strip() == "all locations":
+                            try:
+                                location = frepple.location(
+                                    name=root_location.name, action="C"
+                                )
+                            except Exception:
+                                errors.append("Location not found: %s" % location_name)
+                        else:
+                            errors.append("Location not found: %s" % location_name)
                 if customer_name:
                     try: 
                         customer = frepple.customer(name=customer_name, action="C")
                     except Exception as e: 
-                        errors.append("Customer not found: %s" % customer_name)
+                        root_customer = (
+                            Customer.objects.using(request.database)
+                            .filter(lvl=0)
+                            .order_by("name")
+                            .first()
+                        )
+                        if root_customer and customer_name.lower().strip() == "all customers":
+                            try:
+                                customer = frepple.customer(
+                                    name=root_customer.name, action="C"
+                                )
+                            except Exception:
+                                errors.append("Customer not found: %s" % customer_name)
+                        else:
+                            errors.append("Customer not found: %s" % customer_name)
 
                 method = data.get("forecastmethod")
                 if method and request.user.has_perm("forecast.change_forecast"):
@@ -2082,7 +2143,7 @@ class ForecastEditor:
                             for key, val in bckt.items():
                                 if key not in ("id", "bucket", "startdate", "enddate") and val is not None and val != "":
                                     args[key] = float(val)
-                                    if key != "forecastoverride":
+                                    if key != "forecastoverride" and recalculate:
                                         replan = True
                             frepple.setForecast(**args)
                         except Exception as e:
