@@ -469,8 +469,8 @@ $(function() {
           <span class="ms-1">{% firstof user.first_name user.username %}</span>
         </a>
 				<ul class="dropdown-menu dropdown-menu-end" style="right: 0 !important; left: auto !important">
-				  <li><a class="dropdown-item" href="{{request.prefix}}/preferences/">{% trans 'preferences'|capfirst %}</a></li>
-				  <li><a class="dropdown-item" href="/data/logout/">{% trans 'Log out'|capfirst %}</a></li>
+				  <li><a class="dropdown-item" href="{{request.prefix}}/preferences/">Profile {% trans 'preferences'|capfirst %}</a></li>
+				  <li><a class="dropdown-item" href="/data/logout/">force {% trans 'Log out'|capfirst %}</a></li>
 				</ul>
 			  </li>
       </ul>
